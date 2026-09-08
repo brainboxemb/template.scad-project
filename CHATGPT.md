@@ -280,3 +280,35 @@ every component in both OpenSCAD and PythonSCAD.
 
 The project design root is intentionally `dsg`, allowing both
 `dsg/openscad/...` and `dsg/pythonscad/...` design documents to be discovered.
+
+
+## External update convention
+
+Keep bootstrap and dependency advancement separate.
+
+`bootstrap.ps1` / `bootstrap.sh`:
+- restore the exact submodule commits pinned by the project.
+
+`update-externals.ps1` / `update-externals.sh`:
+- update only CAD/library paths below `dsg/*/ext/`;
+- never update `tools/tool.scad-project`;
+- require clean external working trees;
+- use remote default branch + fast-forward only;
+- leave changed gitlinks for review and manual commit.
+
+Tooling updates are intentionally separate because project-tool versions and
+CAD-library versions have different release cadence.
+
+## Build branch index
+
+The source file `docs/build-README.md` is copied to `bld/README.md` by CI after
+the project build and before artifact/publication.
+
+The resulting root README on the mutable `build` branch is a navigation index
+to:
+- generated design documentation;
+- PNG renders;
+- STL exports.
+
+Do not commit generated `bld/README.md` to `main`.
+

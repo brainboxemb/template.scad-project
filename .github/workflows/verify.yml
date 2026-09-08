@@ -39,11 +39,16 @@ jobs:
       - name: Lint design documentation
         run: bash ./tools/tool.scad-project/scad-project.sh design-lint
 
-      - name: Build materialized design documentation
+      - name: Build generated design documentation
         run: bash ./tools/tool.scad-project/scad-project.sh design-build
 
       - name: Verify project build
         run: bash ./tools/tool.scad-project/scad-project.sh verify
+
+      - name: Add build branch index
+        run: |
+          mkdir -p bld
+          cp docs/build-README.md bld/README.md
 
       - name: Upload generated build
         uses: actions/upload-artifact@v4

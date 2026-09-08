@@ -15,6 +15,14 @@ template.scad-project
     project configuration + CAD source + documentation
 ```
 
+## Quick links
+
+- [Generated build branch](../../tree/build)
+- [Build overview](../../blob/build/README.md)
+- [Generated design documentation](../../blob/build/design/README.md)
+- [PNG renders](../../tree/build/png)
+- [STL exports](../../tree/build/stl)
+
 ## Structure
 
 ```text
@@ -131,6 +139,47 @@ Once bootstrapped, use the pinned local tool:
 .\tools\tool.scad-project\scad-project.ps1 build
 .\tools\tool.scad-project\scad-project.ps1 verify
 ```
+
+### Updating CAD/library externals
+
+Bootstrap restores the exact versions pinned by the project. To intentionally
+move the CAD/library externals to the latest commit on their remote default
+branch, use:
+
+Windows:
+
+```powershell
+.\update-externals.ps1
+```
+
+Linux/macOS:
+
+```bash
+bash ./update-externals.sh
+```
+
+The updater:
+
+- initializes missing submodules first;
+- updates only paths below `dsg/*/ext/`;
+- deliberately leaves `tools/tool.scad-project` untouched;
+- refuses to continue when an external contains local changes;
+- fetches tags and the remote default branch;
+- updates with `pull --ff-only`;
+- shows old and new commit SHAs;
+- never commits automatically.
+
+After reviewing the result, commit the changed external gitlink in the parent
+project:
+
+```powershell
+git status
+git add dsg/openscad/ext/lib.scad.clamps
+git commit -m "Update external CAD libraries"
+```
+
+Updating project tooling is a separate, deliberate operation because tooling
+and CAD libraries do not necessarily advance at the same cadence.
 
 ## Development entrypoint
 
@@ -351,6 +400,10 @@ build
     generated PNG
     generated STL
 ```
+
+
+The `build` branch also has a generated root `README.md` that acts as an index
+to the design documentation, PNG renders and STL exports.
 
 A user can also run `design-build` locally to inspect the same generated design
 documentation without modifying the source tree.

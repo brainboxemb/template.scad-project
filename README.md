@@ -140,46 +140,68 @@ Once bootstrapped, use the pinned local tool:
 .\tools\tool.scad-project\scad-project.ps1 verify
 ```
 
-### Updating CAD/library externals
+## Versioned dependencies
 
-Bootstrap restores the exact versions pinned by the project. To intentionally
-move the CAD/library externals to the latest commit on their remote default
-branch, use:
+`project.yml` is the dependency-policy source.
 
-Windows:
+The template deliberately demonstrates two different policies:
 
-```powershell
-.\update-externals.ps1
+```yaml
+tooling:
+  tool_scad_project:
+    type: git-submodule
+    url: https://github.com/brainboxemb/tool.scad-project.git
+    path: tools/tool.scad-project
+    ref: v0.4.3
+
+externals:
+  - name: lib.scad.clamps
+    type: git-submodule
+    url: https://github.com/brainboxemb/lib.scad.clamps.git
+    path: dsg/openscad/ext/lib.scad.clamps
+    ref: latest
+    required_file: openscad/tube-clamp/tube_clamp.scad
 ```
 
-Linux/macOS:
+This demonstrates:
+
+```text
+tool.scad-project
+    exact released tooling version
+
+lib.scad.clamps
+    latest stable semantic-version tag
+```
+
+A project can also use a branch ref such as:
+
+```yaml
+ref: main
+```
+
+when it intentionally wants to test against current development.
+
+After bootstrap, update all configured dependencies with:
+
+```powershell
+.\update-repo.ps1
+```
+
+or:
 
 ```bash
-bash ./update-externals.sh
+bash ./update-repo.sh
 ```
 
-The updater:
+The updater is Python-free. It resolves each dependency independently, updates
+the corresponding gitlink, aligns reusable workflow refs for the project
+tooling, and leaves all changes uncommitted for review.
 
-- initializes missing submodules first;
-- updates only paths below `dsg/*/ext/`;
-- deliberately leaves `tools/tool.scad-project` untouched;
-- refuses to continue when an external contains local changes;
-- fetches tags and the remote default branch;
-- updates with `pull --ff-only`;
-- shows old and new commit SHAs;
-- never commits automatically.
-
-After reviewing the result, commit the changed external gitlink in the parent
-project:
+To restore the commits already locked by the parent repository, use:
 
 ```powershell
-git status
-git add dsg/openscad/ext/lib.scad.clamps
-git commit -m "Update external CAD libraries"
+.\tools\tool.scad-project\scad-project.ps1 repo-sync
 ```
-
-Updating project tooling is a separate, deliberate operation because tooling
-and CAD libraries do not necessarily advance at the same cadence.
 
 ## Development entrypoint
 
@@ -331,22 +353,26 @@ stale images.
 
 ## CI
 
-The GitHub workflow:
+The repository keeps a thin GitHub Actions caller:
 
-1. checks out the project and recursively restores pinned submodules;
-2. invokes the checked-out `tools/tool.scad-project` directly;
-3. runs config/external/docs/design linting;
-4. renders design documentation images;
-5. builds/verifies the project;
-6. uploads generated output as an artifact.
+```yaml
+jobs:
+  build:
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.4.3
+```
 
-Generated build output stays out of `main`.
+The reusable workflow owns the common SCAD project build sequence:
 
-Verification-branch publication will be added later once that capability has
-been generalized in `tool.scad-project`.
+1. restore pinned submodules;
+2. validate tooling alignment;
+3. lint configuration, externals, source docs and design docs;
+4. generate OpenSCAD and PythonSCAD design documentation;
+5. build configured PNG/STL outputs;
+6. create the build index;
+7. upload `bld/` as an artifact;
+8. publish successful non-PR output to the mutable `build` branch.
 
-The model, code and documentation are being developed with the assistance of ChatGPT.
-
+Generated output stays out of `main`.
 
 ## OpenSCAD module boundaries
 

@@ -312,3 +312,33 @@ to:
 
 Do not commit generated `bld/README.md` to `main`.
 
+## Versioned dependency reference example
+
+The template intentionally demonstrates per-dependency ref policy:
+
+```text
+tool.scad-project
+    ref: v0.4.3
+
+lib.scad.clamps
+    ref: latest
+```
+
+`latest` means the highest stable semantic-version tag and does not mean
+`main`.
+
+A project may use `ref: main` explicitly when testing a dependency's current
+development branch.
+
+Root dependency-management scripts:
+- `bootstrap.ps1`
+- `bootstrap.sh`
+- `update-repo.ps1`
+- `update-repo.sh`
+
+These are copied from `tool.scad-project` v0.4.3. The updater scripts are
+Python-free.
+
+The template no longer maintains separate `update-externals.*` scripts; generic
+dependency updating belongs to `update-repo.*`.
+

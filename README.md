@@ -152,6 +152,24 @@ reusable tube clamp
 
 ## Design documentation
 
+Design renders use a compact defaults + step syntax:
+
+```markdown
+<!-- scad-render-defaults
+module: tube_design
+vpr: [60, 0, 35]
+-->
+
+<!-- scad-render
+view: outer
+-->
+```
+
+The image name is generated from declaration order (`01-outer.png`,
+`02-bore.png`, ...). The default design image size is `640x480`; individual
+steps can override it with `size:`.
+
+
 `design.md` files are source documentation. Generated images are not committed
 beside them on `main`.
 
@@ -167,7 +185,7 @@ dsg/openscad/components/tube/
 The source document declares views:
 
 ```markdown
-<!-- scad-design
+<!-- scad-render
 type: source-view
 module: tube_design
 view: bore
@@ -182,7 +200,7 @@ Run:
 .\tools\tool.scad-project\scad-project.ps1 design-build
 ```
 
-Generated output is materialized under:
+Generated output is generated under:
 
 ```text
 bld/design/
@@ -302,7 +320,7 @@ main
     bootstrap/configuration
 
 build
-    materialized design docs
+    generated design docs
     generated PNG
     generated STL
 ```

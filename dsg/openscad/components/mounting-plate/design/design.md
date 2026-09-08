@@ -6,17 +6,17 @@ The mounting plate is intentionally simple project-specific geometry. It gives
 the reusable clamp a neutral mounting surface without mixing the example with a
 specific real-world enclosure.
 
+<!-- scad-render-defaults
+module: mounting_plate_design
+vpr: [65, 0, 35]
+-->
+
 ## Base plate
 
 The plate is centered in X/Y and begins at Z=0.
 
-<!-- scad-design
-type: source-view
-module: mounting_plate_design
+<!-- scad-render
 view: base
-image: 01-base-plate.png
-size: [1400, 900]
-vpr: [70, 0, 35]
 -->
 
 ## Final
@@ -24,11 +24,6 @@ vpr: [70, 0, 35]
 The final geometry is the same simple mounting surface without the
 documentation highlight.
 
-<!-- scad-design
-type: source-view
-module: mounting_plate_design
+<!-- scad-render
 view: final
-image: 02-final.png
-size: [1400, 900]
-vpr: [70, 0, 35]
 -->

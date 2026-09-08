@@ -240,7 +240,7 @@ The mutable orphan `build` branch contains the generated `bld/` snapshot.
 `main` remains free of generated binary/document output.
 
 The source `design.md` render declarations are replaced with image references
-only in the materialized build copy.
+only in the generated build copy.
 
 
 
@@ -251,3 +251,20 @@ in library-native orientation. `tube_holder_mounted()` rotates the clamp at the
 project boundary, and `assembly_reference_tube()` applies the same axis
 rotation. The tube axis is therefore the geometric reference for assembly
 placement.
+
+
+## Design render authoring
+
+Use `scad-render-defaults` once per `design.md` for shared module/camera
+metadata and compact `scad-render` blocks for individual views. Let the tooling
+generate `NN-<view>.png` names unless a fixed filename is specifically needed.
+
+Project default:
+
+```yaml
+openscad:
+  design_image_size: [640, 480]
+```
+
+Keep normal project render resolution separate via `openscad.image_size`.
+

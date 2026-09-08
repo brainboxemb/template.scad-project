@@ -16,6 +16,15 @@ MOUNTING_PLATE_WIDTH = 120;
 MOUNTING_PLATE_HEIGHT = 70;
 MOUNTING_PLATE_THICKNESS = 6;
 
+
+// Function: mounting_plate_thickness()
+// Usage:
+//   thickness = mounting_plate_thickness();
+// Description:
+//   Returns the default mounting plate thickness for consumers that import
+//   this file with `use`.
+function mounting_plate_thickness() = MOUNTING_PLATE_THICKNESS;
+
 module mounting_plate(
     width = MOUNTING_PLATE_WIDTH,
     height = MOUNTING_PLATE_HEIGHT,

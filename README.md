@@ -127,7 +127,7 @@ Once bootstrapped, use the pinned local tool:
 ```powershell
 .\tools\tool.scad-project\scad-project.ps1 externals-status
 .\tools\tool.scad-project\scad-project.ps1 design-lint
-.\tools\tool.scad-project\scad-project.ps1 design-render
+.\tools\tool.scad-project\scad-project.ps1 design-build
 .\tools\tool.scad-project\scad-project.ps1 build
 .\tools\tool.scad-project\scad-project.ps1 verify
 ```
@@ -152,16 +152,19 @@ reusable tube clamp
 
 ## Design documentation
 
-Every meaningful component/assembly has:
+`design.md` files are source documentation. Generated images are not committed
+beside them on `main`.
+
+Source example:
 
 ```text
-design/design.md
-design/img/
+dsg/openscad/components/tube/
+├── tube.scad
+└── design/
+    └── design.md
 ```
 
-The design documents declare their renders directly.
-
-Example:
+The source document declares views:
 
 ```markdown
 <!-- scad-design
@@ -169,14 +172,35 @@ type: source-view
 module: tube_design
 view: bore
 image: 02-bore.png
+alt: Tube bore
 -->
 ```
 
-The geometry itself stays in the `.scad` source. The Markdown selects the
-existing design view.
+Run:
 
-Small documentation-only OpenSCAD illustrations may also be embedded inline,
-but reusable project geometry should not be duplicated in Markdown.
+```powershell
+.\tools\tool.scad-project\scad-project.ps1 design-build
+```
+
+Generated output is materialized under:
+
+```text
+bld/design/
+├── project/
+│   └── components/tube/design/
+│       ├── design.md
+│       └── img/
+└── ext/
+    └── lib.scad.clamps/
+        └── ...
+```
+
+The external library's design documentation is included automatically when the
+library contains compatible `design/design.md` sources.
+
+This means the library's generated images do not need to be committed to its
+source checkout just to make its design documentation visible to a consuming
+project.
 
 ## Source/API documentation
 
@@ -203,7 +227,7 @@ After bootstrap, use the project-pinned local tool:
 .\tools\tool.scad-project\scad-project.ps1 externals-check
 .\tools\tool.scad-project\scad-project.ps1 docs-lint
 .\tools\tool.scad-project\scad-project.ps1 design-lint
-.\tools\tool.scad-project\scad-project.ps1 design-render
+.\tools\tool.scad-project\scad-project.ps1 design-build
 .\tools\tool.scad-project\scad-project.ps1 build
 .\tools\tool.scad-project\scad-project.ps1 verify
 ```
@@ -228,3 +252,61 @@ Verification-branch publication will be added later once that capability has
 been generalized in `tool.scad-project`.
 
 The model, code and documentation are being developed with the assistance of ChatGPT.
+
+
+## OpenSCAD module boundaries
+
+The example deliberately uses `use <...>` between project components.
+`use` imports modules and functions, but not top-level variables.
+
+Values needed across component boundaries are therefore exposed through
+functions rather than by directly reading another file's constants. For
+example:
+
+```scad
+function mounting_plate_thickness() = MOUNTING_PLATE_THICKNESS;
+```
+
+The assembly calls `mounting_plate_thickness()` instead of referencing
+`MOUNTING_PLATE_THICKNESS` directly.
+
+
+## Generated build branch
+
+The source branch deliberately does not contain generated design images,
+renders or STL files.
+
+Local/CI output goes to:
+
+```text
+bld/
+├── design/
+├── png/
+└── stl/
+```
+
+On successful non-PR CI runs, the current `bld/` contents are published as the
+mutable orphan branch:
+
+```text
+build
+```
+
+So the repository roles are:
+
+```text
+main
+    source .scad
+    source design.md
+    project.yml
+    bootstrap/configuration
+
+build
+    materialized design docs
+    generated PNG
+    generated STL
+```
+
+A user can also run `design-build` locally to inspect the same generated design
+documentation without modifying the source tree.
+

@@ -194,3 +194,51 @@ path.
 
 After bootstrap, Python is allowed for normal `scad-project` operations.
 
+
+## OpenSCAD `use` boundary
+
+`use <file.scad>` imports modules/functions but not top-level variables.
+
+Do not reference constants such as `MOUNTING_PLATE_THICKNESS` from a consumer
+that uses the component file. Expose required values through a function, object
+API, or explicit assembly parameter.
+
+Current example:
+
+```scad
+mounting_plate_thickness()
+```
+
+This rule exists because OpenSCAD otherwise returns `undef` while still often
+exiting successfully.
+
+
+## Generated design/build separation
+
+Do not create or commit `design/img/` directories in the source tree.
+
+Source:
+
+```text
+dsg/.../*.scad
+dsg/.../design/design.md
+```
+
+Generated:
+
+```text
+bld/design/project/...
+bld/design/ext/<external>/...
+bld/png/...
+bld/stl/...
+```
+
+`design-build` materializes both project and compatible external design docs
+into `bld/design`.
+
+The mutable orphan `build` branch contains the generated `bld/` snapshot.
+`main` remains free of generated binary/document output.
+
+The source `design.md` render declarations are replaced with image references
+only in the materialized build copy.
+

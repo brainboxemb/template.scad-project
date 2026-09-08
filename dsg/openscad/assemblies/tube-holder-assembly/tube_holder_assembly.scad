@@ -18,12 +18,12 @@ module tube_holder_assembly(show_tube = true) {
     color([0.78, 0.70, 0.55])
         mounting_plate();
 
-    translate([0, 0, MOUNTING_PLATE_THICKNESS])
+    translate([0, 0, mounting_plate_thickness()])
         color([0.82, 0.15, 0.12])
             tube_holder();
 
     if (show_tube)
-        translate([0, 0, MOUNTING_PLATE_THICKNESS + 14])
+        translate([0, 0, mounting_plate_thickness() + 14])
             rotate([90, 0, 0])
                 color([0.65, 0.65, 0.68, 0.65])
                     tube();
@@ -47,14 +47,14 @@ module tube_holder_assembly_design(view = "final") {
         color([0.75, 0.75, 0.75, 0.4])
             mounting_plate();
 
-        translate([0, 0, MOUNTING_PLATE_THICKNESS])
+        translate([0, 0, mounting_plate_thickness()])
             color([1, 0, 0, 0.55])
                 tube_holder();
     } else if (view == "tube") {
         color([0.75, 0.75, 0.75, 0.4])
             tube_holder_assembly(show_tube = false);
 
-        translate([0, 0, MOUNTING_PLATE_THICKNESS + 14])
+        translate([0, 0, mounting_plate_thickness() + 14])
             rotate([90, 0, 0])
                 color([1, 0, 0, 0.55])
                     tube();

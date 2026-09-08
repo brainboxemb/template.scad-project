@@ -27,3 +27,6 @@ builds:
   - name: tube-holder-assembly-stl
     source: dsg/openscad/render/tube-holder-assembly.scad
     output: bld/stl/tube-holder-assembly.stl
+
+publication:
+  build_branch: build

@@ -220,6 +220,33 @@ This means the library's generated images do not need to be committed to its
 source checkout just to make its design documentation visible to a consuming
 project.
 
+
+## PythonSCAD design-render example
+
+The reference project includes a small PythonSCAD component under:
+
+```text
+dsg/pythonscad/components/pythonscad-example/
+```
+
+Its `design.md` uses the same render declarations as OpenSCAD components:
+
+```markdown
+<!-- scad-render-defaults
+engine: pythonscad
+source: pythonscad_example.py
+vpr: [65, 0, 35]
+-->
+
+<!-- scad-render
+view: final
+-->
+```
+
+This example is intentionally small. Its purpose is to verify the generic
+multi-engine design pipeline rather than introduce a second implementation of
+the main tube-holder assembly.
+
 ## Source/API documentation
 
 Structured `.scad` comments use `openscad_docsgen` conventions.

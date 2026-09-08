@@ -268,3 +268,15 @@ openscad:
 
 Keep normal project render resolution separate via `openscad.image_size`.
 
+
+
+## PythonSCAD reference consumer
+
+Keep one small PythonSCAD component in the template as an end-to-end test of
+`tool.scad-project` multi-engine design rendering.
+
+It is a tooling demonstration, not a requirement that real projects implement
+every component in both OpenSCAD and PythonSCAD.
+
+The project design root is intentionally `dsg`, allowing both
+`dsg/openscad/...` and `dsg/pythonscad/...` design documents to be discovered.

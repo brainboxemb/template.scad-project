@@ -2,7 +2,7 @@ project:
   name: template.scad-project
 
 paths:
-  design_root: dsg/openscad
+  design_root: dsg
   build_root: bld
 
 openscad:
@@ -12,6 +12,12 @@ openscad:
     - --render
   image_size: [1600, 1000]
   design_image_size: [640, 480]
+
+pythonscad:
+  common_flags:
+    - --trust-python
+  render_flags:
+    - --render
 
 externals:
   - name: lib.scad.clamps

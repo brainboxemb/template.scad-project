@@ -310,3 +310,14 @@ build
 A user can also run `design-build` locally to inspect the same generated design
 documentation without modifying the source tree.
 
+
+
+### Reference assembly orientation
+
+The reusable clamp keeps its library-native coordinate system. The project
+adapter rotates it only at the mounting boundary: the compact flat face rests
+on the mounting plate and the reference tube follows the resulting horizontal
+X-axis bore.
+
+Design declarations use explicit image sizes but only `vpr` where possible;
+`scad-project` then keeps the requested orientation and auto-fits the model.

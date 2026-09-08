@@ -15,6 +15,7 @@ type: source-view
 module: mounting_plate_design
 view: base
 image: 01-base-plate.png
+size: [1400, 900]
 vpr: [70, 0, 35]
 -->
 
@@ -28,5 +29,6 @@ type: source-view
 module: mounting_plate_design
 view: final
 image: 02-final.png
+size: [1400, 900]
 vpr: [70, 0, 35]
 -->

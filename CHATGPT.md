@@ -242,3 +242,12 @@ The mutable orphan `build` branch contains the generated `bld/` snapshot.
 The source `design.md` render declarations are replaced with image references
 only in the materialized build copy.
 
+
+
+## Reference assembly coordinate convention
+
+Do not rotate the tube independently from the clamp bore. `tube_holder()` stays
+in library-native orientation. `tube_holder_mounted()` rotates the clamp at the
+project boundary, and `assembly_reference_tube()` applies the same axis
+rotation. The tube axis is therefore the geometric reference for assembly
+placement.

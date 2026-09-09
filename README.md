@@ -49,7 +49,7 @@ repository.
 The CI runtime is:
 
 ```text
-ghcr.io/brainboxemb/scad-toolchain:v0.3.0
+ghcr.io/brainboxemb/scad-toolchain:v0.4.0
 ```
 
 The reusable workflow CLI comes from:
@@ -57,6 +57,18 @@ The reusable workflow CLI comes from:
 ```text
 tool.scad-project
 ```
+
+The template also demonstrates project-controlled PNG watermarking:
+
+```yaml
+rendering:
+  watermark:
+    text: "© 2026 brainboxemb"
+```
+
+The project configuration supplies the text, `tool.scad-project` orchestrates
+the post-processing, and the runtime provides the public
+`scad-image-watermark` command.
 
 The reusable project tool is not downloaded by CI on every run. It is pinned
 inside the project as a Git submodule:
@@ -152,7 +164,7 @@ tooling:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.5.0
+    ref: v0.6.0
 
 externals:
   - name: lib.scad.clamps
@@ -358,7 +370,7 @@ The repository keeps a thin GitHub Actions caller:
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.5.0
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.6.0
 ```
 
 The reusable workflow owns the common SCAD project build sequence:

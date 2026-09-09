@@ -48,6 +48,7 @@ This template currently configures:
 - design/build roots;
 - OpenSCAD flags;
 - default image size;
+- PNG watermark policy;
 - external libraries;
 - build outputs.
 
@@ -129,7 +130,7 @@ before any structured Module/Function/etc block.
 Runtime:
 
 ```text
-ghcr.io/brainboxemb/scad-toolchain:v0.3.0
+ghcr.io/brainboxemb/scad-toolchain:v0.4.0
 ```
 
 Workflow tool:
@@ -159,21 +160,37 @@ Do not restructure `lib.scad.clamps` to contain an internal `dsg/`.
 The template should remain a real consumer.
 
 CI should:
-- checkout recursive submodules;
+- checkout the project's direct pinned submodules;
 - invoke the pinned local `tools/tool.scad-project` checkout;
 - use its `scad-project` launcher commands;
 - upload generated evidence as artifacts.
 
 Do not duplicate generic tool logic in workflow shell blocks.
 
-## Current scope
+## PNG watermark reference configuration
 
-Verification orphan-branch publication is intentionally deferred until that
-behavior is implemented generically in `tool.scad-project`.
+The template demonstrates the generic released watermark path:
 
-Copyright/watermark behavior is also deferred. It should first be designed as a
-generic project-tool capability and only later drive any required toolchain
-runtime update.
+```yaml
+rendering:
+  watermark:
+    text: "© 2026 brainboxemb"
+```
+
+Responsibility remains split:
+
+```text
+docker.scad-toolchain
+    -> generic scad-image-watermark command
+
+tool.scad-project
+    -> build orchestration and configuration
+
+template / consumer
+    -> watermark text and whether the policy is enabled
+```
+
+Do not add project-local Pillow/image-processing code.
 
 
 ## Python-free robust bootstrap
@@ -318,7 +335,7 @@ The template intentionally demonstrates per-dependency ref policy:
 
 ```text
 tool.scad-project
-    ref: v0.4.3
+    ref: v0.6.0
 
 lib.scad.clamps
     ref: latest

@@ -15,6 +15,6 @@ permissions:
 
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.6.0
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.6.1
     with:
       artifact_name: template-scad-project-build

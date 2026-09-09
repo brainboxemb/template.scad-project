@@ -164,7 +164,7 @@ tooling:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.6.0
+    ref: v0.6.1
 
 externals:
   - name: lib.scad.clamps
@@ -370,7 +370,7 @@ The repository keeps a thin GitHub Actions caller:
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.6.0
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.6.1
 ```
 
 The reusable workflow owns the common SCAD project build sequence:

@@ -335,7 +335,7 @@ The template intentionally demonstrates per-dependency ref policy:
 
 ```text
 tool.scad-project
-    ref: v0.6.0
+    ref: v0.6.1
 
 lib.scad.clamps
     ref: latest

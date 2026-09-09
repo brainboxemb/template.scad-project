@@ -152,7 +152,7 @@ tooling:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.4.3
+    ref: v0.5.0
 
 externals:
   - name: lib.scad.clamps
@@ -358,7 +358,7 @@ The repository keeps a thin GitHub Actions caller:
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.4.3
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.5.0
 ```
 
 The reusable workflow owns the common SCAD project build sequence:
@@ -369,8 +369,10 @@ The reusable workflow owns the common SCAD project build sequence:
 4. generate OpenSCAD and PythonSCAD design documentation;
 5. build configured PNG/STL outputs;
 6. create the build index;
-7. upload `bld/` as an artifact;
-8. publish successful non-PR output to the mutable `build` branch.
+7. write `publication-info.txt`;
+8. upload `bld/` as an artifact;
+9. publish production branches to `build`, development branches to
+   `dev/build`, and keep PR/tag runs artifact-only.
 
 Generated output stays out of `main`.
 
@@ -405,12 +407,27 @@ bld/
 └── stl/
 ```
 
-On successful non-PR CI runs, the current `bld/` contents are published as the
-mutable orphan branch:
+Publication now depends on the source context:
 
 ```text
-build
+main
+    → build
+
+other branch
+    → dev/build
+
+pull request
+    → artifact only
+
+version tag v*
+    → artifact only
 ```
+
+The same policy applies to verification output in projects that define it:
+`verification` for production and `dev/verification` for development.
+
+Every generated artifact/snapshot contains `publication-info.txt` with the
+source ref, commit and workflow-run provenance.
 
 So the repository roles are:
 
@@ -422,9 +439,10 @@ main
     bootstrap/configuration
 
 build
-    generated design docs
-    generated PNG
-    generated STL
+    current production-generated output
+
+dev/build
+    latest development-generated output
 ```
 
 

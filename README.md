@@ -19,6 +19,7 @@ template.scad-project
 
 - [Generated build branch](../../tree/build)
 - [Build overview](../../blob/build/README.md)
+- [Build provenance](../../blob/build/publication-info.txt)
 - [Generated design documentation](../../blob/build/design/README.md)
 - [PNG renders](../../tree/build/png)
 - [STL exports](../../tree/build/stl)

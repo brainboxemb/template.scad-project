@@ -19,6 +19,7 @@ template.scad-project
 
 - [Production build](../../tree/prod/build)
 - [Production build overview](../../blob/prod/build/README.md)
+- [Production build PNG gallery](../../blob/prod/build/png/README.md)
 - [Production build provenance](../../blob/prod/build/publication-info.txt)
 - [Production verification](../../tree/prod/verification)
 - [Project releases](../../releases)
@@ -26,7 +27,7 @@ template.scad-project
 ## Current baseline
 
 ```text
-tool.scad-project   v0.9.0
+tool.scad-project   v0.9.1
 SCAD toolchain      v0.4.1
 SCons               4.11.1
 ```
@@ -93,6 +94,8 @@ build_engine:
 ```
 
 SCons tracks OpenSCAD dependencies and restores unchanged outputs from the persistent CI cache. The generated design tree is also restored from cache when its complete input set is unchanged.
+
+`tool.scad-project v0.9.1` generates `bld/png/README.md` as a browseable, deterministically ordered gallery whenever PNG build output is present. The generated `bld/README.md` links directly to that gallery.
 
 ## Development entrypoint
 
@@ -187,7 +190,7 @@ The repository keeps thin workflow callers pinned to the same immutable tool rel
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.0
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.1
 ```
 
 Build owns configuration/external/source/design linting, generated-design cache handling, dependency-selective PNG/STL generation, build indexing, provenance and publication. Verify owns generic build/source verification, project-specific verification commands, provenance and verification publication.

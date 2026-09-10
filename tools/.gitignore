@@ -1,7 +1,0 @@
-bld/
-*.scad~
-*.bak
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db

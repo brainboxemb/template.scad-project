@@ -11,6 +11,8 @@ tooling:
 paths:
   design_root: dsg
   build_root: bld
+  render_root: dsg/openscad/render
+  export_root: dsg/openscad/export
 
 design:
   include_externals: false
@@ -43,15 +45,6 @@ externals:
     path: dsg/openscad/ext/lib.scad.clamps
     ref: main
     required_file: openscad/tube-clamp/tube_clamp.scad
-
-builds:
-  - name: tube-holder-assembly-png
-    source: dsg/openscad/render/tube-holder-assembly.scad
-    output: bld/png/tube-holder-assembly.png
-
-  - name: tube-holder-assembly-stl
-    source: dsg/openscad/render/tube-holder-assembly.scad
-    output: bld/stl/tube-holder-assembly.stl
 
 verification:
   commands:

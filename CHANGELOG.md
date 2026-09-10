@@ -2,6 +2,20 @@
 
 Functional changes to released `template.scad-project` versions.
 
+## Unreleased
+
+### Changed
+
+- Use directory-based OpenSCAD build discovery through `paths.render_root` and `paths.export_root` instead of explicit normal PNG/STL `builds:` entries.
+- Keep separate stable render and export entrypoints for the reference assembly while preserving the existing output basenames.
+- Align README and ChatGPT handoff documentation with `tool.scad-project` v0.9.0, SCAD toolchain v0.4.1 and the `prod/*` / `dev/*` / immutable `rel/vX.Y.Z/*` publication lifecycle.
+- Synchronize root bootstrap/update scripts with the canonical v0.9.0 tool release.
+
+### Removed
+
+- Remove the accidental nested copy of the template project below `tools/`; only `tools/tool.scad-project` remains there.
+- Remove legacy `docs/build-README.md`; `scad-project build-index` now generates the build index directly.
+
 ## v0.0.1
 
 ### Added

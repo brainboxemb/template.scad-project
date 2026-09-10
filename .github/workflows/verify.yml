@@ -17,7 +17,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-verify.yml@v0.9.6
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-verify.yml@360b6aa950288adfad845fffccd0ffa41becd45c
     with:
       artifact_name: template-scad-project-verification
       verification_path: vrf/out

@@ -27,12 +27,12 @@ template.scad-project
 ## Current baseline
 
 ```text
-tool.scad-project   v0.9.6
+tool.scad-project   v0.9.8
 SCAD toolchain      v0.4.1
 SCons               4.11.1
 ```
 
-The tool is pinned twice: semantically in `project.yml` and technically by the Git submodule gitlink at `tools/tool.scad-project`.
+The tool dependency is expressed semantically as `v0.9.8` in `project.yml`. The Git submodule gitlink at `tools/tool.scad-project` points to the commit behind that tag, while Build, Verify and Release callers are pinned to the exact same 40-character commit SHA. This keeps the dependency readable while making reusable-workflow composition immutable and unambiguous.
 
 ## Reference-consumer role
 
@@ -40,7 +40,7 @@ This repository is the canonical minimal consumer for `tool.scad-project`. A too
 
 The template is intentionally not the only integration test. Larger consumers can supplement it when a feature needs a realistic dependency graph or enough independent outputs to demonstrate selective rebuild behaviour. In particular, dependency-selective cache tests are more informative in a project such as the HUB75 display frame, while this repository remains the first-line reference/smoke consumer.
 
-Functional verification also checks the reference-consumer tooling contract: `project.yml`, Build, Verify and Release must use the same immutable tool ref, and the root bootstrap/update scripts must match the canonical scripts from that pinned release.
+Functional verification also checks the reference-consumer tooling contract: the semantic tool ref in `project.yml` must resolve to the checked-out tool gitlink commit, all three workflow callers must use that exact commit SHA, and the root bootstrap/update scripts must match the canonical scripts from that pinned release.
 
 ## Structure
 
@@ -103,7 +103,7 @@ build_engine:
 
 SCons tracks OpenSCAD dependencies and restores unchanged outputs from the persistent CI cache. The generated design tree is also restored from cache when its complete input set is unchanged.
 
-`tool.scad-project v0.9.6` generates `bld/png/README.md` as a browseable, deterministically ordered gallery whenever PNG build output is present. The generated `bld/README.md` links directly to that gallery.
+`tool.scad-project v0.9.8` generates `bld/png/README.md` as a browseable, deterministically ordered gallery whenever PNG build output is present. The generated `bld/README.md` links directly to that gallery.
 
 ## Development entrypoint
 
@@ -175,7 +175,7 @@ or:
 bash ./update-repo.sh
 ```
 
-The updater leaves gitlink/workflow changes uncommitted for normal review. From v0.9.6 it advances the Build, Verify and Release reusable workflow refs together with the tool dependency so those callers cannot silently remain on different tool releases. Direct dependency checkout is intentionally non-recursive; a consumer does not initialize development dependencies nested inside its libraries.
+The updater leaves gitlink/workflow changes uncommitted for normal review. From v0.9.6 it advances the Build, Verify and Release callers together with the tool dependency; from v0.9.8 those workflow callers are written as the exact checked-out tool commit SHA instead of the semantic tag text. Direct dependency checkout is intentionally non-recursive; a consumer does not initialize development dependencies nested inside its libraries.
 
 ## Local workflow
 
@@ -193,12 +193,12 @@ After bootstrap, use the pinned local tool:
 
 ## CI
 
-The repository keeps thin workflow callers pinned to the same immutable tool release:
+The repository keeps thin workflow callers pinned to the exact tool commit corresponding to the semantic release in `project.yml`:
 
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.6
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@360b6aa950288adfad845fffccd0ffa41becd45c
 ```
 
 Build owns configuration/external/source/design linting, generated-design cache handling, dependency-selective PNG/STL generation, build indexing, provenance and publication. Verify owns generic build/source verification, project-specific verification commands, provenance and verification publication.

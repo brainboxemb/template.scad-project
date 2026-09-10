@@ -18,7 +18,7 @@ template.scad-project
 ## Current baseline
 
 ```text
-tool.scad-project   v0.9.0
+tool.scad-project   v0.9.1
 SCAD toolchain      v0.4.1
 SCons               4.11.1
 ```
@@ -128,18 +128,18 @@ The template is a real consumer and keeps thin callers only:
 
 ```text
 .github/workflows/build.yml
-    -> project-build.yml@v0.9.0
+    -> project-build.yml@v0.9.1
 
 .github/workflows/verify.yml
-    -> project-verify.yml@v0.9.0
+    -> project-verify.yml@v0.9.1
 
 .github/workflows/release.yml
-    -> project-release.yml@v0.9.0
+    -> project-release.yml@v0.9.1
 ```
 
 Do not duplicate generic tool logic in workflow shell blocks.
 
-`scad-project build-index` generates `bld/README.md`. There is no source `docs/build-README.md` template anymore.
+`scad-project build-index` generates both `bld/README.md` and the normal build PNG gallery at `bld/png/README.md`. There is no source `docs/build-README.md` template anymore.
 
 ## Publication lifecycle
 

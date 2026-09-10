@@ -16,6 +16,7 @@ on:
       - "release-request/**"
 
 permissions:
+  actions: read
   contents: write
   packages: read
 
@@ -74,6 +75,7 @@ jobs:
   release:
     needs: resolve
     permissions:
+      actions: read
       contents: write
       packages: read
     uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@feature/versioned-project-release

@@ -4,13 +4,23 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+## v0.0.2
+
 ### Changed
 
+- Upgrade the canonical reference consumer to `tool.scad-project` v0.9.6 and SCAD toolchain v0.4.1.
+- Pin Build, Verify and Release callers plus the `tools/tool.scad-project` gitlink to the same immutable tool release.
 - Use directory-based OpenSCAD build discovery through `paths.render_root` and `paths.export_root` instead of explicit normal PNG/STL `builds:` entries.
 - Keep separate stable render and export entrypoints for the reference assembly while preserving the existing output basenames.
-- Align README and ChatGPT handoff documentation with `tool.scad-project` v0.9.1, SCAD toolchain v0.4.1 and the `prod/*` / `dev/*` / immutable `rel/vX.Y.Z/*` publication lifecycle.
-- Synchronize root bootstrap/update scripts with the canonical tool release; the v0.9.1 patch does not change those helper scripts.
+- Enable the SCons selective build backend and exercise cold-cache and exact-hit behaviour in the template CI.
 - Publish the generic generated normal-build PNG gallery at `bld/png/README.md` and link it from the template README.
+- Define `template.scad-project` explicitly as the canonical minimal/reference smoke consumer, complemented by larger integration consumers for dependency-selective tests.
+- Synchronize the root bootstrap/update scripts with the canonical v0.9.6 tool release.
+
+### Fixed
+
+- Keep repository upgrades from leaving the Release workflow on an older tool ref: v0.9.6 updates Build, Verify and Release callers together.
+- Extend template functional verification to require `project.yml`, Build, Verify and Release to use the same immutable tool ref and to require root bootstrap/update scripts to match the pinned tool release.
 
 ### Removed
 

@@ -1,5 +1,5 @@
 // File: tube-holder-assembly.scad
-//   Stable CI/build entrypoint for the reference assembly.
+//   Stable STL/export entrypoint for the reference assembly.
 
 use <../assemblies/tube-holder-assembly/tube_holder_assembly.scad>
 

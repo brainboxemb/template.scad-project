@@ -1,28 +1,37 @@
 # template.scad-project
 
-Reference OpenSCAD project using the reusable `tool.scad-project` workflow.
+Reference consumer for the current SCAD project architecture built around `tool.scad-project`.
 
-The project demonstrates the intended separation:
+The repository demonstrates the intended separation:
 
 ```text
 docker.scad-toolchain
     runtime and external capabilities
 
 tool.scad-project
-    reusable project workflow
+    reusable project workflow and conventions
 
 template.scad-project
-    project configuration + CAD source + documentation
+    project configuration, CAD source and project documentation
 ```
 
 ## Quick links
 
-- [Generated build branch](../../tree/build)
-- [Build overview](../../blob/build/README.md)
-- [Build provenance](../../blob/build/publication-info.txt)
-- [Generated design documentation](../../blob/build/design/README.md)
-- [PNG renders](../../tree/build/png)
-- [STL exports](../../tree/build/stl)
+- [Production build](../../tree/prod/build)
+- [Production build overview](../../blob/prod/build/README.md)
+- [Production build provenance](../../blob/prod/build/publication-info.txt)
+- [Production verification](../../tree/prod/verification)
+- [Project releases](../../releases)
+
+## Current baseline
+
+```text
+tool.scad-project   v0.9.0
+SCAD toolchain      v0.4.1
+SCons               4.11.1
+```
+
+The tool is pinned twice: semantically in `project.yml` and technically by the Git submodule gitlink at `tools/tool.scad-project`.
 
 ## Structure
 
@@ -30,191 +39,60 @@ template.scad-project
 .
 ├── project.yml
 ├── dsg/
-│   └── openscad/
-│       ├── ext/
-│       ├── lib/
-│       ├── components/
-│       ├── assemblies/
-│       ├── render/
-│       └── main.scad
-├── bld/
+│   ├── openscad/
+│   │   ├── ext/
+│   │   ├── lib/
+│   │   ├── components/
+│   │   ├── assemblies/
+│   │   ├── render/
+│   │   ├── export/
+│   │   └── main.scad
+│   └── pythonscad/
+├── tools/
+│   └── tool.scad-project/
+├── scripts/
 ├── vrf/
 └── .github/workflows/
 ```
 
-There are deliberately no project-specific build/render Python scripts in this
-repository.
+`bld/` is generated output and is not source-of-truth content.
 
-## Runtime
+## Configuration-first builds
 
-The CI runtime is:
-
-```text
-ghcr.io/brainboxemb/scad-toolchain:v0.4.0
-```
-
-The reusable workflow CLI comes from:
-
-```text
-tool.scad-project
-```
-
-The template also demonstrates project-controlled PNG watermarking:
+Normal OpenSCAD outputs are discovered from directories configured in `project.yml`:
 
 ```yaml
-rendering:
-  watermark:
-    text: "© 2026 brainboxemb"
+paths:
+  design_root: dsg
+  build_root: bld
+  render_root: dsg/openscad/render
+  export_root: dsg/openscad/export
 ```
 
-The project configuration supplies the text, `tool.scad-project` orchestrates
-the post-processing, and the runtime provides the public
-`scad-image-watermark` command.
-
-The reusable project tool is not downloaded by CI on every run. It is pinned
-inside the project as a Git submodule:
+The default mapping is:
 
 ```text
-tools/tool.scad-project
+dsg/openscad/render/*.scad  -> bld/png/*.png
+dsg/openscad/export/*.scad  -> bld/stl/*.stl
 ```
 
-The parent repository therefore records the exact tool commit alongside the
-exact commits of its CAD-library externals.
-
-## Bootstrap and externals
-
-A fresh project contains:
+The reference assembly therefore has two small stable entrypoints with the same basename:
 
 ```text
-bootstrap.ps1
-bootstrap.sh
-.gitmodules
+dsg/openscad/render/tube-holder-assembly.scad
+dsg/openscad/export/tube-holder-assembly.scad
 ```
 
-Bootstrap deliberately requires **no Python**.
+No explicit `builds:` entries are needed for these normal targets. Use optional `render.yml` or `export.yml` only when an entrypoint needs special profiles such as multiple sizes or a non-default render size. Explicit `builds:` remain available for exceptional mappings, but they are not the preferred normal template pattern.
 
-On Windows the only prerequisites are PowerShell and Git:
-
-```powershell
-.\bootstrap.ps1
-```
-
-`.gitmodules` is the technical bootstrap manifest. For this template it declares:
-
-```text
-tools/tool.scad-project
-dsg/openscad/ext/lib.scad.clamps
-```
-
-The script is safe to run repeatedly. It detects and preserves already-correct
-submodules, initializes registered-but-empty submodules, and can repair the
-common ZIP/new-repository state where `.gitmodules` exists but the parent Git
-repository does not yet contain the gitlink.
-
-This is specifically intended to handle partially completed local setup.
-
-After bootstrap:
-
-```powershell
-git status
-```
-
-will show any newly established submodule gitlinks that still need to be
-committed. A typical first commit is:
-
-```powershell
-git add .gitmodules tools/tool.scad-project dsg/openscad/ext/lib.scad.clamps
-git commit -m "Add project tooling and external libraries"
-git push
-```
-
-The semantic dependency declaration remains in `project.yml`:
+The template enables the selective build backend:
 
 ```yaml
-externals:
-  - name: lib.scad.clamps
-    type: git-submodule
-    url: https://github.com/brainboxemb/lib.scad.clamps.git
-    path: dsg/openscad/ext/lib.scad.clamps
-    required_file: openscad/tube-clamp/tube_clamp.scad
+build_engine:
+  engine: scons
 ```
 
-`.gitmodules` exists because Git needs the technical URL/path information before
-the Python project tool itself is available. Later linting can check that
-`project.yml` and `.gitmodules` agree.
-
-Once bootstrapped, use the pinned local tool:
-
-```powershell
-.\tools\tool.scad-project\scad-project.ps1 externals-status
-.\tools\tool.scad-project\scad-project.ps1 design-lint
-.\tools\tool.scad-project\scad-project.ps1 design-build
-.\tools\tool.scad-project\scad-project.ps1 build
-.\tools\tool.scad-project\scad-project.ps1 verify
-```
-
-## Versioned dependencies
-
-`project.yml` is the dependency-policy source.
-
-The template deliberately demonstrates two different policies:
-
-```yaml
-tooling:
-  tool_scad_project:
-    type: git-submodule
-    url: https://github.com/brainboxemb/tool.scad-project.git
-    path: tools/tool.scad-project
-    ref: v0.6.1
-
-externals:
-  - name: lib.scad.clamps
-    type: git-submodule
-    url: https://github.com/brainboxemb/lib.scad.clamps.git
-    path: dsg/openscad/ext/lib.scad.clamps
-    ref: latest
-    required_file: openscad/tube-clamp/tube_clamp.scad
-```
-
-This demonstrates:
-
-```text
-tool.scad-project
-    exact released tooling version
-
-lib.scad.clamps
-    latest stable semantic-version tag
-```
-
-A project can also use a branch ref such as:
-
-```yaml
-ref: main
-```
-
-when it intentionally wants to test against current development.
-
-After bootstrap, update all configured dependencies with:
-
-```powershell
-.\update-repo.ps1
-```
-
-or:
-
-```bash
-bash ./update-repo.sh
-```
-
-The updater is Python-free. It resolves each dependency independently, updates
-the corresponding gitlink, aligns reusable workflow refs for the project
-tooling, and leaves all changes uncommitted for review.
-
-To restore the commits already locked by the parent repository, use:
-
-```powershell
-.\tools\tool.scad-project\scad-project.ps1 repo-sync
-```
+SCons tracks OpenSCAD dependencies and restores unchanged outputs from the persistent CI cache. The generated design tree is also restored from cache when its complete input set is unchanged.
 
 ## Development entrypoint
 
@@ -224,19 +102,13 @@ Open:
 dsg/openscad/main.scad
 ```
 
-The example assembly contains:
-
-```text
-mounting plate
-+
-reusable tube clamp
-+
-20 mm reference tube
-```
+The reference assembly contains a mounting plate, a reusable clamp from `lib.scad.clamps`, and a 20 mm reference tube. The reusable clamp keeps its library-native coordinate system; the project adapter performs the mounting rotation at the assembly boundary.
 
 ## Design documentation
 
-Design renders use a compact defaults + step syntax:
+Each meaningful component or assembly owns source documentation under `design/design.md`. Render declarations live in that document rather than in `project.yml`.
+
+Example:
 
 ```markdown
 <!-- scad-render-defaults
@@ -249,107 +121,54 @@ view: outer
 -->
 ```
 
-The image name is generated from declaration order (`01-outer.png`,
-`02-bore.png`, ...). The default design image size is `640x480`; individual
-steps can override it with `size:`.
+The project default design image size is `640x480`. Generated design documentation is materialized under `bld/design/` and is never committed beside source `design.md` files.
 
+The template deliberately sets:
 
-`design.md` files are source documentation. Generated images are not committed
-beside them on `main`.
+```yaml
+design:
+  include_externals: false
+```
 
-Source example:
+External CAD source remains available to the project, but the consumer publishes only its project-owned design documentation.
+
+A small PythonSCAD component under `dsg/pythonscad/` remains as an end-to-end demonstration of the multi-engine design pipeline.
+
+## Bootstrap and dependency updates
+
+The root bootstrap and update scripts are exact copies of the canonical scripts from the pinned tool release:
 
 ```text
-dsg/openscad/components/tube/
-├── tube.scad
-└── design/
-    └── design.md
+bootstrap.ps1
+bootstrap.sh
+update-repo.ps1
+update-repo.sh
 ```
 
-The source document declares views:
+Bootstrap deliberately needs only Git plus PowerShell/bash. It restores the direct submodules declared in `.gitmodules`:
 
-```markdown
-<!-- scad-render
-type: source-view
-module: tube_design
-view: bore
-image: 02-bore.png
-alt: Tube bore
--->
+```text
+tools/tool.scad-project
+dsg/openscad/ext/lib.scad.clamps
 ```
 
-Run:
+Normal dependency policy lives in `project.yml`. To advance configured dependencies intentionally, run:
 
 ```powershell
-.\tools\tool.scad-project\scad-project.ps1 design-build
+.\update-repo.ps1
 ```
 
-Generated output is generated under:
+or:
 
-```text
-bld/design/
-├── project/
-│   └── components/tube/design/
-│       ├── design.md
-│       └── img/
-└── ext/
-    └── lib.scad.clamps/
-        └── ...
+```bash
+bash ./update-repo.sh
 ```
 
-The external library's design documentation is included automatically when the
-library contains compatible `design/design.md` sources.
-
-This means the library's generated images do not need to be committed to its
-source checkout just to make its design documentation visible to a consuming
-project.
-
-
-## PythonSCAD design-render example
-
-The reference project includes a small PythonSCAD component under:
-
-```text
-dsg/pythonscad/components/pythonscad-example/
-```
-
-Its `design.md` uses the same render declarations as OpenSCAD components:
-
-```markdown
-<!-- scad-render-defaults
-engine: pythonscad
-source: pythonscad_example.py
-vpr: [65, 0, 35]
--->
-
-<!-- scad-render
-view: final
--->
-```
-
-This example is intentionally small. Its purpose is to verify the generic
-multi-engine design pipeline rather than introduce a second implementation of
-the main tube-holder assembly.
-
-## Source/API documentation
-
-Structured `.scad` comments use `openscad_docsgen` conventions.
-
-For example:
-
-```scad
-// File: tube.scad
-//
-// Module: tube()
-// ...
-```
-
-`scad-project docs-lint` validates these comments using the docsgen tooling from
-the runtime image.
+The updater leaves gitlink/workflow changes uncommitted for normal review. Direct dependency checkout is intentionally non-recursive; a consumer does not initialize development dependencies nested inside its libraries.
 
 ## Local workflow
 
-After bootstrap, use the project-pinned local tool:
+After bootstrap, use the pinned local tool:
 
 ```powershell
 .\tools\tool.scad-project\scad-project.ps1 config-lint
@@ -361,118 +180,45 @@ After bootstrap, use the project-pinned local tool:
 .\tools\tool.scad-project\scad-project.ps1 verify
 ```
 
-`design-render` renders the complete expected design image set before removing
-stale images.
-
 ## CI
 
-The repository keeps a thin GitHub Actions caller:
+The repository keeps thin workflow callers pinned to the same immutable tool release:
 
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.6.1
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.0
 ```
 
-The reusable workflow owns the common SCAD project build sequence:
+Build owns configuration/external/source/design linting, generated-design cache handling, dependency-selective PNG/STL generation, build indexing, provenance and publication. Verify owns generic build/source verification, project-specific verification commands, provenance and verification publication.
 
-1. restore pinned submodules;
-2. validate tooling alignment;
-3. lint configuration, externals, source docs and design docs;
-4. generate OpenSCAD and PythonSCAD design documentation;
-5. build configured PNG/STL outputs;
-6. create the build index;
-7. write `publication-info.txt`;
-8. upload `bld/` as an artifact;
-9. publish production branches to `build`, development branches to
-   `dev/build`, and keep PR/tag runs artifact-only.
+## Publication and releases
 
-Generated output stays out of `main`.
-
-## OpenSCAD module boundaries
-
-The example deliberately uses `use <...>` between project components.
-`use` imports modules and functions, but not top-level variables.
-
-Values needed across component boundaries are therefore exposed through
-functions rather than by directly reading another file's constants. For
-example:
-
-```scad
-function mounting_plate_thickness() = MOUNTING_PLATE_THICKNESS;
-```
-
-The assembly calls `mounting_plate_thickness()` instead of referencing
-`MOUNTING_PLATE_THICKNESS` directly.
-
-
-## Generated build branch
-
-The source branch deliberately does not contain generated design images,
-renders or STL files.
-
-Local/CI output goes to:
-
-```text
-bld/
-├── design/
-├── png/
-└── stl/
-```
-
-Publication now depends on the source context:
+Generated output stays off `main`.
 
 ```text
 main
-    → build
+    source and project configuration
 
-other branch
-    → dev/build
-
-pull request
-    → artifact only
-
-version tag v*
-    → artifact only
-```
-
-The same policy applies to verification output in projects that define it:
-`verification` for production and `dev/verification` for development.
-
-Every generated artifact/snapshot contains `publication-info.txt` with the
-source ref, commit and workflow-run provenance.
-
-So the repository roles are:
-
-```text
-main
-    source .scad
-    source design.md
-    project.yml
-    bootstrap/configuration
-
-build
-    current production-generated output
+prod/build
+prod/verification
+    latest successful generated production snapshots
 
 dev/build
-    latest development-generated output
+dev/verification
+    latest successful generated development snapshots
+
+rel/vX.Y.Z/build
+rel/vX.Y.Z/verification
+    immutable browseable project-release snapshots
 ```
 
+Pull requests remain artifact-only. A coordinated project release is created from the exact current production-branch HEAD only after Build and Verify both succeed. A GitHub Release then contains deterministic build/verification/STL bundles plus `SHA256SUMS.txt` and links back to the immutable browseable `rel/*` branches.
 
-The `build` branch also has a generated root `README.md` that acts as an index
-to the design documentation, PNG renders and STL exports.
+Every generated snapshot includes `publication-info.txt` with source commit, tool/toolchain versions, submodule pins and runtime provenance.
 
-A user can also run `design-build` locally to inspect the same generated design
-documentation without modifying the source tree.
+## Source/API documentation
 
+Structured OpenSCAD comments use `openscad_docsgen` conventions and start with `// File:` or `// LibFile:` before structured module/function blocks. `scad-project docs-lint` validates this in CI.
 
-
-### Reference assembly orientation
-
-The reusable clamp keeps its library-native coordinate system. The project
-adapter rotates it only at the mounting boundary: the compact flat face rests
-on the mounting plate and the reference tube follows the resulting horizontal
-X-axis bore.
-
-Design declarations use explicit image sizes but only `vpr` where possible;
-`scad-project` then keeps the requested orientation and auto-fits the model.
+The model and documentation were developed with the assistance of ChatGPT.

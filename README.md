@@ -27,12 +27,18 @@ template.scad-project
 ## Current baseline
 
 ```text
-tool.scad-project   v0.9.1
+tool.scad-project   v0.9.5
 SCAD toolchain      v0.4.1
 SCons               4.11.1
 ```
 
 The tool is pinned twice: semantically in `project.yml` and technically by the Git submodule gitlink at `tools/tool.scad-project`.
+
+## Reference-consumer role
+
+This repository is the canonical minimal consumer for `tool.scad-project`. A tool release should be exercised here to prove that the documented project structure, bootstrap/update flow and thin Build/Verify/Release callers still work together on a small representative project.
+
+The template is intentionally not the only integration test. Larger consumers can supplement it when a feature needs a realistic dependency graph or enough independent outputs to demonstrate selective rebuild behaviour. In particular, dependency-selective cache tests are more informative in a project such as the HUB75 display frame, while this repository remains the first-line reference/smoke consumer.
 
 ## Structure
 
@@ -95,7 +101,7 @@ build_engine:
 
 SCons tracks OpenSCAD dependencies and restores unchanged outputs from the persistent CI cache. The generated design tree is also restored from cache when its complete input set is unchanged.
 
-`tool.scad-project v0.9.1` generates `bld/png/README.md` as a browseable, deterministically ordered gallery whenever PNG build output is present. The generated `bld/README.md` links directly to that gallery.
+`tool.scad-project v0.9.5` generates `bld/png/README.md` as a browseable, deterministically ordered gallery whenever PNG build output is present. The generated `bld/README.md` links directly to that gallery.
 
 ## Development entrypoint
 
@@ -190,7 +196,7 @@ The repository keeps thin workflow callers pinned to the same immutable tool rel
 ```yaml
 jobs:
   build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.1
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.5
 ```
 
 Build owns configuration/external/source/design linting, generated-design cache handling, dependency-selective PNG/STL generation, build indexing, provenance and publication. Verify owns generic build/source verification, project-specific verification commands, provenance and verification publication.

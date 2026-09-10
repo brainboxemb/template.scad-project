@@ -17,6 +17,6 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.6
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@v0.9.7
     with:
       artifact_name: template-scad-project-build

@@ -6,7 +6,7 @@ tooling:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: experiment/scons-selective-build
+    ref: v0.8.0
 
 paths:
   design_root: dsg
@@ -52,14 +52,6 @@ builds:
   - name: tube-holder-assembly-stl
     source: dsg/openscad/render/tube-holder-assembly.scad
     output: bld/stl/tube-holder-assembly.stl
-
-  - name: tube-png
-    source: dsg/openscad/render/tube.scad
-    output: bld/png/tube.png
-
-  - name: mounting-plate-png
-    source: dsg/openscad/render/mounting-plate.scad
-    output: bld/png/mounting-plate.png
 
 publication:
   production:

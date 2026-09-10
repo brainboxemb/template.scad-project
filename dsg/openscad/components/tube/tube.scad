@@ -14,7 +14,7 @@
 //   length = Tube length.
 TUBE_OUTER_DIAMETER = 20;
 TUBE_WALL_THICKNESS = 2;
-TUBE_LENGTH = 101;
+TUBE_LENGTH = 100;
 
 module tube(
     outer_diameter = TUBE_OUTER_DIAMETER,

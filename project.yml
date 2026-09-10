@@ -6,7 +6,7 @@ tooling:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.8.0
+    ref: feature/versioned-project-release
 
 paths:
   design_root: dsg
@@ -53,11 +53,16 @@ builds:
     source: dsg/openscad/render/tube-holder-assembly.scad
     output: bld/stl/tube-holder-assembly.stl
 
+verification:
+  commands:
+    - [bash, scripts/run-verification.sh]
+  output_root: vrf/out
+
 publication:
   production:
     source_branch: main
-    build_branch: build
-    verification_branch: verification
+    build_branch: prod/build
+    verification_branch: prod/verification
 
   development:
     build_branch: dev/build
@@ -65,3 +70,7 @@ publication:
 
   tags:
     pattern: "v*"
+
+  release:
+    branch_prefix: rel
+    tag_pattern: "v*"

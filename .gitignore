@@ -1,4 +1,5 @@
 bld/
+.cache/
 *.scad~
 *.bak
 .vscode/

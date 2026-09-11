@@ -7,6 +7,8 @@ The reference consumer currently verifies two independent OpenSCAD dependency pa
 - the configured tube holder and nominal tube bore;
 - the mounting plate thickness.
 
+These renders are verification evidence rather than presentation output, so they deliberately use the smaller verification-specific image size.
+
 ## Verification renders
 
 ![Tube-holder bore check](png/tube-holder-bore-check.png)

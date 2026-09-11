@@ -2,7 +2,6 @@
 //   Project adapter that consumes lib.scad.clamps.
 //
 // FileSummary: Reusable library clamp as a project component.
-// Verification cache probe: comment-only source change; geometry is unchanged.
 
 use <../../ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad>
 

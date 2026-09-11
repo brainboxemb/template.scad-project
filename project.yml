@@ -6,7 +6,7 @@ tooling:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.9.12
+    ref: v0.9.13
 
 paths:
   design_root: dsg
@@ -47,9 +47,11 @@ externals:
     required_file: openscad/tube-clamp/tube_clamp.scad
 
 verification:
+  render_root: vrf/openscad
+  output_root: vrf/out
+  image_size: [1280, 720]
   commands:
     - [bash, scripts/run-verification.sh]
-  output_root: vrf/out
 
 publication:
   production:

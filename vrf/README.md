@@ -1,7 +1,14 @@
 # Verification
 
-Verification rules are intentionally minimal in the template at this stage.
+Verification source is intentionally separate from normal build output.
 
-The current `tool.scad-project` release performs linting and build verification.
-Publishing orphan verification snapshot branches will be added once that logic
-is generalized in the reusable tooling repository.
+```text
+vrf/
+├── openscad/     verification-only OpenSCAD entrypoints
+├── templates/    source templates for generated verification documentation
+└── out/          generated verification snapshot (CI/local output)
+```
+
+`tool.scad-project` owns dependency-aware rendering and its separate verification cache. A normal `bld/` PNG/STL is not copied into `vrf/out`; verification evidence should exist only when it adds a distinct check.
+
+Project-specific policy checks remain in `scripts/run-verification.sh` and run after the verification geometry targets are current.

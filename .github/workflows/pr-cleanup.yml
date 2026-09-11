@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   cleanup:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-pr-cleanup.yml@ba93e9165f8c23df3f867c2ae7fa160187166d9d
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-pr-cleanup.yml@19f38a6cf283e281ca7b9ab6ef8397740afe6fbf
     with:
       pr_number: ${{ github.event.pull_request.number }}
       pr_branch_prefix: dev/pr

@@ -8,12 +8,13 @@ Functional changes to released `template.scad-project` versions.
 
 - Advance the reusable `lib.scad.clamps` dependency from `v0.1.0` to the newly validated immutable `v0.1.1` release.
 - Lock the `dsg/openscad/ext/lib.scad.clamps` gitlink to the exact source commit behind `v0.1.1` (`e2e4c03a743b4c76ebd96f015ca81cc686defbf3`).
-- Upgrade the canonical reference consumer from `tool.scad-project` v0.9.8 through v0.9.10 to v0.9.11.
-- Align the semantic tool ref, `tools/tool.scad-project` gitlink, and Build/Verify/Release/PR-cleanup reusable workflow callers to the exact v0.9.11 source commit.
+- Upgrade the canonical reference consumer from `tool.scad-project` v0.9.8 through v0.9.10 and v0.9.11 to v0.9.12.
+- Align the semantic tool ref, `tools/tool.scad-project` gitlink, and Build/Verify/Release/PR-cleanup reusable workflow callers to the exact v0.9.12 source commit.
 - Replace shared `dev/build` and `dev/verification` snapshots with isolated `dev/pr-<number>/build` and `dev/pr-<number>/verification` pull-request previews.
 - Run Build and Verify for pull requests and pushes to `main` instead of also running a duplicate build for every feature-branch push.
 - Add pull-request cleanup that removes generated PR preview branches after close and deletes merged same-repository feature branches.
 - Keep production publication on mutable `prod/build` and `prod/verification` snapshots.
+- Defer generic branch, pull-request and publication-agent guidance to the pinned `tools/tool.scad-project/AGENTS.md` policy instead of duplicating changing workflow rules in the template root guidance.
 
 ## v0.0.2
 

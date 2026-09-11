@@ -1,29 +1,39 @@
-# ChatGPT project handoff
+# Repository agent guidance
+
+Persistent guidance for automated coding agents working in `template.scad-project`.
 
 ## Repository role
 
-`template.scad-project` is the reference consumer for the current SCAD project architecture. Keep generic behavior in `tool.scad-project`; do not reintroduce project-specific build/render orchestration here.
+This repository is the reference consumer for the current SCAD project
+architecture. Generic behavior belongs in `tool.scad-project`; do not duplicate
+project workflow logic here.
 
 ```text
 docker.scad-toolchain
-    runtime/capabilities
+    runtime / capabilities
 
 tool.scad-project
-    reusable workflow and conventions
+    reusable workflow / conventions
 
 template.scad-project
-    project configuration, source and documentation
+    reference consumer
 ```
 
-## Current baseline
+## Sources of truth
+
+Do not duplicate volatile dependency versions in this file.
+
+Use:
 
 ```text
-tool.scad-project   v0.9.1
-SCAD toolchain      v0.4.1
-SCons               4.11.1
+project.yml                         dependency policy
+.gitlinks / .gitmodules             resolved dependency lock / registration
+.github/workflows/*.yml             reusable workflow refs
+scad-toolchain-info                 runtime component evidence
 ```
 
-The tool release is declared in `project.yml`, pinned by the `tools/tool.scad-project` gitlink, and matched by all reusable workflow refs.
+When updating `tool.scad-project`, keep its `project.yml` ref, gitlink and
+reusable workflow refs aligned.
 
 ## Project structure
 
@@ -47,65 +57,57 @@ tools/
 vrf/
 ```
 
-Do not add a second copy of the project under `tools/`. That directory contains only the pinned tool submodule.
+`tools/` contains tooling only. Do not place a second copy of the project there.
 
-## Directory-based build convention
+## Build convention
 
-Normal build targets are discovered from configured roots:
-
-```yaml
-paths:
-  design_root: dsg
-  build_root: bld
-  render_root: dsg/openscad/render
-  export_root: dsg/openscad/export
-```
+Normal targets are directory-discovered:
 
 ```text
-render/*.scad -> bld/png/*.png
-export/*.scad -> bld/stl/*.stl
+dsg/openscad/render/*.scad -> bld/png/*.png
+dsg/openscad/export/*.scad -> bld/stl/*.stl
 ```
 
-Do not list normal render/export files under root `builds:`. Keep explicit `builds:` only for exceptional mappings that cannot be represented by directory discovery. Use `render.yml` / `export.yml` for profile-specific behavior such as multiple sizes.
+Use adjacent `render.yml` / `export.yml` only for profile-specific behavior.
+Keep root `builds:` for exceptional mappings that cannot be represented by the
+normal convention.
 
-The template enables:
-
-```yaml
-build_engine:
-  engine: scons
-```
-
-SCons dependency selection and cache semantics belong to `tool.scad-project`, not the template.
+The template intentionally enables the SCons backend. SCons dependency logic,
+cache semantics and changed-target selection belong to `tool.scad-project`.
 
 ## Design documentation
 
-Source design documentation lives beside the owning component/assembly as `design/design.md`. Prefer `scad-render-defaults` plus compact `scad-render` steps and source views rather than duplicating geometry in Markdown.
+Source design documentation lives beside the owning component or assembly as
+`design/design.md`.
 
-Generated design material belongs only under `bld/design`; never commit `design/img/` output beside source docs.
+Prefer:
 
-The template deliberately uses:
-
-```yaml
-design:
-  include_externals: false
+```text
+scad-render-defaults
+scad-render
 ```
 
-External CAD source remains available, but this consumer publishes only project-owned design documentation.
+and source views over duplicated inline geometry.
 
-Keep the small PythonSCAD example as an end-to-end multi-engine design test; it is not a requirement to duplicate real components in PythonSCAD.
+Generated design output belongs only under `bld/design`; never commit generated
+`design/img/` output beside source documentation.
+
+The template deliberately excludes external design documentation while keeping
+external CAD source available to builds.
+
+Keep the small PythonSCAD example as an end-to-end multi-engine design test. It
+is not a requirement to duplicate real components in PythonSCAD.
 
 ## Dependencies and bootstrap
 
-Direct submodules are:
+Direct submodules are the project tool and the example CAD library declared in
+`project.yml` / `.gitmodules`.
 
-```text
-tools/tool.scad-project
-dsg/openscad/ext/lib.scad.clamps
-```
+Normal checkout is direct-only. Do not recursively initialize development
+dependencies owned by those repositories.
 
-Checkout is intentionally direct/non-recursive. A consumer does not initialize nested development dependencies of its libraries.
-
-Root helper scripts:
+Root helper scripts must remain exact copies of the canonical files from the
+pinned `tool.scad-project` release:
 
 ```text
 bootstrap.ps1
@@ -114,34 +116,28 @@ update-repo.ps1
 update-repo.sh
 ```
 
-must stay exact copies of the canonical versions from the pinned `tool.scad-project` release. Bootstrap remains Python-free and uses Git plus PowerShell/bash only. `update-repo` resolves dependency policy from `project.yml`, updates gitlinks/workflow refs and leaves changes uncommitted for review.
+Bootstrap remains Python-free and depends only on Git plus PowerShell/bash.
+`update-repo` intentionally advances dependency policy and leaves changes
+uncommitted for review.
 
 ## OpenSCAD boundaries
 
-`use <file.scad>` imports modules/functions, not top-level variables. Values required across component boundaries must be exposed through functions/parameters rather than directly reading constants that would become `undef`.
+`use <file.scad>` imports modules/functions, not file-level variables. Values
+needed across component boundaries must be exposed through functions or
+parameters.
 
-The reference assembly keeps the reusable clamp in library-native coordinates. Project mounting adapters apply the rotation at the assembly boundary; the tube follows the clamp bore axis.
+Keep reusable library geometry in library-native coordinates. Apply project
+orientation changes at the assembly boundary.
 
-## CI
+## CI and publication
 
-The template is a real consumer and keeps thin callers only:
+Consumer workflows must remain thin callers of reusable workflows in
+`tool.scad-project`. Do not copy generic lint/design/build/publication shell
+logic into this repository.
 
-```text
-.github/workflows/build.yml
-    -> project-build.yml@v0.9.1
+`scad-project build-index` owns generated build indexes.
 
-.github/workflows/verify.yml
-    -> project-verify.yml@v0.9.1
-
-.github/workflows/release.yml
-    -> project-release.yml@v0.9.1
-```
-
-Do not duplicate generic tool logic in workflow shell blocks.
-
-`scad-project build-index` generates both `bld/README.md` and the normal build PNG gallery at `bld/png/README.md`. There is no source `docs/build-README.md` template anymore.
-
-## Publication lifecycle
+Publication model:
 
 ```text
 main
@@ -153,17 +149,20 @@ prod/verification
 
 dev/build
 dev/verification
-    mutable latest development snapshots
+    mutable development snapshots
 
 rel/vX.Y.Z/build
 rel/vX.Y.Z/verification
-    immutable browseable release snapshots
+    immutable release snapshots
 ```
 
-Pull requests are artifact-only. A versioned release must use the exact current production-branch HEAD, pass coordinated Build + Verify, then create immutable `rel/*` branches, an annotated source tag and GitHub Release bundles/checksums.
-
-Every generated snapshot contains `publication-info.txt` with source, tool/toolchain, submodule and runtime provenance.
+Pull requests are artifact-only. Every generated snapshot must contain
+`publication-info.txt` provenance.
 
 ## Source documentation
 
-Structured `.scad` comments follow `openscad_docsgen` conventions. A structured source starts with `// File:` or `// LibFile:` before Module/Function/etc blocks. Treat OpenSCAD warnings indicating `undef`/undefined geometry as failures; presentation-only camera warnings remain allowed by the shared tool policy.
+Structured `.scad` comments follow `openscad_docsgen` conventions and begin
+with `File:` or `LibFile:` before structured API blocks.
+
+Treat OpenSCAD warnings that indicate undefined/broken geometry as failures;
+presentation-only camera warnings are handled by shared tool policy.

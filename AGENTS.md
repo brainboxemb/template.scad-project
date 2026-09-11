@@ -19,6 +19,15 @@ template.scad-project
     reference consumer
 ```
 
+## Generic workflow policy
+
+Before branch, pull-request, publication or release work, read the pinned
+`tools/tool.scad-project/AGENTS.md`. Its pull-request-first change workflow and
+publication lifecycle are authoritative for this consumer.
+
+This root file adds template-specific guidance only. It must not contradict the
+pinned tool policy or duplicate changing generic branch/publication conventions.
+
 ## Sources of truth
 
 Do not duplicate volatile dependency versions in this file.
@@ -135,29 +144,11 @@ Consumer workflows must remain thin callers of reusable workflows in
 `tool.scad-project`. Do not copy generic lint/design/build/publication shell
 logic into this repository.
 
-`scad-project build-index` owns generated build indexes.
+`scad-project build-index` owns generated build indexes. Branch naming, PR
+preview publication, cleanup and release lifecycle are defined by the pinned
+tool policy and `project.yml`, not repeated here.
 
-Publication model:
-
-```text
-main
-    source only
-
-prod/build
-prod/verification
-    mutable latest successful production snapshots
-
-dev/build
-dev/verification
-    mutable development snapshots
-
-rel/vX.Y.Z/build
-rel/vX.Y.Z/verification
-    immutable release snapshots
-```
-
-Pull requests are artifact-only. Every generated snapshot must contain
-`publication-info.txt` provenance.
+Every generated snapshot must contain `publication-info.txt` provenance.
 
 ## Source documentation
 

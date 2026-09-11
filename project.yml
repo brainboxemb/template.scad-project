@@ -43,7 +43,7 @@ externals:
     type: git-submodule
     url: https://github.com/brainboxemb/lib.scad.clamps.git
     path: dsg/openscad/ext/lib.scad.clamps
-    ref: v0.1.0
+    ref: v0.1.1
     required_file: openscad/tube-clamp/tube_clamp.scad
 
 verification:

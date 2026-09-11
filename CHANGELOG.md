@@ -4,6 +4,11 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+### Changed
+
+- Pin the reusable `lib.scad.clamps` dependency to its first immutable release, `v0.1.0`, instead of following the moving `main` branch.
+- Lock the `dsg/openscad/ext/lib.scad.clamps` gitlink to the exact source commit behind `v0.1.0`.
+
 ## v0.0.2
 
 ### Changed

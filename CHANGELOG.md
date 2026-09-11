@@ -8,6 +8,9 @@ Functional changes to released `template.scad-project` versions.
 
 - Pin the reusable `lib.scad.clamps` dependency to its first immutable release, `v0.1.0`, instead of following the moving `main` branch.
 - Lock the `dsg/openscad/ext/lib.scad.clamps` gitlink to the exact source commit behind `v0.1.0`.
+- Upgrade the canonical reference consumer from `tool.scad-project` v0.9.8 to v0.9.10.
+- Align the semantic tool ref, `tools/tool.scad-project` gitlink, and Build/Verify/Release reusable workflow callers to the exact v0.9.10 source commit.
+- Exercise the v0.9.10 layout-independent Build/Verify cache-input hashing fix in the canonical template consumer before wider rollout.
 
 ## v0.0.2
 

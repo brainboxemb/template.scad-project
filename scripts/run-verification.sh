@@ -33,7 +33,8 @@ fi
 for mapping in \
   "build.yml:project-build" \
   "verify.yml:project-verify" \
-  "release.yml:project-release"; do
+  "release.yml:project-release" \
+  "pr-cleanup.yml:project-pr-cleanup"; do
   caller="${mapping%%:*}"
   reusable="${mapping#*:}"
   expected="brainboxemb/tool.scad-project/.github/workflows/${reusable}.yml@${TOOL_SHA}"
@@ -42,6 +43,27 @@ for mapping in \
     exit 1
   fi
 done
+
+for caller in build.yml verify.yml; do
+  path=".github/workflows/${caller}"
+  if ! grep -Eq '^  pull_request:' "$path"; then
+    echo "ERROR: ${path} must run for pull requests" >&2
+    exit 1
+  fi
+  if ! grep -Eq '^      - main$' "$path"; then
+    echo "ERROR: ${path} must run for pushes to main" >&2
+    exit 1
+  fi
+  if grep -Fq -- '- "**"' "$path"; then
+    echo "ERROR: ${path} must not run for every feature-branch push" >&2
+    exit 1
+  fi
+done
+
+if ! grep -Fq 'pr_branch_prefix: dev/pr' project.yml; then
+  echo "ERROR: project.yml must use pull-request-scoped development publication" >&2
+  exit 1
+fi
 
 for script in bootstrap.ps1 bootstrap.sh update-repo.ps1 update-repo.sh; do
   canonical="tools/tool.scad-project/bootstrap/${script}"
@@ -63,7 +85,9 @@ The verification checks that:
 
 - the configured reference assembly produces both a non-empty PNG render and a non-empty STL export;
 - the semantic `tool.scad-project` ref in `project.yml` resolves to the checked-out tool gitlink commit;
-- Build, Verify and Release callers are pinned to that exact 40-character tool commit SHA;
+- Build, Verify, Release and PR-cleanup callers are pinned to that exact 40-character tool commit SHA;
+- Build and Verify use the PR-first trigger policy: pull requests plus pushes to `main`, without duplicate feature-branch push builds;
+- development publication uses the `dev/pr-<number>/*` namespace;
 - the root bootstrap/update scripts match the canonical copies from the pinned tool release.
 
 ## Render evidence

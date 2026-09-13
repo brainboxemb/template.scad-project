@@ -15,6 +15,13 @@ dependencies:
     path: tools/tool.scad-project
     ref: 40694891d3239401cb0ba4bfb35a3812d6584ab7
 
+  - name: tool.eng-docs
+    role: tooling
+    type: git-submodule
+    url: https://github.com/brainboxemb/tool.eng-docs.git
+    path: tools/tool.eng-docs
+    ref: 2620b1a52cbfb5c1428cb4e83388a130db381ce6
+
   - name: lib.scad.clamps
     role: external
     type: git-submodule

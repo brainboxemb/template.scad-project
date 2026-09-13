@@ -89,7 +89,7 @@ for producer in produce-build produce-verification; do
     exit 1
   fi
 done
-if ! grep -Fq "- 'scad.build'" moon.yml; then
+if ! grep -Fq -- "- 'scad.build'" moon.yml; then
   echo "ERROR: scad.verify must depend on scad.build so project checks receive normal Build output" >&2
   exit 1
 fi

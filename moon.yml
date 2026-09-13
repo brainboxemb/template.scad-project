@@ -1,0 +1,42 @@
+tasks:
+  scad.build:
+    command: 'bash tools/tool.scad-project/scad-project.sh produce-build'
+    inputs:
+      - 'project.yml'
+      - 'project.scad.yml'
+      - '.gitmodules'
+      - '.github/workflows/**'
+      - 'dsg/**'
+      - 'tools/tool.scad-project/**'
+      - 'tools/tool.git-project/**'
+      - 'moon.yml'
+      - '.moon/workspace.yml'
+    outputs:
+      - 'bld/**'
+      - '.cache/scad-project/state/last-build.json'
+      - '.cache/scad-project/state/last-design-build.json'
+    options:
+      cache: true
+
+  scad.verify:
+    command: 'bash tools/tool.scad-project/scad-project.sh produce-verification'
+    deps:
+      - 'scad.build'
+    inputs:
+      - 'project.yml'
+      - 'project.scad.yml'
+      - '.gitmodules'
+      - '.github/workflows/**'
+      - 'vrf/README.md'
+      - 'vrf/openscad/**'
+      - 'vrf/templates/**'
+      - 'scripts/**'
+      - 'tools/tool.scad-project/**'
+      - 'tools/tool.git-project/**'
+      - 'moon.yml'
+      - '.moon/workspace.yml'
+    outputs:
+      - 'vrf/out/**'
+      - '.cache/scad-project/verification-state/last-verification-build.json'
+    options:
+      cache: true

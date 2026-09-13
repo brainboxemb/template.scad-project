@@ -1,0 +1,51 @@
+schema_version: 1
+
+asset_manifests:
+  - path: bld/design/project/openscad/components/tube-holder/design/assets.yml
+    publish_prefix: documents/design/tube-holder
+  - path: bld/design/project/openscad/assemblies/tube-holder-assembly/design/assets.yml
+    publish_prefix: documents/design/tube-holder-assembly
+  - path: bld/png/assets.yml
+    publish_prefix: png
+
+documents:
+  - id: project-overview
+    source: README.md
+    output: documents/project-overview.md
+  - id: tube-holder-source
+    source: dsg/openscad/components/tube-holder/design/design.md
+    output: documents/source/tube-holder-design.md
+  - id: tube-holder-rendered
+    source: bld/design/project/openscad/components/tube-holder/design/design.md
+    output: documents/design/tube-holder/design.md
+  - id: tube-holder-assembly-rendered
+    source: bld/design/project/openscad/assemblies/tube-holder-assembly/design/design.md
+    output: documents/design/tube-holder-assembly/design.md
+
+indexes:
+  - output: README.md
+    title: SCAD document assembly qualification
+    intro: Qualification output assembled from source Markdown and already-produced SCAD build/design output.
+    sections:
+      - title: Source Markdown
+        items:
+          - document: project-overview
+          - document: tube-holder-source
+      - title: Existing generated design documentation
+        items:
+          - document: tube-holder-rendered
+          - document: tube-holder-assembly-rendered
+      - title: Existing normal build output
+        items:
+          - label: Normal build PNG gallery
+            target: png/README.md
+          - label: Tube-holder assembly PNG
+            target: png/tube-holder-assembly.png
+
+books:
+  - output: documents/design-book.md
+    title: SCAD generated design review
+    description: Combined review copy of design Markdown produced by the existing SCAD design pipeline.
+    documents:
+      - tube-holder-rendered
+      - tube-holder-assembly-rendered

@@ -1,0 +1,143 @@
+name: Qualify document assembly
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  document-assembly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: ghcr.io/brainboxemb/scad-toolchain:v0.4.1
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Bootstrap existing SCAD tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash ./bootstrap.sh
+          tools/tool.git-project/git-project.sh validate --repo "$PWD"
+          tools/tool.git-project/git-project.sh status --repo "$PWD"
+
+      - name: Install exact eng-docs qualification head
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check \
+            'git+https://github.com/brainboxemb/tool.eng-docs.git@2620b1a52cbfb5c1428cb4e83388a130db381ce6'
+          eng-docs --help >/dev/null
+
+      - name: Record authoritative source Markdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum \
+            README.md \
+            dsg/openscad/components/tube-holder/design/design.md \
+            dsg/openscad/assemblies/tube-holder-assembly/design/design.md \
+            > /tmp/source-docs.sha256
+
+      - name: Generate existing SCAD outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          tools/tool.scad-project/scad-project.sh design-build
+          tools/tool.scad-project/scad-project.sh build
+          tools/tool.scad-project/scad-project.sh build-index
+
+      - name: Describe already-produced SCAD assets
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          eng-docs manifest \
+            --source bld/design/project/openscad/components/tube-holder/design \
+            --out bld/design/project/openscad/components/tube-holder/design/assets.yml \
+            --producer template.scad-project.design.tube-holder \
+            --producer-version 40694891d3239401cb0ba4bfb35a3812d6584ab7 \
+            --source-revision "$SOURCE_SHA" \
+            --lifecycle design-doc \
+            --relationship generate-inline \
+            --include 'img/*.png'
+
+          eng-docs manifest \
+            --source bld/design/project/openscad/assemblies/tube-holder-assembly/design \
+            --out bld/design/project/openscad/assemblies/tube-holder-assembly/design/assets.yml \
+            --producer template.scad-project.design.tube-holder-assembly \
+            --producer-version 40694891d3239401cb0ba4bfb35a3812d6584ab7 \
+            --source-revision "$SOURCE_SHA" \
+            --lifecycle design-doc \
+            --relationship generate-inline \
+            --include 'img/*.png'
+
+          eng-docs manifest \
+            --source bld/png \
+            --out bld/png/assets.yml \
+            --producer template.scad-project.build.png \
+            --producer-version 40694891d3239401cb0ba4bfb35a3812d6584ab7 \
+            --source-revision "$SOURCE_SHA" \
+            --lifecycle build \
+            --relationship reference-existing \
+            --include '*.png' \
+            --include 'README.md'
+
+      - name: Assemble without running SCAD producers
+        shell: bash
+        run: |
+          set -euo pipefail
+          eng-docs assemble \
+            --root . \
+            --config docs/assembly-qualification.yml \
+            --out bld/docs
+
+      - name: Validate assembled SCAD documentation
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Assembly must never mutate authoritative source Markdown.
+          sha256sum -c /tmp/source-docs.sha256
+
+          test -f bld/docs/README.md
+          test -f bld/docs/documents/project-overview.md
+          test -f bld/docs/documents/source/tube-holder-design.md
+          test -f bld/docs/documents/design/tube-holder/design.md
+          test -f bld/docs/documents/design/tube-holder/img/01-library-clamp.png
+          test -f bld/docs/documents/design/tube-holder/img/03-final.png
+          test -f bld/docs/documents/design/tube-holder-assembly/design.md
+          test -f bld/docs/documents/design/tube-holder-assembly/img/04-final.png
+          test -f bld/docs/documents/design-book.md
+          test -f bld/docs/png/README.md
+          test -f bld/docs/png/tube-holder-assembly.png
+          test "$(find bld/docs/_manifests -maxdepth 1 -type f | wc -l)" -eq 3
+
+          # Source-local design authoring remains ordinary Markdown with scad-render declarations.
+          grep -Fq '<!-- scad-render' bld/docs/documents/source/tube-holder-design.md
+
+          # Existing SCAD-generated design Markdown keeps its local image relationship.
+          grep -Fq '![Library Clamp](img/01-library-clamp.png)' \
+            bld/docs/documents/design/tube-holder/design.md
+          grep -Fq '![Final](img/04-final.png)' \
+            bld/docs/documents/design/tube-holder-assembly/design.md
+
+          # A normal build-tree link from source Markdown resolves to the assembled build output.
+          grep -Fq '[Production build PNG gallery](../png/README.md)' \
+            bld/docs/documents/project-overview.md
+
+      - name: Upload assembled qualification output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scad-document-assembly-qualification
+          path: bld/docs
+          if-no-files-found: error
+          retention-days: 14

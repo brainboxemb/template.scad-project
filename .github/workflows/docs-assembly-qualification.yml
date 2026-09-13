@@ -32,9 +32,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m pip install --disable-pip-version-check \
+          pkgdir="${RUNNER_TEMP}/eng-docs-python"
+          bindir="${RUNNER_TEMP}/eng-docs-bin"
+          python3 -m pip install --disable-pip-version-check --target "$pkgdir" \
             'git+https://github.com/brainboxemb/tool.eng-docs.git@2620b1a52cbfb5c1428cb4e83388a130db381ce6'
-          eng-docs --help >/dev/null
+          mkdir -p "$bindir"
+          cat > "$bindir/eng-docs" <<EOF
+          #!/usr/bin/env bash
+          PYTHONPATH="$pkgdir" exec python3 -m eng_docs.cli "\$@"
+          EOF
+          chmod +x "$bindir/eng-docs"
+          echo "$bindir" >> "$GITHUB_PATH"
+          "$bindir/eng-docs" --help >/dev/null
 
       - name: Record authoritative source Markdown
         shell: bash

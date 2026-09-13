@@ -59,9 +59,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tools/tool.scad-project/scad-project.sh design-build
-          tools/tool.scad-project/scad-project.sh build
-          tools/tool.scad-project/scad-project.sh build-index
+          bash tools/tool.scad-project/scad-project.sh design-build
+          bash tools/tool.scad-project/scad-project.sh build
+          bash tools/tool.scad-project/scad-project.sh build-index
 
       - name: Describe already-produced SCAD assets
         shell: bash

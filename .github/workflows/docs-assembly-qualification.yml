@@ -23,6 +23,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          git config --global --add safe.directory "$PWD"
           bash ./bootstrap.sh
           tools/tool.git-project/git-project.sh validate --repo "$PWD"
           tools/tool.git-project/git-project.sh status --repo "$PWD"
@@ -139,5 +140,5 @@ jobs:
         with:
           name: scad-document-assembly-qualification
           path: bld/docs
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14

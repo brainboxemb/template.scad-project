@@ -1,0 +1,56 @@
+paths:
+  design_root: dsg
+  build_root: bld
+  render_root: dsg/openscad/render
+  export_root: dsg/openscad/export
+
+design:
+  include_externals: false
+
+build_engine:
+  engine: scons
+
+openscad:
+  common_flags:
+    - --enable=object-function
+  render_flags:
+    - --render
+  image_size: [1600, 1000]
+  design_image_size: [640, 480]
+
+rendering:
+  watermark:
+    text: "© 2026 brainboxemb"
+
+pythonscad:
+  common_flags:
+    - --trust-python
+  render_flags:
+    - --render
+
+externals:
+  - name: lib.scad.clamps
+    required_file: openscad/tube-clamp/tube_clamp.scad
+
+verification:
+  render_root: vrf/openscad
+  output_root: vrf/out
+  image_size: [1280, 720]
+  commands:
+    - [bash, scripts/run-verification.sh]
+
+publication:
+  production:
+    source_branch: main
+    build_branch: prod/build
+    verification_branch: prod/verification
+
+  development:
+    pr_branch_prefix: dev/pr
+
+  tags:
+    pattern: "v*"
+
+  release:
+    branch_prefix: rel
+    tag_pattern: "v*"

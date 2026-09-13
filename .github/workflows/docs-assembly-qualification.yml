@@ -28,14 +28,14 @@ jobs:
           tools/tool.git-project/git-project.sh validate --repo "$PWD"
           tools/tool.git-project/git-project.sh status --repo "$PWD"
 
-      - name: Install exact eng-docs qualification head
+      - name: Activate managed eng-docs qualification dependency
         shell: bash
         run: |
           set -euo pipefail
           pkgdir="${RUNNER_TEMP}/eng-docs-python"
           bindir="${RUNNER_TEMP}/eng-docs-bin"
           python3 -m pip install --disable-pip-version-check --target "$pkgdir" \
-            'git+https://github.com/brainboxemb/tool.eng-docs.git@2620b1a52cbfb5c1428cb4e83388a130db381ce6'
+            ./tools/tool.eng-docs
           mkdir -p "$bindir"
           cat > "$bindir/eng-docs" <<EOF
           #!/usr/bin/env bash

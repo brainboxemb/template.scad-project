@@ -4,6 +4,9 @@
 [submodule "tools/tool.scad-project"]
 	path = tools/tool.scad-project
 	url = https://github.com/brainboxemb/tool.scad-project.git
+[submodule "tools/tool.eng-docs"]
+	path = tools/tool.eng-docs
+	url = https://github.com/brainboxemb/tool.eng-docs.git
 [submodule "dsg/openscad/ext/lib.scad.clamps"]
 	path = dsg/openscad/ext/lib.scad.clamps
 	url = https://github.com/brainboxemb/lib.scad.clamps.git

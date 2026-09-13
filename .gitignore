@@ -1,5 +1,8 @@
 bld/
+vrf/out/
 .cache/
+.moon/cache/
+.moon/invocations/
 *.scad~
 *.bak
 .vscode/

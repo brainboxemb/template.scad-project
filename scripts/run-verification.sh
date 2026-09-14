@@ -2,8 +2,8 @@
 set -euo pipefail
 
 EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
-EXPECTED_SCAD_TOOL_SHA="47bf0924e306dac371a46adfdc577623949f1579"
-EXPECTED_SCAD_TOOL_REF="v0.10.1"
+EXPECTED_SCAD_TOOL_SHA="8e0bd8f3b31e421586554f2bc7cbd914d05836b6"
+EXPECTED_SCAD_TOOL_REF="v0.11.0"
 
 BUILD_PNG="bld/png/tube-holder-assembly.png"
 BUILD_STL="bld/stl/tube-holder-assembly.stl"
@@ -67,7 +67,10 @@ for required in \
   'brainboxemb/tool.git-project/moon@v0.2.3' \
   'brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3' \
   'task: consumer:scad.ci' \
-  'SCAD_PROJECT_SOURCE_SHA:'; do
+  'SCAD_PROJECT_SOURCE_SHA:' \
+  'bld/evidence/executions/scad-docs/execution.json' \
+  'bld/evidence/executions/scad-build/execution.json' \
+  'vrf/out/evidence/executions/scad-verify/execution.json'; do
   if ! grep -Fq "$required" "$SCAD_WORKFLOW"; then
     echo "ERROR: ${SCAD_WORKFLOW} is missing production orchestration contract: ${required}" >&2
     exit 1
@@ -77,6 +80,13 @@ done
 if grep -Fq 'task: consumer:scad.build' "$SCAD_WORKFLOW" || \
    grep -Fq 'moon-project.sh run consumer:scad.verify' "$SCAD_WORKFLOW"; then
   echo "ERROR: workflow must invoke one SCAD Moon graph instead of separate build/verify roots" >&2
+  exit 1
+fi
+
+if grep -Fq 'cp .cache/scad-project/state/last-build.json "$staging/evidence/domain/last-build.json"' "$SCAD_WORKFLOW" || \
+   grep -Fq 'cp .cache/scad-project/state/last-design-build.json "$staging/evidence/domain/last-design-build.json"' "$SCAD_WORKFLOW" || \
+   grep -Fq 'cp .cache/scad-project/verification-state/last-verification-build.json "$staging/evidence/domain/last-verification-build.json"' "$SCAD_WORKFLOW"; then
+  echo "ERROR: publication staging must consume producer-owned domain evidence, not synthesize it from cache state" >&2
   exit 1
 fi
 
@@ -92,19 +102,25 @@ fi
 for required in \
   'scad.docs:' \
   'scad-project.sh design-build' \
+  'bld/evidence/executions/scad-docs/**' \
+  'bld/evidence/domain/last-design-build.json' \
   'scad.build:' \
   'scad-project.sh build' \
+  'bld/evidence/executions/scad-build/**' \
+  'bld/evidence/domain/last-build.json' \
   'scad.build-index:' \
   'scad-project.sh build-index' \
   'scad.build-provenance:' \
   'scad-project.sh publication-info-build' \
   'scad.verify:' \
   'scad-project.sh verify' \
+  'vrf/out/evidence/executions/scad-verify/**' \
+  'vrf/out/evidence/domain/last-verification-build.json' \
   'scad.verification-provenance:' \
   'scad-project.sh publication-info-verification' \
   'scad.ci:'; do
   if ! grep -Fq "$required" moon.yml; then
-    echo "ERROR: moon.yml is missing explicit SCAD production stage: ${required}" >&2
+    echo "ERROR: moon.yml is missing explicit SCAD production/evidence stage contract: ${required}" >&2
     exit 1
   fi
 done
@@ -161,4 +177,4 @@ mkdir -p "$OUT"
 rm -f "$OUT/png/tube-holder-assembly.png"
 cp vrf/templates/README.md "$OUT/README.md"
 
-echo "Template production Moon orchestration verification: OK"
+echo "Template T6 SCAD execution-evidence verification: OK"

@@ -86,6 +86,7 @@ tasks:
       - 'project.yml'
       - 'project.scad.yml'
       - '.gitmodules'
+      - 'dsg/**'
       - 'vrf/README.md'
       - 'vrf/openscad/**'
       - 'vrf/templates/**'

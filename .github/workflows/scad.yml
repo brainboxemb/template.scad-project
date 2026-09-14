@@ -22,6 +22,7 @@ jobs:
       SCAD_TOOLCHAIN_IMAGE: ghcr.io/brainboxemb/scad-toolchain:v0.4.1
       SCAD_TOOLCHAIN_VERSION: v0.4.1
       SCAD_PROJECT_PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+      SCAD_PROJECT_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
     steps:
       - name: Checkout exact consumer revision with Moon VCS history
@@ -65,19 +66,11 @@ jobs:
           restore-keys: |
             template-scad-verification-scons-v1-${{ runner.os }}-${{ github.repository_id }}-v0.4.1-47bf0924e306dac371a46adfdc577623949f1579-
 
-      - name: Run or hydrate normal SCAD producer
+      - name: Run or hydrate SCAD production graph
         uses: brainboxemb/tool.git-project/moon@v0.2.3
         with:
-          task: consumer:scad.build
+          task: consumer:scad.ci
           cache-namespace: template-scad-production
-
-      - name: Run or hydrate verification producer
-        shell: bash
-        env:
-          MOON_INSTALL_ROOT: ${{ runner.temp }}/tool-git-project/moon-runtime
-        run: |
-          set -euo pipefail
-          bash tools/tool.git-project/moon-project.sh run consumer:scad.verify --repo .
 
       - name: Verify producer output and current materialization evidence
         shell: bash
@@ -89,7 +82,9 @@ jobs:
           for file in \
             bld/png/tube-holder-assembly.png \
             bld/stl/tube-holder-assembly.stl \
+            bld/design/README.md \
             bld/README.md \
+            bld/png/README.md \
             bld/publication-info.txt \
             vrf/out/png/tube-holder-bore-check.png \
             vrf/out/png/mounting-plate-thickness-check.png \
@@ -98,10 +93,8 @@ jobs:
             .cache/scad-project/state/last-build.json \
             .cache/scad-project/state/last-design-build.json \
             .cache/scad-project/verification-state/last-verification-build.json \
-            .moon/invocations/consumer_scad.build/materialization.json \
-            .moon/invocations/consumer_scad.build/moon.log \
-            .moon/invocations/consumer_scad.verify/materialization.json \
-            .moon/invocations/consumer_scad.verify/moon.log; do
+            .moon/invocations/consumer_scad.ci/materialization.json \
+            .moon/invocations/consumer_scad.ci/moon.log; do
             test -s "$file"
           done
 
@@ -111,16 +104,17 @@ jobs:
           from pathlib import Path
 
           expected = os.environ["SOURCE_REVISION"]
-          for task in ("consumer_scad.build", "consumer_scad.verify"):
-              path = Path(".moon/invocations") / task / "materialization.json"
-              data = json.loads(path.read_text(encoding="utf-8"))
-              if data.get("source_revision") != expected:
-                  raise SystemExit(f"{task}: materialization revision mismatch")
-              if data.get("status") != "success" or data.get("exit_code") != 0:
-                  raise SystemExit(f"{task}: materialization did not succeed")
+          path = Path(".moon/invocations/consumer_scad.ci/materialization.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          if data.get("task") != "consumer:scad.ci":
+              raise SystemExit("materialization task mismatch")
+          if data.get("source_revision") != expected:
+              raise SystemExit("materialization revision mismatch")
+          if data.get("status") != "success" or data.get("exit_code") != 0:
+              raise SystemExit("materialization did not succeed")
           PY
 
-      - name: Stage build producer output with current materialization evidence
+      - name: Stage build output with current orchestration evidence
         shell: bash
         run: |
           set -euo pipefail
@@ -130,10 +124,10 @@ jobs:
           cp -a bld/. "$staging/"
           cp .cache/scad-project/state/last-build.json "$staging/evidence/domain/last-build.json"
           cp .cache/scad-project/state/last-design-build.json "$staging/evidence/domain/last-design-build.json"
-          cp .moon/invocations/consumer_scad.build/moon.log "$staging/orchestration/moon.log"
-          cp .moon/invocations/consumer_scad.build/materialization.json "$staging/orchestration/materialization.json"
+          cp .moon/invocations/consumer_scad.ci/moon.log "$staging/orchestration/moon.log"
+          cp .moon/invocations/consumer_scad.ci/materialization.json "$staging/orchestration/materialization.json"
 
-      - name: Stage verification producer output with current materialization evidence
+      - name: Stage verification output with current orchestration evidence
         shell: bash
         run: |
           set -euo pipefail
@@ -142,8 +136,8 @@ jobs:
           mkdir -p "$staging/evidence/domain" "$staging/orchestration"
           cp -a vrf/out/. "$staging/"
           cp .cache/scad-project/verification-state/last-verification-build.json "$staging/evidence/domain/last-verification-build.json"
-          cp .moon/invocations/consumer_scad.verify/moon.log "$staging/orchestration/moon.log"
-          cp .moon/invocations/consumer_scad.verify/materialization.json "$staging/orchestration/materialization.json"
+          cp .moon/invocations/consumer_scad.ci/moon.log "$staging/orchestration/moon.log"
+          cp .moon/invocations/consumer_scad.ci/materialization.json "$staging/orchestration/materialization.json"
 
       - name: Upload prepared build publication
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

@@ -11,6 +11,8 @@ tasks:
       - '.moon/workspace.yml'
     outputs:
       - 'bld/design/**'
+      - 'bld/evidence/executions/scad-docs/**'
+      - 'bld/evidence/domain/last-design-build.json'
       - '.cache/scad-project/state/last-design-build.json'
     options:
       cache: true
@@ -31,6 +33,8 @@ tasks:
     outputs:
       - 'bld/png/**/*.png'
       - 'bld/stl/**/*.stl'
+      - 'bld/evidence/executions/scad-build/**'
+      - 'bld/evidence/domain/last-build.json'
       - '.cache/scad-project/state/last-build.json'
     options:
       cache: true
@@ -103,6 +107,8 @@ tasks:
     outputs:
       - 'vrf/out/png/**/*.png'
       - 'vrf/out/README.md'
+      - 'vrf/out/evidence/executions/scad-verify/**'
+      - 'vrf/out/evidence/domain/last-verification-build.json'
       - '.cache/scad-project/verification-state/last-verification-build.json'
     options:
       cache: true

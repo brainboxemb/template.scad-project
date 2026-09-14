@@ -31,6 +31,14 @@ jobs:
           fetch-depth: 0
           filter: blob:none
 
+      - name: Configure Git safe directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE/tools/tool.git-project"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE/tools/tool.scad-project"
+
       - name: Bootstrap released tooling
         shell: bash
         run: |

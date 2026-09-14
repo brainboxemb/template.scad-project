@@ -66,13 +66,19 @@ SCAD_WORKFLOW=.github/workflows/scad.yml
 for required in \
   'brainboxemb/tool.git-project/moon@v0.2.3' \
   'brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3' \
-  'consumer:scad.build' \
-  'consumer:scad.verify'; do
+  'task: consumer:scad.ci' \
+  'SCAD_PROJECT_SOURCE_SHA:'; do
   if ! grep -Fq "$required" "$SCAD_WORKFLOW"; then
     echo "ERROR: ${SCAD_WORKFLOW} is missing production orchestration contract: ${required}" >&2
     exit 1
   fi
 done
+
+if grep -Fq 'task: consumer:scad.build' "$SCAD_WORKFLOW" || \
+   grep -Fq 'moon-project.sh run consumer:scad.verify' "$SCAD_WORKFLOW"; then
+  echo "ERROR: workflow must invoke one SCAD Moon graph instead of separate build/verify roots" >&2
+  exit 1
+fi
 
 if ! grep -Fq "project-release.yml@${EXPECTED_SCAD_TOOL_SHA}" .github/workflows/release.yml; then
   echo "ERROR: release.yml is not pinned to released tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}" >&2
@@ -83,14 +89,40 @@ if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.3' .github/workflows/pr-clea
   exit 1
 fi
 
-for producer in produce-build produce-verification; do
-  if ! grep -Fq "$producer" moon.yml; then
-    echo "ERROR: moon.yml is missing stable SCAD producer action: ${producer}" >&2
+for required in \
+  'scad.docs:' \
+  'scad-project.sh design-build' \
+  'scad.build:' \
+  'scad-project.sh build' \
+  'scad.build-index:' \
+  'scad-project.sh build-index' \
+  'scad.build-provenance:' \
+  'scad-project.sh publication-info-build' \
+  'scad.verify:' \
+  'scad-project.sh verify' \
+  'scad.verification-provenance:' \
+  'scad-project.sh publication-info-verification' \
+  'scad.ci:'; do
+  if ! grep -Fq "$required" moon.yml; then
+    echo "ERROR: moon.yml is missing explicit SCAD production stage: ${required}" >&2
     exit 1
   fi
 done
+
+for coarse in produce-build produce-verification; do
+  if grep -Fq "$coarse" moon.yml; then
+    echo "ERROR: moon.yml must expose meaningful production stages instead of coarse ${coarse}" >&2
+    exit 1
+  fi
+done
+
 if ! grep -Fq -- "- 'scad.build'" moon.yml; then
   echo "ERROR: scad.verify must depend on scad.build so project checks receive normal Build output" >&2
+  exit 1
+fi
+if ! grep -Fq -- "- 'scad.build-provenance'" moon.yml || \
+   ! grep -Fq -- "- 'scad.verification-provenance'" moon.yml; then
+  echo "ERROR: scad.ci must resolve both build and verification publication-ready branches" >&2
   exit 1
 fi
 

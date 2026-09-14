@@ -1,0 +1,2 @@
+Qualification-only probe: this root file is intentionally outside every SCAD Moon producer input.
+Its commit must update current materialization evidence without rewriting cached producer execution evidence.

@@ -1,7 +1,7 @@
 // File: mounting_plate.scad
 //   Project-specific mounting plate used by the reference assembly.
 //
-// FileSummary: Simple rectangular mounting surface.
+// FileSummary: Reference mounting surface shared by assembly and verification examples.
 //
 // Module: mounting_plate()
 // Usage:

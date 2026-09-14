@@ -72,7 +72,7 @@ jobs:
         uses: brainboxemb/tool.git-project/moon@v0.2.3
         with:
           task: consumer:scad.ci
-          cache-namespace: template-scad-production
+          cache-namespace: template-scad-production-t6-v1
 
       - name: Verify producer output and current materialization evidence
         shell: bash

@@ -6,6 +6,7 @@ Functional changes to released `template.scad-project` versions.
 
 ### Changed
 
+- Keep the reference Moon graph's normal Build and Verification branches logically independent; aggregate `scad.ci` still requests both publication-ready branches.
 - Advance the reusable `lib.scad.clamps` dependency from `v0.1.0` to the newly validated immutable `v0.1.1` release.
 - Lock the `dsg/openscad/ext/lib.scad.clamps` gitlink to the exact source commit behind `v0.1.1` (`e2e4c03a743b4c76ebd96f015ca81cc686defbf3`).
 - Upgrade the canonical reference consumer from `tool.scad-project` v0.9.8 through v0.9.10 and v0.9.11 to v0.9.12.

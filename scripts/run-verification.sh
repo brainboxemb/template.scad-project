@@ -67,6 +67,7 @@ for required in \
   'brainboxemb/tool.git-project/moon@v0.2.3' \
   'brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3' \
   'task: consumer:scad.ci' \
+  'cache-namespace: template-scad-production-t6-v1' \
   'SCAD_PROJECT_SOURCE_SHA:' \
   'bld/evidence/executions/scad-docs/execution.json' \
   'bld/evidence/executions/scad-build/execution.json' \

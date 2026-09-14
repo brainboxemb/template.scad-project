@@ -5,15 +5,13 @@ EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
 EXPECTED_SCAD_TOOL_SHA="68301267273ea21c4b82ff3b26e1c8a30ff7b065"
 EXPECTED_SCAD_TOOL_REF="v0.12.0"
 
-BUILD_PNG="bld/png/tube-holder-assembly.png"
-BUILD_STL="bld/stl/tube-holder-assembly.stl"
 OUT="vrf/out"
 VERIFY_PNGS=(
   "$OUT/png/tube-holder-bore-check.png"
   "$OUT/png/mounting-plate-thickness-check.png"
 )
 
-for file in "$BUILD_PNG" "$BUILD_STL" "${VERIFY_PNGS[@]}"; do
+for file in "${VERIFY_PNGS[@]}"; do
   if [[ ! -s "$file" ]]; then
     echo "ERROR: expected non-empty generated output is missing: $file" >&2
     exit 1
@@ -133,8 +131,12 @@ for coarse in produce-build produce-verification; do
   fi
 done
 
-if ! grep -Fq -- "- 'scad.build'" moon.yml; then
-  echo "ERROR: scad.verify must depend on scad.build so project checks receive normal Build output" >&2
+if awk '
+  /^  scad\.verify:/ { in_verify = 1 }
+  /^  scad\.verification-provenance:/ { in_verify = 0 }
+  in_verify { print }
+' moon.yml | grep -Fq -- "- 'scad.build'"; then
+  echo "ERROR: scad.verify must remain logically independent from normal scad.build output" >&2
   exit 1
 fi
 if ! grep -Fq -- "- 'scad.build-provenance'" moon.yml || \

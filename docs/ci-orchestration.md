@@ -10,8 +10,8 @@ The production graph is intentionally visible in `moon.yml`:
 scad.docs ───────┐
                  ├──> scad.build-index ──> scad.build-provenance ──┐
 scad.build ──────┘                                                   │
-     │                                                               ├──> scad.ci
-     └──> scad.verify ──> scad.verification-provenance ──────────────┘
+                                                                     ├──> scad.ci
+scad.verify ─────────────> scad.verification-provenance ─────────────┘
 ```
 
 The stages have distinct responsibilities:
@@ -20,9 +20,11 @@ The stages have distinct responsibilities:
 - `scad.build` generates normal PNG/STL output and normal build-decision evidence;
 - `scad.build-index` creates navigation/gallery files after both documentation and normal build output are available;
 - `scad.build-provenance` records producer/publication provenance for the build snapshot;
-- `scad.verify` generates verification-only evidence and runs project verification checks; this template depends on `scad.build` because its project check intentionally inspects normal Build output;
+- `scad.verify` generates verification-only evidence and runs project verification checks independently from normal Build output;
 - `scad.verification-provenance` records producer/publication provenance for the verification snapshot;
-- `scad.ci` is the non-cacheable repository root used by CI so Moon resolves the complete dependency graph once.
+- `scad.ci` is the non-cacheable repository root used by normal CI so Moon resolves both publication-ready branches in one repository graph.
+
+Build and Verify are separate logical domains even when normal CI requests both through `scad.ci`. A verification task must not gain an implicit dependency on normal Build output merely because both happen in the same production job. Aggregate CI is responsible for requiring both branches when a complete production snapshot is requested.
 
 Normal build and verification SCons `CacheDir` state is persisted separately from Moon output-cache state. A Moon task that executes can therefore still report target-level `BUILT`, `CACHE_RESTORED`, `CURRENT` or `ERROR` decisions from SCons. If Moon hydrates the entire task result, the SCAD action and SCons are not run for that task.
 

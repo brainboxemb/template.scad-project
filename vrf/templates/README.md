@@ -17,4 +17,6 @@ These renders are verification evidence rather than presentation output, so they
 
 The geometry above is built by the dependency-aware verification target engine. `scripts/run-verification.sh` performs the remaining cheap project-policy checks and copies this source template into the generated snapshot.
 
+In the repository Moon graph this template is a verification-only input. Updating verification documentation or verification CAD must invalidate the verification branch without invalidating unrelated normal Build or generated-design tasks.
+
 The exact source commit and runtime/tooling versions are recorded separately in `publication-info.txt` by `tool.scad-project`.

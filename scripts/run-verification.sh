@@ -2,8 +2,8 @@
 set -euo pipefail
 
 EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
-EXPECTED_SCAD_TOOL_SHA="8e0bd8f3b31e421586554f2bc7cbd914d05836b6"
-EXPECTED_SCAD_TOOL_REF="v0.11.0"
+EXPECTED_SCAD_TOOL_SHA="68301267273ea21c4b82ff3b26e1c8a30ff7b065"
+EXPECTED_SCAD_TOOL_REF="v0.12.0"
 
 BUILD_PNG="bld/png/tube-holder-assembly.png"
 BUILD_STL="bld/stl/tube-holder-assembly.stl"

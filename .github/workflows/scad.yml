@@ -44,7 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           bash ./bootstrap.sh
-          test "$(git -C tools/tool.git-project rev-parse HEAD)" = "d6d760845967f70bd266b3ac2b36c9d5b0edc862"
+          test "$(git -C tools/tool.git-project rev-parse HEAD)" = "fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
           test "$(git -C tools/tool.scad-project rev-parse HEAD)" = "47bf0924e306dac371a46adfdc577623949f1579"
           grep -F 'ref: v0.10.1' project.yml
           tools/tool.git-project/git-project.sh validate --repo .
@@ -66,7 +66,7 @@ jobs:
             template-scad-verification-scons-v1-${{ runner.os }}-${{ github.repository_id }}-v0.4.1-47bf0924e306dac371a46adfdc577623949f1579-
 
       - name: Run or hydrate normal SCAD producer
-        uses: brainboxemb/tool.git-project/moon@v0.2.2
+        uses: brainboxemb/tool.git-project/moon@v0.2.3
         with:
           task: consumer:scad.build
           cache-namespace: template-scad-production
@@ -166,7 +166,7 @@ jobs:
     needs: scad
     permissions:
       contents: write
-    uses: brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.2
+    uses: brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3
     with:
       artifact_name: template-scad-project-build-publication
       branch_suffix: build
@@ -176,7 +176,7 @@ jobs:
     needs: scad
     permissions:
       contents: write
-    uses: brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.2
+    uses: brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3
     with:
       artifact_name: template-scad-project-verification-publication
       branch_suffix: verification

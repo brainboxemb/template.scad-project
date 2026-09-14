@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_GIT_TOOL_SHA="d6d760845967f70bd266b3ac2b36c9d5b0edc862"
+EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
 EXPECTED_SCAD_TOOL_SHA="47bf0924e306dac371a46adfdc577623949f1579"
 EXPECTED_SCAD_TOOL_REF="v0.10.1"
 
@@ -64,8 +64,8 @@ fi
 
 SCAD_WORKFLOW=.github/workflows/scad.yml
 for required in \
-  'brainboxemb/tool.git-project/moon@v0.2.2' \
-  'brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.2' \
+  'brainboxemb/tool.git-project/moon@v0.2.3' \
+  'brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3' \
   'consumer:scad.build' \
   'consumer:scad.verify'; do
   if ! grep -Fq "$required" "$SCAD_WORKFLOW"; then
@@ -78,7 +78,7 @@ if ! grep -Fq "project-release.yml@${EXPECTED_SCAD_TOOL_SHA}" .github/workflows/
   echo "ERROR: release.yml is not pinned to released tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}" >&2
   exit 1
 fi
-if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.2' .github/workflows/pr-cleanup.yml; then
+if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.3' .github/workflows/pr-cleanup.yml; then
   echo "ERROR: pr-cleanup.yml must use released generic cleanup" >&2
   exit 1
 fi

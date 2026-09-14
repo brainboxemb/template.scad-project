@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./bootstrap.sh
+          bash ./bootstrap.sh
           test "$(git -C tools/tool.git-project rev-parse HEAD)" = "d6d760845967f70bd266b3ac2b36c9d5b0edc862"
           test "$(git -C tools/tool.scad-project rev-parse HEAD)" = "47bf0924e306dac371a46adfdc577623949f1579"
           grep -F 'ref: v0.10.1' project.yml

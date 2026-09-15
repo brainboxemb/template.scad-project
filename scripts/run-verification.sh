@@ -130,14 +130,28 @@ for coarse in produce-build produce-verification; do
   fi
 done
 
-if awk '
+VERIFY_BLOCK="$(awk '
   /^  scad\.verify:/ { in_verify = 1 }
   /^  scad\.verification-provenance:/ { in_verify = 0 }
   in_verify { print }
-' moon.yml | grep -Fq -- "- 'scad.build'"; then
+' moon.yml)"
+if grep -Fq -- "- 'scad.build'" <<< "$VERIFY_BLOCK"; then
   echo "ERROR: scad.verify must remain logically independent from normal scad.build output" >&2
   exit 1
 fi
+if grep -Fq -- "- 'dsg/**'" <<< "$VERIFY_BLOCK"; then
+  echo "ERROR: scad.verify must not use the whole design tree as a coarse input" >&2
+  exit 1
+fi
+for required in \
+  "- 'dsg/openscad/components/tube-holder/tube_holder.scad'" \
+  "- 'dsg/openscad/components/mounting-plate/mounting_plate.scad'" \
+  "- 'dsg/openscad/ext/lib.scad.clamps/**'"; do
+  if ! grep -Fq -- "$required" <<< "$VERIFY_BLOCK"; then
+    echo "ERROR: scad.verify is missing an actual verification source dependency: ${required}" >&2
+    exit 1
+  fi
+done
 
 IMPACT_BLOCK="$(awk '
   /^  scad\.production-impact:/ { in_impact = 1 }

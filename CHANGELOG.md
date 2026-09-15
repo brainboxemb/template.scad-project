@@ -4,6 +4,17 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+## v0.0.4
+
+### Changed
+
+- Repin the Migration-005 reference consumer to `tool.scad-project v0.14.3` after the parallel HUB75 canary exposed a shared v0.14.2 Moon output-contract defect for command-only verification.
+- Keep the existing Migration-005 reference architecture unchanged: the patch release only advances the shared tool dependency, exact tool gitlink and reusable Production/Release workflow pins to the corrected owner release.
+
+### Fixed
+
+- Ensure the canonical reference consumer uses the same corrected shared foundation as the clamps and HUB75 Migration-005 canaries instead of leaving released `template.scad-project v0.0.3` on the superseded v0.14.2 owner release.
+
 ## v0.0.3
 
 ### Changed

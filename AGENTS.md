@@ -31,8 +31,8 @@ project.yml                         generic dependency policy
 project.scad.yml                    SCAD project/runtime/build policy
 .gitlinks / .gitmodules             exact resolved dependency pins
 .github/workflows/*.yml             exact reusable-workflow refs
-.moon/workspace.yml                 visible SCAD capability selection
-moon.yml                            project-specific impact rules
+.moon/workspace.yml                 Moon workspace/project registration
+moon.yml                            visible capabilities + project-specific impact rules
 scad-toolchain-info                 runtime component evidence
 ```
 
@@ -48,14 +48,14 @@ scad.build   presentation renders / exports
 scad.verify  Verification
 ```
 
-They are selected in `.moon/workspace.yml`. The shared commands, stable tool inputs, normal output boundaries and Moon cache policy are inherited from:
+They are selected in root `moon.yml` through `workspace.inheritedTasks.include`. The shared commands, stable tool inputs, normal output boundaries and Moon cache policy are inherited from:
 
 ```text
 .moon/tasks/scad.yml
     -> tools/tool.scad-project/moon/tasks/scad.yml
 ```
 
-Root `moon.yml` contains only project-specific source-impact inputs. Do not reintroduce generic commands, build-index/provenance tasks, synthetic CI roots, or broad `tools/tool.scad-project/**` inputs.
+Beyond that capability selection, root `moon.yml` contains only project-specific source-impact inputs. Keep `.moon/workspace.yml` limited to Moon workspace-level configuration. Do not reintroduce generic commands, build-index/provenance tasks, synthetic CI roots, or broad `tools/tool.scad-project/**` inputs.
 
 Verification impact stays deliberately narrow: list the project CAD source actually consumed by verification entrypoints and extend that list when verification gains a dependency.
 

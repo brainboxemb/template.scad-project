@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
-EXPECTED_SCAD_TOOL_SHA="da57820fdadd7d203091b6818984991f1548408f"
-EXPECTED_SCAD_TOOL_REF="v0.13.0"
+EXPECTED_GIT_TOOL_SHA="7c43f37e7b07cfb57638a1d1dad2501de09ba7eb"
+EXPECTED_SCAD_TOOL_SHA="5712324ea9e3a7c81ba1b79013f2758f52b219cf"
+EXPECTED_SCAD_TOOL_REF="v0.14.2"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -51,12 +51,12 @@ if [[ "$GIT_TOOL_SHA" != "$EXPECTED_GIT_TOOL_SHA" ]]; then
   exit 1
 fi
 if [[ "$TOOL_SHA" != "$EXPECTED_SCAD_TOOL_SHA" ]]; then
-  echo "ERROR: tool.scad-project must resolve to released v0.13.0 commit ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_SHA}" >&2
+  echo "ERROR: tool.scad-project must resolve to released ${EXPECTED_SCAD_TOOL_REF} commit ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_SHA}" >&2
   exit 1
 fi
 
 if [[ -e .github/workflows/build.yml || -e .github/workflows/verify.yml ]]; then
-  echo "ERROR: standalone Build/Verify callers must not coexist with the production Moon graph" >&2
+  echo "ERROR: standalone Build/Verify callers must not coexist with the shared production lifecycle" >&2
   exit 1
 fi
 
@@ -64,21 +64,29 @@ SCAD_WORKFLOW=.github/workflows/scad.yml
 REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/project-production.yml@${EXPECTED_SCAD_TOOL_SHA}"
 for required in \
   "$REUSABLE_PRODUCTION" \
-  'affected_task: consumer:scad.production-impact' \
-  'aggregate_task: consumer:scad.ci' \
-  'cache_namespace: template-scad-production-v1'; do
+  'cache_namespace: template-scad-production-v2'; do
   if ! grep -Fq "$required" "$SCAD_WORKFLOW"; then
-    echo "ERROR: ${SCAD_WORKFLOW} is missing released reusable-production caller contract: ${required}" >&2
+    echo "ERROR: ${SCAD_WORKFLOW} is missing Migration-005 production caller contract: ${required}" >&2
+    exit 1
+  fi
+done
+for removed in \
+  'affected_task:' \
+  'aggregate_task:' \
+  'scad.production-impact' \
+  'scad.ci'; do
+  if grep -Fq "$removed" "$SCAD_WORKFLOW"; then
+    echo "ERROR: ${SCAD_WORKFLOW} still exposes removed Migration-004 lifecycle input: ${removed}" >&2
     exit 1
   fi
 done
 
-# The consumer caller stays thin; reusable orchestration and publication belong to the released tools.
+# The consumer caller stays thin; reusable orchestration and publication belong to released tools.
 for forbidden in \
   'container:' \
-  'fetch-depth: 0' \
-  'brainboxemb/tool.git-project/moon@' \
-  'reusable-generated-output-publish.yml@' \
+  'fetch-depth:' \
+  'brainboxemb/tool.git-project/moon/' \
+  'generated-output-publish.sh' \
   'scad-project.sh build' \
   'scad-project.sh verify'; do
   if grep -Fq "$forbidden" "$SCAD_WORKFLOW"; then
@@ -91,54 +99,56 @@ if ! grep -Fq "project-release.yml@${EXPECTED_SCAD_TOOL_SHA}" .github/workflows/
   echo "ERROR: release.yml is not pinned to released tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}" >&2
   exit 1
 fi
-if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.3' .github/workflows/pr-cleanup.yml; then
-  echo "ERROR: pr-cleanup.yml must retain the separately owned released generic cleanup workflow" >&2
+if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.8' .github/workflows/pr-cleanup.yml; then
+  echo "ERROR: pr-cleanup.yml must use released generic cleanup workflow v0.2.8" >&2
   exit 1
 fi
 
+if ! grep -Fq "extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'" .moon/tasks/scad.yml; then
+  echo "ERROR: .moon/tasks/scad.yml must inherit the pinned shared SCAD task policy" >&2
+  exit 1
+fi
+if grep -Fq 'workspace:' .moon/workspace.yml || grep -Fq 'inheritedTasks:' .moon/workspace.yml; then
+  echo "ERROR: project-level inherited-task selection belongs in moon.yml, not .moon/workspace.yml" >&2
+  exit 1
+fi
 for required in \
+  'workspace:' \
+  'inheritedTasks:' \
+  '- scad.docs' \
+  '- scad.build' \
+  '- scad.verify' \
+  'tasks:' \
   'scad.docs:' \
-  'scad-project.sh design-build' \
-  'bld/evidence/executions/scad-docs/**' \
-  'bld/evidence/domain/last-design-build.json' \
   'scad.build:' \
-  'scad-project.sh build' \
-  'bld/evidence/executions/scad-build/**' \
-  'bld/evidence/domain/last-build.json' \
-  'scad.build-index:' \
-  'scad-project.sh build-index' \
-  'scad.build-provenance:' \
-  'scad-project.sh publication-info-build' \
-  'scad.verify:' \
-  'scad-project.sh verify' \
-  'vrf/out/evidence/executions/scad-verify/**' \
-  'vrf/out/evidence/domain/last-verification-build.json' \
-  'scad.verification-provenance:' \
-  'scad-project.sh publication-info-verification' \
-  'scad.production-impact:' \
-  'scad.ci:'; do
-  if ! grep -Fq "$required" moon.yml; then
-    echo "ERROR: moon.yml is missing explicit SCAD production/evidence stage contract: ${required}" >&2
+  'scad.verify:'; do
+  if ! grep -Fq -- "$required" moon.yml; then
+    echo "ERROR: moon.yml is missing Migration-005 capability contract: ${required}" >&2
     exit 1
   fi
 done
 
-for coarse in produce-build produce-verification; do
-  if grep -Fq "$coarse" moon.yml; then
-    echo "ERROR: moon.yml must expose meaningful production stages instead of coarse ${coarse}" >&2
+for removed in \
+  'scad.build-index:' \
+  'scad.build-provenance:' \
+  'scad.verification-provenance:' \
+  'scad.production-impact:' \
+  'scad.ci:' \
+  'command:' \
+  'script:' \
+  'tools/tool.scad-project/**' \
+  'tools/tool.git-project/**'; do
+  if grep -Fq "$removed" moon.yml; then
+    echo "ERROR: moon.yml still contains removed/copied shared lifecycle detail: ${removed}" >&2
     exit 1
   fi
 done
 
 VERIFY_BLOCK="$(awk '
   /^  scad\.verify:/ { in_verify = 1 }
-  /^  scad\.verification-provenance:/ { in_verify = 0 }
+  in_verify && /^  scad\.[a-z]/ && $1 != "scad.verify:" { in_verify = 0 }
   in_verify { print }
 ' moon.yml)"
-if grep -Fq -- "- 'scad.build'" <<< "$VERIFY_BLOCK"; then
-  echo "ERROR: scad.verify must remain logically independent from normal scad.build output" >&2
-  exit 1
-fi
 if grep -Fq -- "- 'dsg/**'" <<< "$VERIFY_BLOCK"; then
   echo "ERROR: scad.verify must not use the whole design tree as a coarse input" >&2
   exit 1
@@ -146,36 +156,12 @@ fi
 for required in \
   "- 'dsg/openscad/components/tube-holder/tube_holder.scad'" \
   "- 'dsg/openscad/components/mounting-plate/mounting_plate.scad'" \
-  "- 'dsg/openscad/ext/lib.scad.clamps/**'"; do
+  "- 'dsg/openscad/ext/lib.scad.clamps'"; do
   if ! grep -Fq -- "$required" <<< "$VERIFY_BLOCK"; then
     echo "ERROR: scad.verify is missing an actual verification source dependency: ${required}" >&2
     exit 1
   fi
 done
-
-IMPACT_BLOCK="$(awk '
-  /^  scad\.production-impact:/ { in_impact = 1 }
-  /^  scad\.ci:/ { in_impact = 0 }
-  in_impact { print }
-' moon.yml)"
-for dependency in "- 'scad.docs'" "- 'scad.build'" "- 'scad.verify'"; do
-  if ! grep -Fq -- "$dependency" <<< "$IMPACT_BLOCK"; then
-    echo "ERROR: scad.production-impact is missing producer dependency: ${dependency}" >&2
-    exit 1
-  fi
-done
-for forbidden in "scad.build-index" "scad.build-provenance" "scad.verification-provenance" '$GITHUB_EVENT_NAME' '$SCAD_PROJECT_PR_NUMBER'; do
-  if grep -Fq -- "$forbidden" <<< "$IMPACT_BLOCK"; then
-    echo "ERROR: scad.production-impact must remain source-impact only, not publication-context sensitive: ${forbidden}" >&2
-    exit 1
-  fi
-done
-
-if ! grep -Fq -- "- 'scad.build-provenance'" moon.yml || \
-   ! grep -Fq -- "- 'scad.verification-provenance'" moon.yml; then
-  echo "ERROR: scad.ci must resolve both build and verification publication-ready branches" >&2
-  exit 1
-fi
 
 if ! grep -Eq '^  pull_request:' "$SCAD_WORKFLOW"; then
   echo "ERROR: ${SCAD_WORKFLOW} must run for pull requests" >&2
@@ -212,4 +198,4 @@ mkdir -p "$OUT"
 rm -f "$OUT/png/tube-holder-assembly.png"
 cp vrf/templates/README.md "$OUT/README.md"
 
-echo "Migration 004 Step 4 released-production verification: OK"
+echo "Migration 005 reference-consumer verification: OK"

@@ -6,6 +6,10 @@ Functional changes to released `template.scad-project` versions.
 
 ### Changed
 
+- Upgrade the reference consumer to released `tool.scad-project v0.13.0` and pin the tool gitlink, Production workflow and Release workflow to exact source commit `da57820fdadd7d203091b6818984991f1548408f`.
+- Replace the copied SCAD production implementation with the released reusable `project-production.yml` workflow: lightweight host preflight, at most one normal SCAD container, and lightweight Build/Verification publication jobs.
+- Add `scad.production-impact` as a source-impact-only Moon gate separate from publication-ready aggregate `scad.ci`, so README-only/unrelated changes can skip the SCAD container without publication context causing false positives.
+- Scope `scad.verify` Moon inputs to the template CAD source actually consumed by verification instead of all `dsg/**`, preserving Verify safety while allowing Build-side-only source impact to remain independent.
 - Keep the reference Moon graph's normal Build and Verification branches logically independent; aggregate `scad.ci` still requests both publication-ready branches.
 - Advance the reusable `lib.scad.clamps` dependency from `v0.1.0` to the newly validated immutable `v0.1.1` release.
 - Lock the `dsg/openscad/ext/lib.scad.clamps` gitlink to the exact source commit behind `v0.1.1` (`e2e4c03a743b4c76ebd96f015ca81cc686defbf3`).

@@ -1,0 +1,35 @@
+SCAD producer execution
+=======================
+
+Capability: scad.docs
+Action: design-build
+Source revision: 28333e4f15efcb711bb333d1eec86cbbd46216c2
+Owner: brainboxemb/tool.scad-project
+Owner revision: 5712324ea9e3a7c81ba1b79013f2758f52b219cf
+tool.scad-project version: 0.14.2
+Status: success
+
+Domain evidence: ../../domain/last-design-build.json
+
+Decision report kind: design
+Build engine: scons
+Targets: 16
+Outcomes: BUILT=16, CACHE_RESTORED=0, CURRENT=0, ERROR=0
+
+Target decisions:
+- BUILT: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/01-plate.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/02-clamp.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/03-tube.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/04-final.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/01-base.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/02-final.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/01-outer.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/02-bore.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/03-final.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/04-wall-thickness.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/01-library-clamp.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/02-mounted.png
+- BUILT: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/03-final.png
+- BUILT: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/01-block.png
+- BUILT: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/02-bore.png
+- BUILT: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/03-final.png

@@ -39,7 +39,7 @@ This repository is the first-line reference consumer for the current SCAD stack.
 
 Larger consumers supplement this smoke test when a feature needs a realistic dependency graph or enough independent outputs to demonstrate selective rebuild behaviour. The HUB75 display frame is a better secondary target for that kind of test; this template remains deliberately small.
 
-During Step 0.5 of the ecosystem migration, `project.yml` may temporarily pin an exact pre-release `tool.scad-project` commit so the new ownership boundary can be tested before a release is cut. The files in the repository remain the source of truth for the current pins.
+`project.yml` records the released dependency policy. The `tools/tool.scad-project` gitlink and reusable workflow SHAs lock the exact tool source used by a particular template revision.
 
 ## Configuration split
 
@@ -61,7 +61,7 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: <exact commit, tag or branch policy>
+    ref: <released version policy>
 
   - name: lib.scad.clamps
     role: external
@@ -219,7 +219,7 @@ or:
 bash ./update-repo.sh
 ```
 
-The SCAD wrapper delegates generic dependency movement to `tool.git-project`, then performs one SCAD-specific follow-up: Build, Verify, Release and PR-cleanup reusable-workflow callers are aligned to the exact checked-out `tool.scad-project` commit.
+The SCAD wrapper delegates generic dependency movement to `tool.git-project`, then performs the SCAD-specific follow-up that aligns Production and Release reusable-workflow callers to the exact checked-out `tool.scad-project` commit. PR-preview cleanup is a generic `tool.git-project` workflow and is versioned independently.
 
 Neither layer commits changes automatically. Gitlink, policy and workflow-ref changes remain visible for normal review. Direct dependency checkout is intentionally non-recursive.
 
@@ -242,23 +242,31 @@ After bootstrap, use the pinned local SCAD tool:
 
 ## CI
 
-The repository keeps thin workflow callers pinned to the exact checked-out `tool.scad-project` commit:
+The repository keeps a thin production-workflow caller pinned to the exact checked-out `tool.scad-project` commit:
 
 ```yaml
 jobs:
-  build:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-build.yml@<40-character-tool-sha>
+  scad:
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@<40-character-tool-sha>
+    with:
+      affected_task: consumer:scad.production-impact
+      aggregate_task: consumer:scad.ci
+      cache_namespace: template-scad-production-v1
 ```
 
 The exact SHA intentionally matches the `tools/tool.scad-project` gitlink. `project.yml` records the dependency/update policy; the gitlink and workflow SHA record the exact version used for a particular source commit.
 
-Build owns configuration/external/source/design linting, generated-design cache handling, dependency-selective PNG/STL generation, build indexing, provenance and build publication. Verify owns source/build verification, verification-only dependency targets, project-specific verification commands, provenance and verification publication.
+The reusable workflow first performs a lightweight Moon affected check on the host. If no producer-domain task is affected, the SCAD toolchain container is never started. If production is required, exactly one heavy SCAD job executes or hydrates the aggregate graph and stages Build and Verification publication trees. Publication then happens in lightweight jobs outside the SCAD container.
 
-Functional verification also checks the tooling boundary itself: required direct gitlinks exist, the configured `tool.scad-project` ref resolves to its gitlink, all reusable workflow callers match that exact commit, and root bootstrap/update launchers match their respective owner repositories.
+Build and Verify remain separate logical domains inside that aggregate lifecycle. `scad.production-impact` gates on producer responsibilities; `scad.ci` resolves both publication-ready branches after production has been requested. See [SCAD CI orchestration](docs/ci-orchestration.md) for the task graph and affected-state boundary.
+
+Functional verification also checks the tooling boundary itself: required direct gitlinks exist, the configured `tool.scad-project` release resolves to its exact gitlink, Production and Release callers use that same exact commit, the production caller contains no copied container/orchestration implementation, and root bootstrap/update launchers match their respective owner repositories.
 
 ## Verification source
 
 Verification-only CAD entrypoints live under `vrf/openscad/`. They generate evidence under `vrf/out/` using the verification-specific selective cache. Normal build PNG/STL output remains under `bld/` and is not duplicated merely to create verification evidence.
+
+The Moon `scad.verify` task lists the project CAD source actually consumed by those verification entrypoints instead of treating all of `dsg/**` as verification input. This keeps verification safe for its real component/library dependencies while allowing Build-side-only source changes to remain independent at the repository affected layer. When a verification entrypoint gains a new project dependency, update that task input contract with it.
 
 `scripts/run-verification.sh` performs cheap policy/integration checks after the verification geometry targets are current.
 

@@ -18,3 +18,4 @@ jobs:
       affected_task: consumer:scad.production-impact
       aggregate_task: consumer:scad.ci
       cache_namespace: template-scad-production-v1
+      base_sha: 0000000000000000000000000000000000000000

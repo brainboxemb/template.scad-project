@@ -1,0 +1,34 @@
+[ WARN 2026-09-15 21:29:01.049] moon_app::queries::changed_files  Detected a shallow checkout, unable to run Git commands to determine changed files. 
+[ WARN 21:29:01.049] moon_app::queries::changed_files  A full Git history is required for affected checks, falling back to an empty files list. 
+▮▮▮▮ consumer:scad.verify (8d964624)
++ openscad-docsgen -m -T /work/dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad
+Parsing...
+  /work/dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad
+No log requests to process
++ openscad-docsgen -m -T /work/dsg/openscad/components/mounting-plate/mounting_plate.scad
+Parsing...
+  /work/dsg/openscad/components/mounting-plate/mounting_plate.scad
+No log requests to process
++ openscad-docsgen -m -T /work/dsg/openscad/components/tube/tube.scad
+Parsing...
+  /work/dsg/openscad/components/tube/tube.scad
+No log requests to process
++ openscad-docsgen -m -T /work/dsg/openscad/components/tube-holder/tube_holder.scad
+Parsing...
+  /work/dsg/openscad/components/tube-holder/tube_holder.scad
+No log requests to process
+Verification SCons engine: 2 target(s), cache=/work/.cache/scad-project/verification-scons
++ scons -Q -f /work/tools/tool.scad-project/src/scad_project/scons_driver.py SCAD_PROJECT_MANIFEST=/work/.cache/scad-project/verification-state/verification-manifest.json
+Retrieved `vrf/out/png/mounting-plate-thickness-check.png' from cache
+Retrieved `vrf/out/png/tube-holder-bore-check.png' from cache
+Verification SCons summary: targets=2 built=0 cache-restored=2 current=0 error=0
+  cache_restored: vrf/out/png/mounting-plate-thickness-check.png
+  cache_restored: vrf/out/png/tube-holder-bore-check.png
++ bash scripts/run-verification.sh
+Migration 005 reference-consumer verification: OK
+verify: OK
+▮▮▮▮ consumer:scad.verify (1s 325ms, 8d964624)
+
+Tasks: 1 completed
+ Time: 1s 370ms
+

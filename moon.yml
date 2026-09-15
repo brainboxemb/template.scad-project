@@ -132,6 +132,18 @@ tasks:
     options:
       cache: true
 
+  scad.production-impact:
+    script: ':'
+    deps:
+      - 'scad.docs'
+      - 'scad.build'
+      - 'scad.verify'
+    inputs:
+      - 'moon.yml'
+      - '.moon/workspace.yml'
+    options:
+      cache: false
+
   scad.ci:
     script: ':'
     deps:

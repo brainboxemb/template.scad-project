@@ -5,7 +5,7 @@ set -euo pipefail
 # This branch deliberately tests an unreleased exact tool.scad-project revision.
 # The normal template main/release policy remains release-tag based.
 EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
-EXPECTED_SCAD_TOOL_SHA="f8fa469c720535a0d091064d151b5abdadc3d6ed"
+EXPECTED_SCAD_TOOL_SHA="f71590631fdc1d278f2bcecbee46fdcc696b7429"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -66,6 +66,7 @@ SCAD_WORKFLOW=.github/workflows/scad.yml
 REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/project-production.yml@${EXPECTED_SCAD_TOOL_SHA}"
 for required in \
   "$REUSABLE_PRODUCTION" \
+  'affected_task: consumer:scad.production-impact' \
   'aggregate_task: consumer:scad.ci' \
   'cache_namespace: template-scad-production-m004-step3-v1'; do
   if ! grep -Fq "$required" "$SCAD_WORKFLOW"; then
@@ -111,6 +112,7 @@ for required in \
   'vrf/out/evidence/domain/last-verification-build.json' \
   'scad.verification-provenance:' \
   'scad-project.sh publication-info-verification' \
+  'scad.production-impact:' \
   'scad.ci:'; do
   if ! grep -Fq "$required" moon.yml; then
     echo "ERROR: moon.yml is missing explicit SCAD production/evidence stage contract: ${required}" >&2
@@ -133,6 +135,25 @@ if awk '
   echo "ERROR: scad.verify must remain logically independent from normal scad.build output" >&2
   exit 1
 fi
+
+IMPACT_BLOCK="$(awk '
+  /^  scad\.production-impact:/ { in_impact = 1 }
+  /^  scad\.ci:/ { in_impact = 0 }
+  in_impact { print }
+' moon.yml)"
+for dependency in "- 'scad.docs'" "- 'scad.build'" "- 'scad.verify'"; do
+  if ! grep -Fq -- "$dependency" <<< "$IMPACT_BLOCK"; then
+    echo "ERROR: scad.production-impact is missing producer dependency: ${dependency}" >&2
+    exit 1
+  fi
+done
+for forbidden in "scad.build-index" "scad.build-provenance" "scad.verification-provenance" '$GITHUB_EVENT_NAME' '$SCAD_PROJECT_PR_NUMBER'; do
+  if grep -Fq -- "$forbidden" <<< "$IMPACT_BLOCK"; then
+    echo "ERROR: scad.production-impact must remain source-impact only, not publication-context sensitive: ${forbidden}" >&2
+    exit 1
+  fi
+done
+
 if ! grep -Fq -- "- 'scad.build-provenance'" moon.yml || \
    ! grep -Fq -- "- 'scad.verification-provenance'" moon.yml; then
   echo "ERROR: scad.ci must resolve both build and verification publication-ready branches" >&2

@@ -13,7 +13,8 @@ permissions:
 
 jobs:
   scad:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@f8fa469c720535a0d091064d151b5abdadc3d6ed
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@f71590631fdc1d278f2bcecbee46fdcc696b7429
     with:
+      affected_task: consumer:scad.production-impact
       aggregate_task: consumer:scad.ci
       cache_namespace: template-scad-production-m004-step3-v1

@@ -14,7 +14,7 @@ Functional changes to released `template.scad-project` versions.
 - Keep the template deliberately representative of the broad path: OpenSCAD + PythonSCAD select the full/dual runtime, while `build_engine.engine: scons` exercises normal and Verification-SCons reuse where applicable.
 - Replace copied production orchestration with the exact-pinned reusable `project-production.yml` lifecycle: one host-side affected query, at most one CAD runtime, publication-safe materialization, lightweight finishing and separate Build/Verification publication.
 - Keep normal successful production to compact orchestration evidence instead of retaining duplicate complete Build/Verification trees as Actions artifacts; coordinated releases still use full exact-source cross-job artifacts.
-- Scope Verification impact to the project CAD source and verification inputs it actually consumes, preserving independent Build/docs/Verify boundaries.
+- Declare project-specific Moon impact at stable source-family boundaries so new components, verification cases and scripts are picked up without adding individual filenames to `moon.yml`.
 - Advance the reusable `lib.scad.clamps` dependency from `v0.1.0` to the validated immutable `v0.1.1` release and lock its gitlink to exact source `e2e4c03a743b4c76ebd96f015ca81cc686defbf3`.
 - Use isolated `dev/pr-<number>/build` and `dev/pr-<number>/verification` pull-request previews, keep production snapshots on `prod/build` and `prod/verification`, and clean pull-request publication after close.
 - Defer generic branch, pull-request, dependency and publication mechanics to the exact-pinned shared tooling instead of duplicating them in the template.
@@ -23,6 +23,7 @@ Functional changes to released `template.scad-project` versions.
 
 - Align the semantic `tool.scad-project` dependency, tool gitlink and Production/Release workflow callers to exact released v0.14.2 source `5712324ea9e3a7c81ba1b79013f2758f52b219cf` after Step-4 integration exposed and fixed clean planner-install and Moon inherited-capability-location defects in the owner tool.
 - Document the Moon 2.5.4 configuration boundary correctly: capability selection belongs in project-level `moon.yml`; `.moon/workspace.yml` remains workspace-level configuration.
+- Replace file-level Verification impact entries and the verification assertions that enforced them with maintainable source-family boundaries.
 
 ### Removed
 

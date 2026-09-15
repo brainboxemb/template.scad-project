@@ -59,7 +59,7 @@ scad.build   Presentation renders / exports
 scad.verify  Verification
 ```
 
-They are selected explicitly in `.moon/workspace.yml`:
+They are selected explicitly in root `moon.yml`:
 
 ```yaml
 workspace:
@@ -77,7 +77,7 @@ The shared implementation is inherited through one link:
 extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'
 ```
 
-That pinned shared policy owns the commands, common stable tool/config inputs, normal output boundaries and Moon cache policy. Root `moon.yml` contains only the project-specific source patterns that affect each capability.
+That pinned shared policy owns the commands, common stable tool/config inputs, normal output boundaries and Moon cache policy. Beyond capability selection, root `moon.yml` contains only the project-specific source patterns that affect each capability. `.moon/workspace.yml` contains only Moon workspace/project registration and workspace-level settings.
 
 This is the important Migration-005 simplification: the consumer describes **what this project can do and what project source affects it**, rather than copying CI lifecycle tasks such as build indexes, provenance roots or aggregate execution nodes.
 
@@ -101,7 +101,7 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.14.1
+    ref: v0.14.2
 ```
 
 SCAD-domain intent lives in `project.scad.yml`. In this template that includes:

@@ -1,3 +1,10 @@
+workspace:
+  inheritedTasks:
+    include:
+      - scad.docs
+      - scad.build
+      - scad.verify
+
 tasks:
   scad.docs:
     inputs:

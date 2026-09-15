@@ -1,0 +1,43 @@
+Publication context : pull_request
+Publication kind    : build
+Publication branch  : dev/pr-32/build
+
+Source
+------
+Repository          : brainboxemb/template.scad-project
+Ref type            : pull_request
+Ref                 : proof/m004-step4-scad-source
+Commit              : dc2592b3c408112f97a0d2028f9b7c67ad905c7c
+Triggered by        : brainboxemb
+Workflow run        : https://github.com/brainboxemb/template.scad-project/actions/runs/34939144877
+
+Tooling
+-------
+SCAD toolchain image: ghcr.io/brainboxemb/scad-toolchain:v0.4.1
+SCAD toolchain ver. : v0.4.1
+tool.scad-project   : v0.13.0
+
+Git submodules
+--------------
+dsg/openscad/ext/lib.scad.clamps : e2e4c03a743b4c76ebd96f015ca81cc686defbf3
+dsg/openscad/ext/lib.scad.clamps/tools/tool.scad-project : 827ae5fef4bffd83b81fb4e2eb580267d1dd3abb
+tools/tool.git-project : fcfe97fd468d2c5f03e0c11637a62db8fafc1751
+tools/tool.scad-project : da57820fdadd7d203091b6818984991f1548408f
+
+Runtime components
+------------------
+SCAD toolchain
+==============
+OpenSCAD   : OpenSCAD version 2026.09.09.nightly
+PythonSCAD : PythonSCAD version 1.1.2
+Python     : Python 3.12.3
+Git        : git version 2.43.0
+SCons      : 4.11.1
+BOSL2      : v2.0.752
+pybosl2    : 0.6.7
+Shapely    : 2.1.2
+docsgen    : 2.0.55
+Pillow     : 12.3.0
+OPENSCADPATH: /opt/openscad-libraries
+BOSL2_ROOT  : /opt/openscad-libraries/BOSL2
+PYTHONPATH : /__w/template.scad-project/template.scad-project/tools/tool.scad-project/src:/opt/python-libs

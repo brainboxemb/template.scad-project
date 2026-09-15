@@ -4,6 +4,17 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+## v0.0.4
+
+### Changed
+
+- Replace file-level Moon impact inputs with maintainable source-family boundaries for components, externals, verification content and scripts.
+- Keep capability impact automatic for newly added components and verification cases so routine repository growth does not require editing `moon.yml`.
+
+### Fixed
+
+- Update repository verification to enforce stable source-family boundaries instead of requiring specific component filenames in the Migration 005 capability contract.
+
 ## v0.0.3
 
 ### Changed

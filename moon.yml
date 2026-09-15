@@ -10,7 +10,7 @@ tasks:
     inputs:
       - 'dsg/openscad/**/*.scad'
       - 'dsg/openscad/**/design/**'
-      - 'dsg/openscad/ext/lib.scad.clamps'
+      - 'dsg/openscad/ext/**'
       - 'dsg/pythonscad/**/*.py'
       - 'dsg/pythonscad/**/design/**'
 
@@ -19,16 +19,13 @@ tasks:
       - 'dsg/openscad/**/*.scad'
       - 'dsg/openscad/**/render.yml'
       - 'dsg/openscad/**/export.yml'
-      - 'dsg/openscad/ext/lib.scad.clamps'
+      - 'dsg/openscad/ext/**'
 
   scad.verify:
     inputs:
-      - 'dsg/openscad/components/tube-holder/tube_holder.scad'
-      - 'dsg/openscad/components/mounting-plate/mounting_plate.scad'
-      - 'dsg/openscad/ext/lib.scad.clamps'
-      - 'vrf/README.md'
-      - 'vrf/openscad/**'
-      - 'vrf/templates/**'
+      - 'dsg/openscad/components/**'
+      - 'dsg/openscad/ext/**'
+      - 'vrf/**'
       - 'scripts/**'
       - 'bootstrap.sh'
       - 'bootstrap.ps1'

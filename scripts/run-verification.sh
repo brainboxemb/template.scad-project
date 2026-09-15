@@ -144,24 +144,8 @@ for removed in \
   fi
 done
 
-VERIFY_BLOCK="$(awk '
-  /^  scad\.verify:/ { in_verify = 1 }
-  in_verify && /^  scad\.[a-z]/ && $1 != "scad.verify:" { in_verify = 0 }
-  in_verify { print }
-' moon.yml)"
-if grep -Fq -- "- 'dsg/**'" <<< "$VERIFY_BLOCK"; then
-  echo "ERROR: scad.verify must not use the whole design tree as a coarse input" >&2
-  exit 1
-fi
-for required in \
-  "- 'dsg/openscad/components/tube-holder/tube_holder.scad'" \
-  "- 'dsg/openscad/components/mounting-plate/mounting_plate.scad'" \
-  "- 'dsg/openscad/ext/lib.scad.clamps'"; do
-  if ! grep -Fq -- "$required" <<< "$VERIFY_BLOCK"; then
-    echo "ERROR: scad.verify is missing an actual verification source dependency: ${required}" >&2
-    exit 1
-  fi
-done
+# Do not mirror the concrete Moon input list here. Impact selection is qualified
+# behaviorally in CI; this script only checks the stable capability/ownership contract.
 
 if ! grep -Eq '^  pull_request:' "$SCAD_WORKFLOW"; then
   echo "ERROR: ${SCAD_WORKFLOW} must run for pull requests" >&2

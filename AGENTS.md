@@ -4,64 +4,96 @@ Persistent guidance for automated coding agents working in `template.scad-projec
 
 ## Repository role
 
-This repository is the reference consumer for the current SCAD project
-architecture. Do not duplicate generic Git/bootstrap behavior or reusable SCAD
-build/workflow logic here.
+This repository is the reference consumer for the current SCAD project architecture. Keep generic repository behaviour and reusable SCAD lifecycle mechanics in their owner repositories instead of copying them here.
 
 ```text
 tool.git-project
-    generic bootstrap / dependency gitlinks / repository update
+    generic bootstrap / dependency gitlinks / Moon affected query
 
 docker.scad-toolchain
-    runtime / capabilities
+    reproducible OpenSCAD-focused and full/dual runtimes
 
 tool.scad-project
-    SCAD configuration / build / design / verification / reusable workflows
+    SCAD configuration / inherited capabilities / build / verification / workflows
 
 template.scad-project
-    reference consumer
+    reference consumer configuration and CAD source
 ```
 
-## Generic workflow policy
-
-Before SCAD branch, pull-request, publication or release work, read the pinned
-`tools/tool.scad-project/AGENTS.md`. Its SCAD project change workflow and
-publication lifecycle are authoritative for this consumer.
-
-Generic bootstrap, dependency registration/status/update and Git-submodule ref
-resolution belong to the pinned `tools/tool.git-project`. Do not reimplement
-those operations in this repository or in `tool.scad-project`.
-
-This root file adds template-specific guidance only. It must not contradict the
-pinned tooling policies or duplicate changing generic conventions.
+Before SCAD workflow, publication or release changes, read the pinned `tools/tool.scad-project/AGENTS.md`. Generic Git/dependency behaviour belongs to the pinned `tools/tool.git-project`.
 
 ## Sources of truth
 
-Do not duplicate volatile dependency versions in this file.
-
-Use:
+Do not duplicate volatile dependency versions in this file. Use:
 
 ```text
-project.yml                         generic project/profile/dependency policy
-project.scad.yml                    SCAD-specific project/build policy
-.gitlinks / .gitmodules             resolved dependency lock / registration
-.github/workflows/*.yml             exact reusable SCAD workflow refs
+project.yml                         generic dependency policy
+project.scad.yml                    SCAD project/runtime/build policy
+.gitlinks / .gitmodules             exact resolved dependency pins
+.github/workflows/*.yml             exact reusable-workflow refs
+.moon/workspace.yml                 visible SCAD capability selection
+moon.yml                            project-specific impact rules
 scad-toolchain-info                 runtime component evidence
 ```
 
-`tools/tool.git-project` is a bootstrap special case: its parent gitlink is the
-authoritative exact pin and it must not recursively list itself in `project.yml`.
+`tool.git-project` is the bootstrap special case: its gitlink is the authoritative exact pin and it is not recursively declared in `project.yml`.
 
-`tool.scad-project` is a normal managed dependency in `project.yml`. When it is
-updated, keep its generic dependency ref, gitlink and Production/Release reusable
-workflow refs aligned to the same exact commit. PR-preview cleanup belongs to
-`tool.git-project` and is versioned independently.
+## Visible SCAD capabilities
+
+This reference consumer intentionally exposes all three shared capabilities:
+
+```text
+scad.docs    design documentation
+scad.build   presentation renders / exports
+scad.verify  Verification
+```
+
+They are selected in `.moon/workspace.yml`. The shared commands, stable tool inputs, normal output boundaries and Moon cache policy are inherited from:
+
+```text
+.moon/tasks/scad.yml
+    -> tools/tool.scad-project/moon/tasks/scad.yml
+```
+
+Root `moon.yml` contains only project-specific source-impact inputs. Do not reintroduce generic commands, build-index/provenance tasks, synthetic CI roots, or broad `tools/tool.scad-project/**` inputs.
+
+Verification impact stays deliberately narrow: list the project CAD source actually consumed by verification entrypoints and extend that list when verification gains a dependency.
+
+## Runtime and build-engine reference choices
+
+The template deliberately keeps both OpenSCAD and PythonSCAD configuration. Therefore the shared planner selects the full/dual runtime profile. A project with no PythonSCAD configuration may use the OpenSCAD-focused profile.
+
+The template deliberately sets:
+
+```yaml
+build_engine:
+  engine: scons
+```
+
+so it exercises target-level SCons reuse. A project that selects `direct` must not restore/save SCons caches merely because the ecosystem supports SCons elsewhere.
+
+Moon and SCons have different jobs:
+
+```text
+Moon     coarse repository capability impact + whole-capability reuse
+SCons    individual CAD target reuse inside an executing SCons capability
+```
+
+## Affected versus materialized capabilities
+
+Do not confuse source impact with publication completeness.
+
+If `scad.docs` changes while `scad.docs` and `scad.build` both contribute to the complete Build publication tree, the shared lifecycle may hydrate unchanged `scad.build` output through Moon before replacing the Build branch. `scad.build` remains non-affected; it is materialized only so unchanged presentation output is not deleted.
+
+Verification is a separate publication family and is not pulled in merely to complete Build.
 
 ## Project structure
 
 ```text
 project.yml
 project.scad.yml
+moon.yml
+.moon/
 
 dsg/
 ├── openscad/
@@ -78,12 +110,13 @@ tools/
 ├── tool.git-project/
 └── tool.scad-project/
 
+scripts/
 vrf/
 ```
 
-`tools/` contains tooling only. Do not place a second copy of the project there.
+`tools/` contains tooling only. Generated output belongs under `bld/` and `vrf/out/`, never beside source documentation.
 
-## Build convention
+## Build and design conventions
 
 Normal targets are directory-discovered:
 
@@ -92,114 +125,44 @@ dsg/openscad/render/*.scad -> bld/png/*.png
 dsg/openscad/export/*.scad -> bld/stl/*.stl
 ```
 
-Use adjacent `render.yml` / `export.yml` only for profile-specific behavior.
-Keep root `builds:` in `project.scad.yml` for exceptional mappings that cannot
-be represented by the normal convention.
+Use adjacent `render.yml` / `export.yml` only for profile-specific behaviour. Root `builds:` is for exceptional mappings.
 
-The template intentionally enables the SCons backend. SCons dependency logic,
-cache semantics and changed-target selection belong to `tool.scad-project`.
-Both `project.yml` and `project.scad.yml` are build/cache inputs.
+Source design documentation lives beside the owning component/assembly as `design/design.md`. Prefer `scad-render-defaults` and `scad-render`; generated design output belongs under `bld/design`.
 
-## Design documentation
+Keep the small PythonSCAD example as an end-to-end multi-engine reference. It is not a requirement to duplicate all OpenSCAD components in PythonSCAD.
 
-Source design documentation lives beside the owning component or assembly as
-`design/design.md`.
+## Bootstrap and updates
 
-Prefer:
+Root bootstrap launchers must remain exact copies of the canonical pinned `tool.git-project` consumer launchers. They initialize the bootstrap gitlink first, then let generic tooling restore dependencies from `project.yml`.
 
-```text
-scad-render-defaults
-scad-render
-```
+Root update launchers must remain exact copies of the pinned `tool.scad-project` consumer update wrappers. Generic dependency movement is delegated to `tool.git-project`; SCAD tooling then aligns exact reusable-workflow refs with the resulting `tool.scad-project` gitlink.
 
-and source views over duplicated inline geometry.
-
-Generated design output belongs only under `bld/design`; never commit generated
-`design/img/` output beside source documentation.
-
-The template deliberately excludes external design documentation while keeping
-external CAD source available to builds.
-
-Keep the small PythonSCAD example as an end-to-end multi-engine design test. It
-is not a requirement to duplicate real components in PythonSCAD.
-
-## Dependencies and bootstrap
-
-The template has three direct gitlinks:
-
-```text
-tools/tool.git-project                    bootstrap engine, directly pinned
-tools/tool.scad-project                   managed SCAD tooling dependency
-dsg/openscad/ext/lib.scad.clamps          managed external dependency
-```
-
-Normal checkout is direct-only. Do not recursively initialize development
-dependencies owned by those repositories.
-
-Root bootstrap launchers must remain exact copies of the canonical generic
-consumer files from the pinned `tool.git-project`:
-
-```text
-bootstrap.ps1  <- tools/tool.git-project/bootstrap/consumer-bootstrap.ps1
-bootstrap.sh   <- tools/tool.git-project/bootstrap/consumer-bootstrap.sh
-```
-
-They initialize only the bootstrap-engine gitlink first; `tool.git-project`
-then restores the dependencies declared by `project.yml`.
-
-Root update launchers must remain exact copies of the thin SCAD consumer
-wrappers from the pinned `tool.scad-project`:
-
-```text
-update-repo.ps1 <- tools/tool.scad-project/bootstrap/consumer-update.ps1
-update-repo.sh  <- tools/tool.scad-project/bootstrap/consumer-update.sh
-```
-
-Those wrappers call `scad-project repo-update`. Generic dependency movement is
-then delegated to `tool.git-project`; `tool.scad-project` only performs the
-SCAD-specific follow-up that aligns reusable workflow callers to the resulting
-exact tool gitlink.
-
-Bootstrap remains Python-free and depends only on Git plus PowerShell/bash.
-`update-repo` intentionally leaves dependency/gitlink/workflow changes
-uncommitted for review.
-
-## OpenSCAD boundaries
-
-`use <file.scad>` imports modules/functions, not file-level variables. Values
-needed across component boundaries must be exposed through functions or
-parameters.
-
-Keep reusable library geometry in library-native coordinates. Apply project
-orientation changes at the assembly boundary.
+Never recursively initialize development dependencies owned by those dependencies.
 
 ## CI and publication
 
-Consumer workflows must remain thin callers of reusable workflows in
-`tool.scad-project`. Do not copy generic lint/design/build/publication shell
-logic into this repository.
+Consumer workflows stay thin. Normal Production calls the exact pinned `project-production.yml` and supplies only consumer-level options such as the cache namespace. Do not reintroduce Migration-004 `affected_task` / `aggregate_task` arguments or copy orchestration shell into this repository.
 
-The normal production caller uses the released `project-production.yml`
-interface with a source-impact Moon target for pre-container gating and a
-separate aggregate Moon target for publication-ready execution. README-only or
-otherwise unrelated changes must stop after host preflight without starting the
-SCAD toolchain container.
+Normal production behaviour is:
 
-Build and Verify remain logically independent domains. Keep verification Moon
-inputs scoped to the CAD source actually consumed by verification entrypoints;
-do not reintroduce all of `dsg/**` merely for convenience. Add new verification
-dependencies explicitly when the verification source starts consuming them.
+1. resolve exact source/base;
+2. run one Moon affected query on the host;
+3. stop before the CAD runtime if no configured SCAD capability changed;
+4. let `tool.scad-project` validate capabilities/config and choose runtime/cache policy;
+5. execute or hydrate only required capabilities in at most one CAD runtime;
+6. add current-run Build/Verification finishing information on the host;
+7. publish only changed output families.
 
-`scad-project build-index` owns generated build indexes. Branch naming, PR
-preview publication, cleanup and release lifecycle are defined by the pinned
-SCAD tool policy and `project.scad.yml`, not repeated here.
+Normal CI retains compact impact/materialization evidence instead of duplicating complete Build/Verification trees as Actions artifacts. Release remains different: separate release jobs need complete artifacts as an exact-source cross-job hand-off.
 
-Every generated snapshot must contain `publication-info.txt` provenance.
+Build and Verification publishers remain separate logical outputs and may overlap on the same runner. Publication stays outside the CAD container because it needs current repository credentials/context, not CAD dependencies.
 
-## Source documentation
+Every generated snapshot must contain `publication-info.txt`.
 
-Structured `.scad` comments follow `openscad_docsgen` conventions and begin
-with `File:` or `LibFile:` before structured API blocks.
+## OpenSCAD boundaries
 
-Treat OpenSCAD warnings that indicate undefined/broken geometry as failures;
-presentation-only camera warnings are handled by shared tool policy.
+`use <file.scad>` imports modules/functions, not file-level variables. Values needed across component boundaries must be exposed through functions or parameters.
+
+Keep reusable library geometry in library-native coordinates. Apply project orientation at the assembly boundary.
+
+Structured `.scad` comments follow `openscad_docsgen` conventions and begin with `File:` or `LibFile:` before structured API blocks. Treat warnings indicating undefined/broken geometry as failures; shared tool policy handles known presentation-only warnings.

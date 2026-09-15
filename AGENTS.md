@@ -53,8 +53,9 @@ scad-toolchain-info                 runtime component evidence
 authoritative exact pin and it must not recursively list itself in `project.yml`.
 
 `tool.scad-project` is a normal managed dependency in `project.yml`. When it is
-updated, keep its generic dependency ref, gitlink and Build/Verify/Release/
-PR-cleanup workflow refs aligned to the same exact commit.
+updated, keep its generic dependency ref, gitlink and Production/Release reusable
+workflow refs aligned to the same exact commit. PR-preview cleanup belongs to
+`tool.git-project` and is versioned independently.
 
 ## Project structure
 
@@ -177,6 +178,17 @@ orientation changes at the assembly boundary.
 Consumer workflows must remain thin callers of reusable workflows in
 `tool.scad-project`. Do not copy generic lint/design/build/publication shell
 logic into this repository.
+
+The normal production caller uses the released `project-production.yml`
+interface with a source-impact Moon target for pre-container gating and a
+separate aggregate Moon target for publication-ready execution. README-only or
+otherwise unrelated changes must stop after host preflight without starting the
+SCAD toolchain container.
+
+Build and Verify remain logically independent domains. Keep verification Moon
+inputs scoped to the CAD source actually consumed by verification entrypoints;
+do not reintroduce all of `dsg/**` merely for convenience. Add new verification
+dependencies explicitly when the verification source starts consuming them.
 
 `scad-project build-index` owns generated build indexes. Branch naming, PR
 preview publication, cleanup and release lifecycle are defined by the pinned

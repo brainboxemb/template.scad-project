@@ -1,0 +1,56 @@
+{
+  "backend_signature": "195eedb850fe0aa31a112b85d8385a7d051fd1afdd26d0af22df4e11afdd026b",
+  "engine": "scons",
+  "kind": "verification",
+  "manifest_schema_version": 1,
+  "outcome_counts": {
+    "BUILT": 2,
+    "CACHE_RESTORED": 0,
+    "CURRENT": 0,
+    "ERROR": 0
+  },
+  "provenance": {
+    "cache": {
+      "exact_hit": null,
+      "matched_key": "",
+      "namespace": "scad-verification-v1",
+      "primary_key": "scad-verification-v1-Linux-1361036750-v0.5.0-5712324ea9e3a7c81ba1b79013f2758f52b219cf-8d08b247502bbe95192fe9bc825cd8ef4335849e2531ed5c7a1b724ada4ee618"
+    },
+    "source_commit_sha": "601e9f6fc7c297a5012cbf2aae0c5b95de4335c9",
+    "tool_commit_sha": "5712324ea9e3a7c81ba1b79013f2758f52b219cf",
+    "tool_version": "0.14.2",
+    "toolchain_image": "ghcr.io/brainboxemb/scad-toolchain:v0.5.0",
+    "toolchain_version": "v0.5.0",
+    "workflow_version": "v0.14.2"
+  },
+  "schema": "scad-project.build-decisions",
+  "schema_version": 1,
+  "target_count": 2,
+  "targets": [
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": "vrf/out/png/mounting-plate-thickness-check.png",
+      "sources": [
+        "vrf/openscad/mounting_plate_thickness_check.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad"
+      ],
+      "target_spec_digest": "e3b6c4c5c100f19e75a8ebde9f7ef1f423bb0596bbd5a07146f59cf0bf19b56d"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": "vrf/out/png/tube-holder-bore-check.png",
+      "sources": [
+        "vrf/openscad/tube_holder_bore_check.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "1d064f8c89e059314e26dae0d59691ee0b84c31674851710ad82996e617ac353"
+    }
+  ]
+}

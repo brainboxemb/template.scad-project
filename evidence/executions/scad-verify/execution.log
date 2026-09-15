@@ -1,0 +1,21 @@
+SCAD producer execution
+=======================
+
+Capability: scad.verify
+Action: verify
+Source revision: dc2592b3c408112f97a0d2028f9b7c67ad905c7c
+Owner: brainboxemb/tool.scad-project
+Owner revision: da57820fdadd7d203091b6818984991f1548408f
+tool.scad-project version: 0.13.0
+Status: success
+
+Domain evidence: ../../domain/last-verification-build.json
+
+Decision report kind: verification
+Build engine: scons
+Targets: 2
+Outcomes: BUILT=2, CACHE_RESTORED=0, CURRENT=0, ERROR=0
+
+Target decisions:
+- BUILT: vrf/out/png/mounting-plate-thickness-check.png
+- BUILT: vrf/out/png/tube-holder-bore-check.png

@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Temporary Migration 004 Step 3 qualification contract.
+# This branch deliberately tests an unreleased exact tool.scad-project revision.
+# The normal template main/release policy remains release-tag based.
 EXPECTED_GIT_TOOL_SHA="fcfe97fd468d2c5f03e0c11637a62db8fafc1751"
-EXPECTED_SCAD_TOOL_SHA="68301267273ea21c4b82ff3b26e1c8a30ff7b065"
-EXPECTED_SCAD_TOOL_REF="v0.12.0"
+EXPECTED_SCAD_TOOL_SHA="f8fa469c720535a0d091064d151b5abdadc3d6ed"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -32,8 +34,8 @@ TOOL_REF="$(awk '
   $1 == "-" && $2 == "name:" { in_tool = ($3 == "tool.scad-project"); next }
   in_tool && $1 == "ref:" { print $2; exit }
 ' project.yml)"
-if [[ "$TOOL_REF" != "$EXPECTED_SCAD_TOOL_REF" ]]; then
-  echo "ERROR: tool.scad-project must use released ref ${EXPECTED_SCAD_TOOL_REF}; got ${TOOL_REF:-<missing>}" >&2
+if [[ "$TOOL_REF" != "$EXPECTED_SCAD_TOOL_SHA" ]]; then
+  echo "ERROR: qualification project.yml must pin exact tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_REF:-<missing>}" >&2
   exit 1
 fi
 
@@ -47,11 +49,11 @@ done
 GIT_TOOL_SHA="$(git -C tools/tool.git-project rev-parse HEAD)"
 TOOL_SHA="$(git -C tools/tool.scad-project rev-parse HEAD)"
 if [[ "$GIT_TOOL_SHA" != "$EXPECTED_GIT_TOOL_SHA" ]]; then
-  echo "ERROR: tool.git-project must resolve to ${EXPECTED_GIT_TOOL_SHA}; got ${GIT_TOOL_SHA}" >&2
+  echo "ERROR: tool.git-project gitlink must resolve to ${EXPECTED_GIT_TOOL_SHA}; got ${GIT_TOOL_SHA}" >&2
   exit 1
 fi
 if [[ "$TOOL_SHA" != "$EXPECTED_SCAD_TOOL_SHA" ]]; then
-  echo "ERROR: tool.scad-project must resolve to ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_SHA}" >&2
+  echo "ERROR: tool.scad-project gitlink must resolve to ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_SHA}" >&2
   exit 1
 fi
 
@@ -61,40 +63,32 @@ if [[ -e .github/workflows/build.yml || -e .github/workflows/verify.yml ]]; then
 fi
 
 SCAD_WORKFLOW=.github/workflows/scad.yml
+REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/project-production.yml@${EXPECTED_SCAD_TOOL_SHA}"
 for required in \
-  'brainboxemb/tool.git-project/moon@v0.2.3' \
-  'brainboxemb/tool.git-project/.github/workflows/reusable-generated-output-publish.yml@v0.2.3' \
-  'task: consumer:scad.ci' \
-  'cache-namespace: template-scad-production-t6-v1' \
-  'SCAD_PROJECT_SOURCE_SHA:' \
-  'bld/evidence/executions/scad-docs/execution.json' \
-  'bld/evidence/executions/scad-build/execution.json' \
-  'vrf/out/evidence/executions/scad-verify/execution.json'; do
+  "$REUSABLE_PRODUCTION" \
+  'aggregate_task: consumer:scad.ci' \
+  'cache_namespace: template-scad-production-m004-step3-v1'; do
   if ! grep -Fq "$required" "$SCAD_WORKFLOW"; then
-    echo "ERROR: ${SCAD_WORKFLOW} is missing production orchestration contract: ${required}" >&2
+    echo "ERROR: ${SCAD_WORKFLOW} is missing Step 3 reusable-production caller contract: ${required}" >&2
     exit 1
   fi
 done
 
-if grep -Fq 'task: consumer:scad.build' "$SCAD_WORKFLOW" || \
-   grep -Fq 'moon-project.sh run consumer:scad.verify' "$SCAD_WORKFLOW"; then
-  echo "ERROR: workflow must invoke one SCAD Moon graph instead of separate build/verify roots" >&2
-  exit 1
-fi
-
-if grep -Fq 'cp .cache/scad-project/state/last-build.json "$staging/evidence/domain/last-build.json"' "$SCAD_WORKFLOW" || \
-   grep -Fq 'cp .cache/scad-project/state/last-design-build.json "$staging/evidence/domain/last-design-build.json"' "$SCAD_WORKFLOW" || \
-   grep -Fq 'cp .cache/scad-project/verification-state/last-verification-build.json "$staging/evidence/domain/last-verification-build.json"' "$SCAD_WORKFLOW"; then
-  echo "ERROR: publication staging must consume producer-owned domain evidence, not synthesize it from cache state" >&2
-  exit 1
-fi
+# The consumer caller must stay thin: orchestration, container and publication live in tool.scad-project/tool.git-project.
+for forbidden in \
+  'container:' \
+  'brainboxemb/tool.git-project/moon@' \
+  'reusable-generated-output-publish.yml@' \
+  'scad-project.sh build' \
+  'scad-project.sh verify'; do
+  if grep -Fq "$forbidden" "$SCAD_WORKFLOW"; then
+    echo "ERROR: ${SCAD_WORKFLOW} contains owner implementation detail instead of remaining a thin reusable-workflow caller: ${forbidden}" >&2
+    exit 1
+  fi
+done
 
 if ! grep -Fq "project-release.yml@${EXPECTED_SCAD_TOOL_SHA}" .github/workflows/release.yml; then
-  echo "ERROR: release.yml is not pinned to released tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}" >&2
-  exit 1
-fi
-if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.3' .github/workflows/pr-cleanup.yml; then
-  echo "ERROR: pr-cleanup.yml must use released generic cleanup" >&2
+  echo "ERROR: release.yml is not aligned to qualification tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}" >&2
   exit 1
 fi
 
@@ -168,11 +162,11 @@ if ! cmp -s bootstrap.ps1 tools/tool.git-project/bootstrap/consumer-bootstrap.ps
   exit 1
 fi
 if ! cmp -s update-repo.sh tools/tool.scad-project/bootstrap/consumer-update.sh; then
-  echo "ERROR: update-repo.sh differs from the pinned tool.scad-project SCAD update wrapper" >&2
+  echo "ERROR: update-repo.sh differs from the qualification tool.scad-project SCAD update wrapper" >&2
   exit 1
 fi
 if ! cmp -s update-repo.ps1 tools/tool.scad-project/bootstrap/consumer-update.ps1; then
-  echo "ERROR: update-repo.ps1 differs from the pinned tool.scad-project SCAD update wrapper" >&2
+  echo "ERROR: update-repo.ps1 differs from the qualification tool.scad-project SCAD update wrapper" >&2
   exit 1
 fi
 
@@ -180,4 +174,4 @@ mkdir -p "$OUT"
 rm -f "$OUT/png/tube-holder-assembly.png"
 cp vrf/templates/README.md "$OUT/README.md"
 
-echo "Template T6 SCAD execution-evidence verification: OK"
+echo "Migration 004 Step 3 reusable-production qualification verification: OK"

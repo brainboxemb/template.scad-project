@@ -1,6 +1,13 @@
 projects:
   consumer: '.'
 
+workspace:
+  inheritedTasks:
+    include:
+      - scad.docs
+      - scad.build
+      - scad.verify
+
 vcs:
   client: git
   provider: github

@@ -149,16 +149,28 @@ VERIFY_BLOCK="$(awk '
   in_verify && /^  scad\.[a-z]/ && $1 != "scad.verify:" { in_verify = 0 }
   in_verify { print }
 ' moon.yml)"
-if grep -Fq -- "- 'dsg/**'" <<< "$VERIFY_BLOCK"; then
-  echo "ERROR: scad.verify must not use the whole design tree as a coarse input" >&2
-  exit 1
-fi
+
+# Impact policy is declared at stable source-family boundaries. New components,
+# verification cases and scripts should not require editing moon.yml merely to be seen.
 for required in \
-  "- 'dsg/openscad/components/tube-holder/tube_holder.scad'" \
-  "- 'dsg/openscad/components/mounting-plate/mounting_plate.scad'" \
-  "- 'dsg/openscad/ext/lib.scad.clamps'"; do
+  "- 'dsg/openscad/components/**'" \
+  "- 'dsg/openscad/ext/**'" \
+  "- 'vrf/**'" \
+  "- 'scripts/**'"; do
   if ! grep -Fq -- "$required" <<< "$VERIFY_BLOCK"; then
-    echo "ERROR: scad.verify is missing an actual verification source dependency: ${required}" >&2
+    echo "ERROR: scad.verify is missing maintainable source-family input: ${required}" >&2
+    exit 1
+  fi
+done
+
+for forbidden in \
+  'tube_holder.scad' \
+  'mounting_plate.scad' \
+  'vrf/README.md' \
+  'vrf/openscad/**' \
+  'vrf/templates/**'; do
+  if grep -Fq -- "$forbidden" <<< "$VERIFY_BLOCK"; then
+    echo "ERROR: scad.verify contains file/subtree-level input that should be covered by a stable source family: ${forbidden}" >&2
     exit 1
   fi
 done

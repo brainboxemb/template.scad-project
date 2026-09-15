@@ -12,3 +12,5 @@ vrf/
 `tool.scad-project` owns dependency-aware rendering and its separate verification cache. A normal `bld/` PNG/STL is not copied into `vrf/out`; verification evidence should exist only when it adds a distinct check.
 
 Project-specific policy checks remain in `scripts/run-verification.sh` and run after the verification geometry targets are current.
+
+Migration 004 Step 4 verification-only affected-state proof marker.

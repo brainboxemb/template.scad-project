@@ -144,36 +144,8 @@ for removed in \
   fi
 done
 
-VERIFY_BLOCK="$(awk '
-  /^  scad\.verify:/ { in_verify = 1 }
-  in_verify && /^  scad\.[a-z]/ && $1 != "scad.verify:" { in_verify = 0 }
-  in_verify { print }
-' moon.yml)"
-
-# Impact policy is declared at stable source-family boundaries. New components,
-# verification cases and scripts should not require editing moon.yml merely to be seen.
-for required in \
-  "- 'dsg/openscad/components/**'" \
-  "- 'dsg/openscad/ext/**'" \
-  "- 'vrf/**'" \
-  "- 'scripts/**'"; do
-  if ! grep -Fq -- "$required" <<< "$VERIFY_BLOCK"; then
-    echo "ERROR: scad.verify is missing maintainable source-family input: ${required}" >&2
-    exit 1
-  fi
-done
-
-for forbidden in \
-  'tube_holder.scad' \
-  'mounting_plate.scad' \
-  'vrf/README.md' \
-  'vrf/openscad/**' \
-  'vrf/templates/**'; do
-  if grep -Fq -- "$forbidden" <<< "$VERIFY_BLOCK"; then
-    echo "ERROR: scad.verify contains file/subtree-level input that should be covered by a stable source family: ${forbidden}" >&2
-    exit 1
-  fi
-done
+# Do not mirror the concrete Moon input list here. Impact selection is qualified
+# behaviorally in CI; this script only checks the stable capability/ownership contract.
 
 if ! grep -Eq '^  pull_request:' "$SCAD_WORKFLOW"; then
   echo "ERROR: ${SCAD_WORKFLOW} must run for pull requests" >&2

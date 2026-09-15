@@ -88,7 +88,9 @@ tasks:
       - 'project.yml'
       - 'project.scad.yml'
       - '.gitmodules'
-      - 'dsg/**'
+      - 'dsg/openscad/components/tube-holder/tube_holder.scad'
+      - 'dsg/openscad/components/mounting-plate/mounting_plate.scad'
+      - 'dsg/openscad/ext/lib.scad.clamps/**'
       - 'vrf/README.md'
       - 'vrf/openscad/**'
       - 'vrf/templates/**'
@@ -131,6 +133,18 @@ tasks:
       - 'vrf/out/publication-info.txt'
     options:
       cache: true
+
+  scad.production-impact:
+    script: ':'
+    deps:
+      - 'scad.docs'
+      - 'scad.build'
+      - 'scad.verify'
+    inputs:
+      - 'moon.yml'
+      - '.moon/workspace.yml'
+    options:
+      cache: false
 
   scad.ci:
     script: ':'

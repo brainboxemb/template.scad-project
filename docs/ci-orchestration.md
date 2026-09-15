@@ -20,7 +20,7 @@ SCons, when configured
 
 ## Consumer capability model
 
-`.moon/workspace.yml` selects:
+Root `moon.yml` selects:
 
 ```text
 scad.docs
@@ -28,7 +28,9 @@ scad.build
 scad.verify
 ```
 
-`.moon/tasks/scad.yml` inherits the shared definitions from the exact pinned `tool.scad-project` gitlink. Root `moon.yml` only adds template-specific impact inputs.
+through `workspace.inheritedTasks.include` and adds the template-specific impact inputs for those capabilities. `.moon/workspace.yml` remains limited to Moon workspace/project registration and other workspace-level settings.
+
+`.moon/tasks/scad.yml` inherits the shared definitions from the exact pinned `tool.scad-project` gitlink.
 
 There are no consumer-authored `scad.production-impact`, `scad.ci`, build-index or provenance tasks. Those were lifecycle mechanics, not project capabilities.
 

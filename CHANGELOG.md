@@ -4,22 +4,29 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+## v0.0.3
+
 ### Changed
 
-- Upgrade the reference consumer to released `tool.scad-project v0.13.0` and pin the tool gitlink, Production workflow and Release workflow to exact source commit `da57820fdadd7d203091b6818984991f1548408f`.
-- Replace the copied SCAD production implementation with the released reusable `project-production.yml` workflow: lightweight host preflight, at most one normal SCAD container, and lightweight Build/Verification publication jobs.
-- Add `scad.production-impact` as a source-impact-only Moon gate separate from publication-ready aggregate `scad.ci`, so README-only/unrelated changes can skip the SCAD container without publication context causing false positives.
-- Scope `scad.verify` Moon inputs to the template CAD source actually consumed by verification instead of all `dsg/**`, preserving Verify safety while allowing Build-side-only source impact to remain independent.
-- Keep the reference Moon graph's normal Build and Verification branches logically independent; aggregate `scad.ci` still requests both publication-ready branches.
-- Advance the reusable `lib.scad.clamps` dependency from `v0.1.0` to the newly validated immutable `v0.1.1` release.
-- Lock the `dsg/openscad/ext/lib.scad.clamps` gitlink to the exact source commit behind `v0.1.1` (`e2e4c03a743b4c76ebd96f015ca81cc686defbf3`).
-- Upgrade the canonical reference consumer from `tool.scad-project` v0.9.8 through v0.9.10 and v0.9.11 to v0.9.12.
-- Align the semantic tool ref, `tools/tool.scad-project` gitlink, and Build/Verify/Release/PR-cleanup reusable workflow callers to the exact v0.9.12 source commit.
-- Replace shared `dev/build` and `dev/verification` snapshots with isolated `dev/pr-<number>/build` and `dev/pr-<number>/verification` pull-request previews.
-- Run Build and Verify for pull requests and pushes to `main` instead of also running a duplicate build for every feature-branch push.
-- Add pull-request cleanup that removes generated PR preview branches after close and deletes merged same-repository feature branches.
-- Keep production publication on mutable `prod/build` and `prod/verification` snapshots.
-- Defer generic branch, pull-request and publication-agent guidance to the pinned `tools/tool.scad-project/AGENTS.md` policy instead of duplicating changing workflow rules in the template root guidance.
+- Migrate the canonical reference consumer to the Migration 005 SCAD capability lifecycle on released `tool.git-project v0.2.8`, `tool.scad-project v0.14.2` and SCAD toolchain v0.5.0 foundations.
+- Replace the consumer-authored Migration-004 lifecycle/aggregate Moon graph with the three real inherited capabilities `scad.docs`, `scad.build` and `scad.verify`.
+- Select inherited capabilities in root `moon.yml`, keep only project-specific impact inputs there, and inherit shared task implementation through `.moon/tasks/scad.yml`.
+- Keep the template deliberately representative of the broad path: OpenSCAD + PythonSCAD select the full/dual runtime, while `build_engine.engine: scons` exercises normal and Verification-SCons reuse where applicable.
+- Replace copied production orchestration with the exact-pinned reusable `project-production.yml` lifecycle: one host-side affected query, at most one CAD runtime, publication-safe materialization, lightweight finishing and separate Build/Verification publication.
+- Keep normal successful production to compact orchestration evidence instead of retaining duplicate complete Build/Verification trees as Actions artifacts; coordinated releases still use full exact-source cross-job artifacts.
+- Scope Verification impact to the project CAD source and verification inputs it actually consumes, preserving independent Build/docs/Verify boundaries.
+- Advance the reusable `lib.scad.clamps` dependency from `v0.1.0` to the validated immutable `v0.1.1` release and lock its gitlink to exact source `e2e4c03a743b4c76ebd96f015ca81cc686defbf3`.
+- Use isolated `dev/pr-<number>/build` and `dev/pr-<number>/verification` pull-request previews, keep production snapshots on `prod/build` and `prod/verification`, and clean pull-request publication after close.
+- Defer generic branch, pull-request, dependency and publication mechanics to the exact-pinned shared tooling instead of duplicating them in the template.
+
+### Fixed
+
+- Align the semantic `tool.scad-project` dependency, tool gitlink and Production/Release workflow callers to exact released v0.14.2 source `5712324ea9e3a7c81ba1b79013f2758f52b219cf` after Step-4 integration exposed and fixed clean planner-install and Moon inherited-capability-location defects in the owner tool.
+- Document the Moon 2.5.4 configuration boundary correctly: capability selection belongs in project-level `moon.yml`; `.moon/workspace.yml` remains workspace-level configuration.
+
+### Removed
+
+- Remove local `scad.build-index`, provenance, synthetic production-impact and aggregate CI lifecycle tasks from the consumer Moon graph; these mechanics are now owned by `tool.scad-project`.
 
 ## v0.0.2
 

@@ -38,7 +38,7 @@ scad-toolchain-info                 runtime component evidence
 
 `tool.git-project` is the bootstrap special case: its gitlink is the authoritative exact pin and it is not recursively declared in `project.yml`.
 
-For `tool.scad-project`, `project.yml` and reusable workflow callers use the same released semantic ref such as `v0.14.4`; the committed gitlink records the exact source commit resolved for that release.
+For `tool.scad-project`, `project.yml` and reusable workflow callers use the same released semantic ref such as `v0.14.6`; the committed gitlink records the exact source commit resolved for that release.
 
 ## Visible SCAD capabilities
 

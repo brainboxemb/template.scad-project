@@ -61,7 +61,7 @@ Functional changes to released `template.scad-project` versions.
 - Upgrade the canonical reference consumer to `tool.scad-project` v0.9.8 and SCAD toolchain v0.4.1.
 - Keep the tool dependency semantic in `project.yml` while pinning Build, Verify and Release callers to the exact commit behind v0.9.8.
 - Pin the `tools/tool.scad-project` gitlink to the same v0.9.8 commit used by the reusable workflow callers.
-- Use directory-based OpenSCAD build discovery through configured `render_root` and `export_root` paths instead of explicit normal PNG/STL `builds:` entries.
+- Use directory-based OpenSCAD build discovery through `paths.render_root` and `paths.export_root` instead of explicit normal PNG/STL `builds:` entries.
 - Keep separate stable render and export entrypoints for the reference assembly while preserving the existing output basenames.
 - Enable the SCons selective build backend and exercise cold-cache and exact-hit behaviour in the template CI.
 - Publish the generic generated normal-build PNG gallery at `bld/png/README.md` and link it from the template README.

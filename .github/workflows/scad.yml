@@ -13,6 +13,6 @@ permissions:
 
 jobs:
   scad:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.7
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.8
     with:
       cache_namespace: template-scad-production-v2

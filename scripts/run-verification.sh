@@ -2,8 +2,8 @@
 set -euo pipefail
 
 EXPECTED_GIT_TOOL_SHA="7c43f37e7b07cfb57638a1d1dad2501de09ba7eb"
-EXPECTED_SCAD_TOOL_SHA="85781a6b21a0f6a06d37be154fd9eb475ecaa2a4"
-EXPECTED_SCAD_TOOL_REF="v0.14.8"
+EXPECTED_SCAD_TOOL_SHA="a140b22858ac1899e7f2fa71b679639a70d819c3"
+EXPECTED_SCAD_TOOL_REF="v0.14.9"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -119,6 +119,16 @@ done
 
 if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.8' .github/workflows/pr-cleanup.yml; then
   echo "ERROR: pr-cleanup.yml must use released generic cleanup workflow v0.2.8" >&2
+  exit 1
+fi
+for suffix in bld vrf; do
+  if ! grep -Fxq "        ${suffix}" .github/workflows/pr-cleanup.yml; then
+    echo "ERROR: pr-cleanup.yml must remove the canonical ${suffix} preview namespace" >&2
+    exit 1
+  fi
+done
+if grep -Fxq '        build' .github/workflows/pr-cleanup.yml || grep -Fxq '        verification' .github/workflows/pr-cleanup.yml; then
+  echo "ERROR: pr-cleanup.yml still uses legacy build/verification preview suffixes" >&2
   exit 1
 fi
 

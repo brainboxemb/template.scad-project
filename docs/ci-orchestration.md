@@ -36,10 +36,10 @@ There are no consumer-authored `scad.production-impact`, `scad.ci`, build-index 
 
 ## Dependency and reusable-workflow identity
 
-`project.yml` records the released semantic `tool.scad-project` dependency, for example `v0.14.4`. Production and Release callers use that same readable semantic release ref:
+`project.yml` records the released semantic `tool.scad-project` dependency, for example `v0.14.6`. Production and Release callers use that same readable semantic release ref:
 
 ```yaml
-uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.4
+uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.6
 ```
 
 The committed `tools/tool.scad-project` gitlink records the exact source commit resolved for that release. Tooling validation checks the semantic workflow ref and exact checked-out tool identity as separate parts of the same dependency contract.
@@ -63,7 +63,7 @@ one Moon affected query
 
 The generic action uses an existing task as query anchor, but the returned affected-task set is repository-wide rather than restricted to that task.
 
-`tool.scad-project v0.14.4` also makes the exact base revision of the `tools/tool.scad-project` gitlink available before the Moon query. This allows a shallow base-to-head comparison to remain precise even when the consumer upgrades the SCAD tool gitlink in the same change. Missing or otherwise unusable comparison state still forces conservative execution rather than risking a false skip.
+Current `tool.scad-project` also makes the exact base revision of the `tools/tool.scad-project` gitlink available before the Moon query. This allows a shallow base-to-head comparison to remain precise even when the consumer upgrades the SCAD tool gitlink in the same change. Missing or otherwise unusable comparison state still forces conservative execution rather than risking a false skip.
 
 README-only or otherwise unrelated changes therefore require no CAD image pull and no CAD container.
 
@@ -155,9 +155,11 @@ The published orchestration evidence deliberately separates three time domains:
 
 1. **producer execution** — when source-derived CAD output was actually produced;
 2. **current materialization** — when Moon executed or hydrated that capability for this run;
-3. **snapshot preparation/publication** — when the current generated-output snapshot was staged.
+3. **current workflow/snapshot preparation** — where the current production path spent time before the immutable generated-output snapshot was ready.
 
-Per-capability `materialization.json` keeps start, finish and duration information. The current snapshot also includes run context/timing evidence and direct navigation to retained raw Moon/producer logs under `orchestration/`. This keeps performance history available after GitHub Actions logs expire, without pretending that cached producer output was freshly executed in the current run.
+Released `tool.scad-project v0.14.6` adds durable coarse workflow-phase timing across preflight/planning, cache restore, runtime pull, capability materialization, cache save, host finishing and snapshot preparation. Each generated Build/Verification snapshot retains this as `orchestration/timings.json`, and its README renders a compact timing table from the same data.
+
+Per-capability `materialization.json` remains the detailed capability-level evidence. Raw Moon/producer logs stay directly linked under `orchestration/`. The remote generated-branch push happens only after a snapshot has been prepared, so that final publication phase is retained in compact CI orchestration evidence rather than written retrospectively into the already-prepared generated snapshot.
 
 Keeping current run/ref/publication context outside Moon source identity allows source-derived capability output to be reused without publishing stale current-run metadata.
 
@@ -167,6 +169,7 @@ Normal production retains current orchestration evidence such as:
 
 - affected decision and affected-task IDs;
 - SCAD execution plan;
+- coarse workflow phase timings;
 - Moon invocation logs and materialization records;
 - producer/domain decision evidence;
 - run/snapshot timing context.
@@ -182,7 +185,7 @@ Only output families with source-affected capabilities are published. Hydrating 
 The template release workflow is intentionally thin. It owns triggers, permissions and project-specific output paths, then calls:
 
 ```yaml
-uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@v0.14.4
+uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@v0.14.6
 ```
 
 The shared release workflow owns release-request parsing and validation, coordinated Build/Verify/finalization, immutable publication and release-request cleanup.

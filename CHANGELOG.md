@@ -4,6 +4,15 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+## v0.0.6
+
+### Changed
+
+- Align the reference consumer to released `tool.scad-project v0.14.9` with exact tool gitlink `a140b22858ac1899e7f2fa71b679639a70d819c3`.
+- Normalize persistent technical Build/Verification publication namespaces to `dev/pr-N/{bld,vrf}`, `prod/{bld,vrf}` and `rel/vX.Y.Z/{bld,vrf}` while retaining human-facing Build/Verification terminology.
+- Record exact-main production qualification on `399d28f6ff497efee955a02e781e8166d435b740` through run `35122146935`, with `prod/bld` and `prod/vrf` provenance on the same v0.14.9 baseline.
+- Keep the template CAD source, external dependency identities and reference-consumer execution model unchanged; this release closes the Migration-005 namespace correction only.
+
 ## v0.0.5
 
 ### Changed

@@ -184,8 +184,17 @@ if ! grep -Eq '^      - main$' "$SCAD_WORKFLOW"; then
   exit 1
 fi
 
-if ! grep -Fq 'pr_branch_prefix: dev/pr' project.scad.yml; then
-  echo "ERROR: project.scad.yml must retain pull-request-scoped SCAD release/publication policy" >&2
+for required in \
+  'pr_branch_prefix: dev/pr' \
+  'build_branch: prod/bld' \
+  'verification_branch: prod/vrf'; do
+  if ! grep -Fq "$required" project.scad.yml; then
+    echo "ERROR: project.scad.yml is missing canonical publication namespace contract: ${required}" >&2
+    exit 1
+  fi
+done
+if grep -Fq 'build_branch: prod/build' project.scad.yml || grep -Fq 'verification_branch: prod/verification' project.scad.yml; then
+  echo "ERROR: project.scad.yml still contains legacy production publication namespaces" >&2
   exit 1
 fi
 

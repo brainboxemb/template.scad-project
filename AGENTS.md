@@ -38,7 +38,7 @@ scad-toolchain-info                 runtime component evidence
 
 `tool.git-project` is the bootstrap special case: its gitlink is the authoritative exact pin and it is not recursively declared in `project.yml`.
 
-For `tool.scad-project`, `project.yml` and reusable workflow callers use the same released semantic ref such as `v0.14.8`; the committed gitlink records the exact source commit resolved for that release.
+For `tool.scad-project`, `project.yml` and reusable workflow callers must use the same configured released semantic ref; the committed gitlink records the exact source commit resolved for that release.
 
 ## Visible SCAD capabilities
 
@@ -160,6 +160,8 @@ Normal production behaviour is:
 Normal CI retains current orchestration evidence with direct navigation to raw Moon/producer logs and durable timing information. Release remains different: separate release jobs need complete Build/Verification trees as an exact-source cross-job hand-off.
 
 Build and Verification publishers remain separate logical outputs and may overlap on the same runner. Publication stays outside the CAD container because it needs current repository credentials/context, not CAD dependencies.
+
+Human-facing lifecycle names are Build and Verification. Persistent technical publication namespaces use the portfolio identifiers `bld` and `vrf` (`prod/bld`, `prod/vrf`, `dev/pr-N/bld`, `dev/pr-N/vrf`, `rel/vX.Y.Z/bld`, `rel/vX.Y.Z/vrf`).
 
 Every generated snapshot must contain `publication-info.txt`.
 

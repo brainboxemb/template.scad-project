@@ -27,11 +27,11 @@ template.scad-project
 
 ## Quick links
 
-- [Production build](../../tree/prod/build)
-- [Production build overview](../../blob/prod/build/README.md)
-- [Production build PNG gallery](../../blob/prod/build/png/README.md)
-- [Production build provenance](../../blob/prod/build/publication-info.txt)
-- [Production verification](../../tree/prod/verification)
+- [Production build](../../tree/prod/bld)
+- [Production build overview](../../blob/prod/bld/README.md)
+- [Production build PNG gallery](../../blob/prod/bld/png/README.md)
+- [Production build provenance](../../blob/prod/bld/publication-info.txt)
+- [Production verification](../../tree/prod/vrf)
 - [Project releases](../../releases)
 
 ## Reference-consumer role
@@ -101,7 +101,7 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.14.8
+    ref: v0.14.9
 ```
 
 The semantic release ref is the human-readable dependency policy. The committed `tools/tool.scad-project` gitlink records the exact source commit resolved for that release.
@@ -156,7 +156,7 @@ materialized for complete Build publication
   scad.build
 ```
 
-`scad.build` remains **non-affected**. Its unchanged output is normally hydrated through Moon only so replacing `prod/build` or the PR Build preview does not delete unchanged presentation files.
+`scad.build` remains **non-affected**. Its unchanged output is normally hydrated through Moon only so replacing `prod/bld` or the PR Build preview does not delete unchanged presentation files.
 
 Verification is a separate publication family and is not materialized merely to complete Build.
 
@@ -167,7 +167,7 @@ The consumer workflow remains intentionally thin:
 ```yaml
 jobs:
   scad:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.8
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.9
     with:
       cache_namespace: template-scad-production-v2
 ```
@@ -294,22 +294,22 @@ The local `scad.verify` override uses maintainable project source families such 
 Generated output stays off `main`:
 
 ```text
-prod/build
-prod/verification
+prod/bld
+prod/vrf
     latest successful production snapshots
 
-dev/pr-<number>/build
-dev/pr-<number>/verification
+dev/pr-<number>/bld
+dev/pr-<number>/vrf
     isolated pull-request previews
 
-rel/vX.Y.Z/build
-rel/vX.Y.Z/verification
+rel/vX.Y.Z/bld
+rel/vX.Y.Z/vrf
     immutable browseable release snapshots
 ```
 
-Build and Verification publication remain logically separate and can overlap on the same host without another CAD runner.
+Build and Verification publication remain logically separate and can overlap on the same host without another CAD runner. Human-facing names remain Build and Verification; the stable technical branch/path identifiers are `bld` and `vrf`.
 
-The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.8`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
+The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.9`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
 
 Release remains intentionally different from normal production because separate Build/Verify/finalize jobs require complete artifacts as exact-source cross-job hand-off. Normal production keeps only compact/current orchestration evidence plus the generated branches.
 

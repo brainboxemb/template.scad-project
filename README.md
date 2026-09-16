@@ -101,7 +101,7 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.14.6
+    ref: v0.14.7
 ```
 
 The semantic release ref is the human-readable dependency policy. The committed `tools/tool.scad-project` gitlink records the exact source commit resolved for that release.
@@ -167,7 +167,7 @@ The consumer workflow remains intentionally thin:
 ```yaml
 jobs:
   scad:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.6
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.7
     with:
       cache_namespace: template-scad-production-v2
 ```
@@ -184,10 +184,10 @@ The reusable production lifecycle is:
 6. select the runtime profile and only applicable cache transport;
 7. execute or hydrate required capabilities in at most one CAD runtime;
 8. validate materialization;
-9. add current-run Build/Verification index/provenance information on the host;
+9. add current-run Build/Verification index/provenance information on the host using the resolved exact source revision;
 10. stage durable orchestration logs/timings and publish only output families whose source-affected capabilities changed.
 
-Normal CI keeps current orchestration evidence, including the coarse workflow phase timings in `orchestration/timings.json`, materialization timing and direct access to retained raw Moon/producer logs. The generated README renders those timings as a compact table. It does **not** upload another complete copy of normal Build/Verification trees as Actions artifacts merely for retention.
+Normal CI keeps current orchestration evidence, including the coarse workflow phase timings in `orchestration/timings.json`, materialization timing and direct access to retained raw Moon/producer logs. The generated README renders those timings as a compact table. `publication-info.txt`, run context, materialization evidence and producer evidence all refer to the same exact assessed source revision rather than a synthetic pull-request merge revision. Normal production does **not** upload another complete copy of Build/Verification trees as Actions artifacts merely for retention.
 
 See [SCAD CI orchestration](docs/ci-orchestration.md) for the detailed flow.
 
@@ -309,7 +309,7 @@ rel/vX.Y.Z/verification
 
 Build and Verification publication remain logically separate and can overlap on the same host without another CAD runner.
 
-The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.6`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
+The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.7`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
 
 Release remains intentionally different from normal production because separate Build/Verify/finalize jobs require complete artifacts as exact-source cross-job hand-off. Normal production keeps only compact/current orchestration evidence plus the generated branches.
 

@@ -24,7 +24,7 @@ jobs:
   release:
     uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@v0.14.7
     with:
-      version: ${{ inputs.version }}
-      source_sha: ${{ inputs.source_sha }}
+      version: ${{ github.event.inputs.version || '' }}
+      source_sha: ${{ github.event.inputs.source_sha || '' }}
       build_path: bld
       verification_path: vrf/out

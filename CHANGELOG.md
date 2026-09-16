@@ -4,6 +4,19 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+### Changed
+
+- Upgrade the reference consumer to released `tool.scad-project v0.14.7` while keeping the committed tool gitlink on exact source `3935e5f86fe309b8908a05554f7ada336a6d6886`.
+- Use readable semantic `@v0.14.7` refs for Production and Release reusable-workflow callers instead of duplicating the tool commit SHA in workflow YAML.
+- Collapse the consumer Release workflow to triggers, permissions, project output paths and one shared `project-release.yml@v0.14.7` call; release-request parsing, validation and cleanup remain in the shared owner workflow.
+- Qualify durable coarse workflow timings in generated Build/Verification output, including `orchestration/timings.json`, the generated README timing table and direct raw-log navigation.
+
+### Fixed
+
+- Qualify shallow base-to-head impact evaluation when the `tool.scad-project` gitlink itself changes, avoiding conservative fallback caused by a missing base gitlink object.
+- Qualify exact pull-request publication provenance so `publication-info.txt`, run context, materialization records and producer evidence all identify the same assessed source revision rather than GitHub's synthetic pull-request merge SHA.
+- Align repository verification and maintainer guidance with the semantic workflow-ref plus exact-gitlink dependency contract.
+
 ## v0.0.4
 
 ### Changed
@@ -33,7 +46,7 @@ Functional changes to released `template.scad-project` versions.
 ### Fixed
 
 - Align the semantic `tool.scad-project` dependency, tool gitlink and Production/Release workflow callers to exact released v0.14.2 source `5712324ea9e3a7c81ba1b79013f2758f52b219cf` after Step-4 integration exposed and fixed clean planner-install and Moon inherited-capability-location defects in the owner tool.
-- Document the Moon 2.5.4 configuration boundary correctly: capability selection belongs in project-level `moon.yml`; `.moon/workspace.yml` remains workspace-level configuration.
+- Document the Moon 2.5.4 configuration boundary correctly: capability selection belongs in project-level root `moon.yml`; `.moon/workspace.yml` remains workspace-level configuration.
 
 ### Removed
 

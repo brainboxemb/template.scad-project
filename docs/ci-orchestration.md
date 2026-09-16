@@ -28,15 +28,25 @@ scad.build
 scad.verify
 ```
 
-through `workspace.inheritedTasks.include` and adds the template-specific impact inputs for those capabilities. `.moon/workspace.yml` remains limited to Moon workspace/project registration and other workspace-level settings.
+through `workspace.inheritedTasks.include` and adds template-specific source-family inputs for those capabilities. `.moon/workspace.yml` remains limited to Moon workspace/project registration and other workspace-level settings.
 
 `.moon/tasks/scad.yml` inherits the shared definitions from the exact pinned `tool.scad-project` gitlink.
 
-There are no consumer-authored `scad.production-impact`, `scad.ci`, build-index or provenance tasks. Those were lifecycle mechanics, not project capabilities.
+There are no consumer-authored `scad.production-impact`, `scad.ci`, build-index or provenance tasks. Those are lifecycle mechanics, not project capabilities.
+
+## Dependency and reusable-workflow identity
+
+`project.yml` records the released semantic `tool.scad-project` dependency, for example `v0.14.7`. Production and Release callers use that same readable semantic release ref:
+
+```yaml
+uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.7
+```
+
+The committed `tools/tool.scad-project` gitlink records the exact source commit resolved for that release. Tooling validation checks the semantic workflow ref and exact checked-out tool identity as separate parts of the same dependency contract.
 
 ## 1. Exact source-impact decision on the host
 
-Normal CI first resolves the exact source revision and comparison base and invokes the released `tool.git-project v0.2.8` affected action once.
+Normal CI first resolves the exact source revision and comparison base and invokes released `tool.git-project v0.2.8` affected logic once.
 
 Conceptually:
 
@@ -51,17 +61,17 @@ one Moon affected query
       +--> affected task IDs -> SCAD planner
 ```
 
-The generic action currently uses `consumer:scad.docs` as an existing query anchor. The complete affected-task list is repository-wide and is not restricted to that anchor.
+The generic action uses an existing task as query anchor, but the returned affected-task set is repository-wide rather than restricted to that task.
 
-If comparison state cannot be established safely, the query returns a conservative decision rather than risking a false skip.
+Current `tool.scad-project` also makes the exact base revision of the `tools/tool.scad-project` gitlink available before the Moon query. This allows a shallow base-to-head comparison to remain precise even when the consumer upgrades the SCAD tool gitlink in the same change. Missing or otherwise unusable comparison state still forces conservative execution rather than risking a false skip.
 
 README-only or otherwise unrelated changes therefore require no CAD image pull and no CAD container.
 
 ## 2. SCAD execution plan
 
-Only when the affected result requires SCAD work does the reusable workflow install the exact pinned `tool.scad-project` planner.
+Only when the affected result requires SCAD work does the reusable workflow install the exact planner from the committed tool gitlink.
 
-The planner validates the visible Moon capabilities against `project.scad.yml` and derives one plan containing:
+The planner validates visible Moon capabilities against `project.scad.yml` and derives one plan containing:
 
 - source-affected capabilities;
 - publication-safe materialization capabilities;
@@ -84,7 +94,7 @@ verification render targets configured
   -> separate Verification-SCons transport applicable
 ```
 
-A direct-engine project would not transport SCons caches. An OpenSCAD-only project can select the focused runtime profile.
+A direct-engine project does not transport SCons caches. An OpenSCAD-only project can select the focused runtime profile.
 
 ## 3. Affected capabilities versus materialization
 
@@ -108,7 +118,7 @@ The unchanged `scad.build` result is normally hydrated from Moon. If no matching
 
 Verification is a separate publication family, so Build completeness does not pull Verification into the materialization set.
 
-This distinction must remain visible in performance evidence: hydration/reproduction of an unchanged contributor is real correctness work and its cost counts.
+This distinction remains visible in performance evidence: hydration or reproduction of an unchanged contributor is real correctness work and its cost counts.
 
 ## 4. At most one CAD runtime
 
@@ -135,25 +145,36 @@ Moon scad.verify
 
 Moon cache identity contains stable source/tool/configuration state, not current GitHub run IDs, PR numbers or publication destinations.
 
-## 5. Host finishing
+## 5. Host finishing and durable timing evidence
 
-After Moon execution/hydration, the CAD runtime exits. Current-run information is then added on the host.
+After Moon execution or hydration, the CAD runtime exits. Current-run information is then added on the host.
 
-For a changed Build family this includes the current Build index and `publication-info.txt`. For a changed Verification family it includes current Verification publication information.
+For a changed Build family this includes the current Build index and `publication-info.txt`. For a changed Verification family it includes current Verification publication information. The resolved exact source SHA is carried into host finishing so publication provenance stays aligned with preflight, materialization and producer evidence even for pull requests where `GITHUB_SHA` is a synthetic merge revision.
+
+The published orchestration evidence deliberately separates three time domains:
+
+1. **producer execution** — when source-derived CAD output was actually produced;
+2. **current materialization** — when Moon executed or hydrated that capability for this run;
+3. **current workflow/snapshot preparation** — where the current production path spent time before the immutable generated-output snapshot was ready.
+
+Released `tool.scad-project v0.14.7` retains the v0.14.6 durable coarse workflow-phase timing across preflight/planning, cache restore, runtime pull, capability materialization, cache save, host finishing and snapshot preparation, and adds exact host publication provenance. Each generated Build/Verification snapshot retains timing as `orchestration/timings.json`, and its README renders a compact timing table from the same data.
+
+Per-capability `materialization.json` remains the detailed capability-level evidence. Raw Moon/producer logs stay directly linked under `orchestration/`. The remote generated-branch push happens only after a snapshot has been prepared, so that final publication phase is retained in compact CI orchestration evidence rather than written retrospectively into the already-prepared generated snapshot.
 
 Keeping current run/ref/publication context outside Moon source identity allows source-derived capability output to be reused without publishing stale current-run metadata.
 
 ## 6. Retained evidence and publication
 
-Normal production retains compact evidence such as:
+Normal production retains current orchestration evidence such as:
 
-- affected decision;
-- affected-task IDs;
+- affected decision and affected-task IDs;
 - SCAD execution plan;
-- Moon materialization records;
-- last domain build/verification decision summaries.
+- coarse workflow phase timings;
+- Moon invocation logs and materialization records;
+- producer/domain decision evidence;
+- run/snapshot timing context.
 
-It does not also upload complete normal `bld/` and `vrf/out/` trees as Actions artifacts merely for retention. Those trees are already staged locally for generated-output publication.
+It does not also upload complete normal `bld/` and `vrf/out/` trees as duplicate Actions artifacts merely for retention. Those trees are already staged locally for generated-output publication.
 
 Build and Verification publishers use isolated temporary Git repositories and may overlap on the same hosted runner. Publication therefore does not require another CAD runner or another CAD image/runtime.
 
@@ -161,11 +182,15 @@ Only output families with source-affected capabilities are published. Hydrating 
 
 ## 7. Release remains a separate lifecycle
 
-Coordinated release has separate Build, Verify and finalization jobs. Complete Build/Verification artifacts are therefore still required as exact-source cross-job hand-off.
+The template release workflow is intentionally thin. It owns triggers, permissions and project-specific output paths, then calls:
 
-That is a real data-transfer use case and is intentionally different from normal same-job publication.
+```yaml
+uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@v0.14.7
+```
 
-The template Release caller is pinned to the same exact `tool.scad-project` source as the normal Production caller and the `tools/tool.scad-project` gitlink.
+The shared release workflow owns release-request parsing and validation, coordinated Build/Verify/finalization, immutable publication and release-request cleanup.
+
+Coordinated release still has separate Build, Verify and finalization jobs. Complete Build/Verification artifacts are therefore required as exact-source cross-job hand-off. That is a real data-transfer use case and intentionally differs from normal same-job publication.
 
 ## Resource model
 
@@ -180,9 +205,4 @@ SCons cache transport:           only when configured/useful
 normal full output artifacts:    0 duplicate copies
 ```
 
-Evaluate both:
-
-- feedback latency;
-- total runner time, image transfer, cache/artifact transfer and duplicated work.
-
-Prefer avoiding work or restoring it at the right layer before adding more hosted parallelism.
+Evaluate both feedback latency and total runner time, image transfer, cache/artifact transfer and duplicated work. Prefer avoiding work or restoring it at the correct layer before adding more hosted parallelism.

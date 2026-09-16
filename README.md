@@ -77,7 +77,7 @@ The shared implementation is inherited through one link:
 extends: '../../tools/tool.scad-project/moon/tasks/scad.yml'
 ```
 
-That pinned shared policy owns the commands, common stable tool/config inputs, normal output boundaries and Moon cache policy. Beyond capability selection, root `moon.yml` contains only the project-specific source patterns that affect each capability. `.moon/workspace.yml` contains only Moon workspace/project registration and workspace-level settings.
+That pinned shared policy owns the commands, common stable tool/config inputs, normal output boundaries and Moon cache policy. Beyond capability selection, root `moon.yml` contains only the project-specific source families that affect each capability. `.moon/workspace.yml` contains only Moon workspace/project registration and workspace-level settings.
 
 This is the important Migration-005 simplification: the consumer describes **what this project can do and what project source affects it**, rather than copying CI lifecycle tasks such as build indexes, provenance roots or aggregate execution nodes.
 
@@ -101,8 +101,10 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.14.2
+    ref: v0.14.7
 ```
+
+The semantic release ref is the human-readable dependency policy. The committed `tools/tool.scad-project` gitlink records the exact source commit resolved for that release.
 
 SCAD-domain intent lives in `project.scad.yml`. In this template that includes:
 
@@ -165,26 +167,27 @@ The consumer workflow remains intentionally thin:
 ```yaml
 jobs:
   scad:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@<exact-tool-commit>
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.7
     with:
       cache_namespace: template-scad-production-v2
 ```
 
-The exact workflow SHA matches the checked-out `tools/tool.scad-project` gitlink. `project.yml` records the semantic release policy; gitlinks/workflow refs lock the exact source used by a particular repository revision.
+The workflow caller uses the same released semantic ref as `project.yml`; the committed gitlink provides exact source identity. This keeps the repository readable without losing reproducibility.
 
 The reusable production lifecycle is:
 
 1. resolve exact source and comparison base;
-2. run one generic Moon affected query on the host;
-3. stop before the CAD image/runtime when no configured SCAD capability changed;
-4. install the exact pinned SCAD planner and validate project/capability consistency;
-5. select the runtime profile and only applicable cache transport;
-6. execute or hydrate required capabilities in at most one CAD runtime;
-7. validate materialization;
-8. add current-run Build/Verification index/provenance information on the host;
-9. publish only output families whose source-affected capabilities changed.
+2. make the exact base `tool.scad-project` gitlink revision available when the dependency changed;
+3. run one generic Moon affected query on the host;
+4. stop before the CAD image/runtime when no configured SCAD capability changed;
+5. install the exact pinned SCAD planner and validate project/capability consistency;
+6. select the runtime profile and only applicable cache transport;
+7. execute or hydrate required capabilities in at most one CAD runtime;
+8. validate materialization;
+9. add current-run Build/Verification index/provenance information on the host using the resolved exact source revision;
+10. stage durable orchestration logs/timings and publish only output families whose source-affected capabilities changed.
 
-Normal CI retains compact impact/materialization evidence. It does **not** upload another complete copy of normal Build/Verification trees as Actions artifacts merely for retention.
+Normal CI keeps current orchestration evidence, including the coarse workflow phase timings in `orchestration/timings.json`, materialization timing and direct access to retained raw Moon/producer logs. The generated README renders those timings as a compact table. `publication-info.txt`, run context, materialization evidence and producer evidence all refer to the same exact assessed source revision rather than a synthetic pull-request merge revision. Normal production does **not** upload another complete copy of Build/Verification trees as Actions artifacts merely for retention.
 
 See [SCAD CI orchestration](docs/ci-orchestration.md) for the detailed flow.
 
@@ -261,7 +264,7 @@ or:
 bash ./bootstrap.sh
 ```
 
-The root update launchers are thin wrappers from the pinned `tool.scad-project`. They delegate generic dependency movement to `tool.git-project` and then align SCAD reusable-workflow callers with the exact resulting `tool.scad-project` gitlink.
+The root update launchers are thin wrappers from the pinned `tool.scad-project`. They delegate generic dependency movement to `tool.git-project`, keep the committed tool gitlink exact, and align SCAD reusable-workflow callers with the configured semantic `tool.scad-project` release ref.
 
 Neither layer commits updates automatically; dependency and workflow changes remain visible for review.
 
@@ -284,7 +287,7 @@ After bootstrap, use the pinned local tool:
 
 Verification-only CAD entrypoints live under `vrf/openscad/` and generate evidence under `vrf/out/`.
 
-The local `scad.verify` Moon override deliberately lists only the project CAD source actually consumed by those verification entrypoints, plus verification scripts/configuration/tooling inputs. Do not broaden it to all of `dsg/**` for convenience. When verification starts consuming another project component, add that dependency explicitly.
+The local `scad.verify` override uses maintainable project source families such as `dsg/openscad/components/**`, external CAD and `vrf/**` instead of enumerating individual component/test files. It deliberately remains narrower than the whole design tree. Adding a normal component or verification case therefore does not require a matching `moon.yml` maintenance edit.
 
 ## Publication and release
 
@@ -306,7 +309,9 @@ rel/vX.Y.Z/verification
 
 Build and Verification publication remain logically separate and can overlap on the same host without another CAD runner.
 
-Release is intentionally different from normal production: separate Build/Verify/finalize jobs require complete artifacts as exact-source cross-job hand-off. The release flow therefore keeps full Build/Verification artifacts even though normal production retains only compact orchestration evidence.
+The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.7`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
+
+Release remains intentionally different from normal production because separate Build/Verify/finalize jobs require complete artifacts as exact-source cross-job hand-off. Normal production keeps only compact/current orchestration evidence plus the generated branches.
 
 Every published snapshot includes `publication-info.txt` with source, tool/toolchain and runtime provenance.
 

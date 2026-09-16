@@ -2,8 +2,8 @@
 set -euo pipefail
 
 EXPECTED_GIT_TOOL_SHA="7c43f37e7b07cfb57638a1d1dad2501de09ba7eb"
-EXPECTED_SCAD_TOOL_SHA="5712324ea9e3a7c81ba1b79013f2758f52b219cf"
-EXPECTED_SCAD_TOOL_REF="v0.14.2"
+EXPECTED_SCAD_TOOL_SHA="3935e5f86fe309b8908a05554f7ada336a6d6886"
+EXPECTED_SCAD_TOOL_REF="v0.14.7"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -61,7 +61,7 @@ if [[ -e .github/workflows/build.yml || -e .github/workflows/verify.yml ]]; then
 fi
 
 SCAD_WORKFLOW=.github/workflows/scad.yml
-REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/project-production.yml@${EXPECTED_SCAD_TOOL_SHA}"
+REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/project-production.yml@${EXPECTED_SCAD_TOOL_REF}"
 for required in \
   "$REUSABLE_PRODUCTION" \
   'cache_namespace: template-scad-production-v2'; do
@@ -95,10 +95,28 @@ for forbidden in \
   fi
 done
 
-if ! grep -Fq "project-release.yml@${EXPECTED_SCAD_TOOL_SHA}" .github/workflows/release.yml; then
-  echo "ERROR: release.yml is not pinned to released tool.scad-project ${EXPECTED_SCAD_TOOL_SHA}" >&2
-  exit 1
-fi
+RELEASE_WORKFLOW=.github/workflows/release.yml
+REUSABLE_RELEASE="brainboxemb/tool.scad-project/.github/workflows/project-release.yml@${EXPECTED_SCAD_TOOL_REF}"
+for required in \
+  "$REUSABLE_RELEASE" \
+  'build_path: bld' \
+  'verification_path: vrf/out'; do
+  if ! grep -Fq "$required" "$RELEASE_WORKFLOW"; then
+    echo "ERROR: ${RELEASE_WORKFLOW} is missing shared release caller contract: ${required}" >&2
+    exit 1
+  fi
+done
+for forbidden in \
+  'runs-on:' \
+  'Resolve release request' \
+  'cleanup-request:' \
+  'git push origin --delete'; do
+  if grep -Fq "$forbidden" "$RELEASE_WORKFLOW"; then
+    echo "ERROR: ${RELEASE_WORKFLOW} still contains shared release implementation detail: ${forbidden}" >&2
+    exit 1
+  fi
+done
+
 if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.8' .github/workflows/pr-cleanup.yml; then
   echo "ERROR: pr-cleanup.yml must use released generic cleanup workflow v0.2.8" >&2
   exit 1

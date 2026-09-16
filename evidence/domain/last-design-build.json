@@ -1,0 +1,263 @@
+{
+  "backend_signature": "ca5c1107e5d45af8fe5c8d183113fe000a7a11389904192528d2fcd7d515aaa5",
+  "engine": "scons",
+  "kind": "design",
+  "manifest_schema_version": 1,
+  "outcome_counts": {
+    "BUILT": 16,
+    "CACHE_RESTORED": 0,
+    "CURRENT": 0,
+    "ERROR": 0
+  },
+  "provenance": {
+    "cache": {
+      "exact_hit": null,
+      "matched_key": "",
+      "namespace": "scad-selective-build-v2",
+      "primary_key": "scad-selective-build-v2-Linux-1361036750-v0.5.0-a140b22858ac1899e7f2fa71b679639a70d819c3-8414ce212abfe5cc38856e078e4e28f0f18e91c990ebc4a920dc015c680e4fd3"
+    },
+    "source_commit_sha": "b8a0cc9113084f56c074b7dc61b160105c615b71",
+    "tool_commit_sha": "a140b22858ac1899e7f2fa71b679639a70d819c3",
+    "tool_version": "0.14.9",
+    "toolchain_image": "ghcr.io/brainboxemb/scad-toolchain:v0.5.0",
+    "toolchain_version": "v0.5.0",
+    "workflow_version": "v0.14.9"
+  },
+  "schema": "scad-project.build-decisions",
+  "schema_version": 1,
+  "target_count": 16,
+  "targets": [
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/01-plate.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/33535839886b0225.scad",
+        "dsg/openscad/assemblies/tube-holder-assembly/design/design.md",
+        "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad",
+        "dsg/openscad/components/tube/tube.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "f85edd601ac3fc456a58eb54d5e1fcd7d8683ad045df3d431806db5529824066"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/02-clamp.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/8f5e51f4fe81e10a.scad",
+        "dsg/openscad/assemblies/tube-holder-assembly/design/design.md",
+        "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad",
+        "dsg/openscad/components/tube/tube.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "3f9f7c2dc0725ad507dee4a9fd3605ee82f35f914e67626b9f24b2a247995ad9"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/03-tube.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/6a4d8fce84759186.scad",
+        "dsg/openscad/assemblies/tube-holder-assembly/design/design.md",
+        "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad",
+        "dsg/openscad/components/tube/tube.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "f14a58c43bda51feff3df8879e29e680a1ff879599487750e23d89020566c0e4"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/04-final.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/e0edca2467a41165.scad",
+        "dsg/openscad/assemblies/tube-holder-assembly/design/design.md",
+        "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad",
+        "dsg/openscad/components/tube/tube.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "e3b049857cbb729b0e22f1e671ee3cf6f32ca2a40a9abb9e878b35f884c23718"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/01-base.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/96a7b030653047d1.scad",
+        "dsg/openscad/components/mounting-plate/design/design.md",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad"
+      ],
+      "target_spec_digest": "79ba9414fadb6e9f02106176bcd256b82b5d983b82d37c00b51692e2daf8c621"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/02-final.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/617d0d548cb7b0db.scad",
+        "dsg/openscad/components/mounting-plate/design/design.md",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad"
+      ],
+      "target_spec_digest": "3005621454f1f831e5620b475e85a69d1454ae2b06b8f17550daf35e5c96e05d"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube/design/img/01-outer.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/d0752be2a2a2db37.scad",
+        "dsg/openscad/components/tube/design/design.md",
+        "dsg/openscad/components/tube/tube.scad"
+      ],
+      "target_spec_digest": "93579541daa406bfb5dd2ee5ea412b56fe612d78ca5a6f6b0ccf5fbc170bbeca"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube/design/img/02-bore.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/79874c4d0c6e3614.scad",
+        "dsg/openscad/components/tube/design/design.md",
+        "dsg/openscad/components/tube/tube.scad"
+      ],
+      "target_spec_digest": "d24f53cb24f2f67795714769d08e12dec0a8eecb9f922a45093797bd8eb80658"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube/design/img/03-final.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/1c6039aaae7a2a93.scad",
+        "dsg/openscad/components/tube/design/design.md",
+        "dsg/openscad/components/tube/tube.scad"
+      ],
+      "target_spec_digest": "489a3a582e429d37888fa82f244425d9de22994754fa6d5a5a8566044e0e13fa"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube/design/img/04-wall-thickness.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/77e444172567a0bf.scad",
+        "dsg/openscad/components/tube/design/design.md"
+      ],
+      "target_spec_digest": "d28b2167196bbe07e00dcb02748133d814181858b14ff6790181b4cd0a22d50f"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/01-library-clamp.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/9e55c486e1e307a3.scad",
+        "dsg/openscad/components/tube-holder/design/design.md",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "9b51386545c41b4fa80951fd39862c418c5e08625b2043e9484e5fc3d1bd0570"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/02-mounted.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/2e2958b5c6daef25.scad",
+        "dsg/openscad/components/tube-holder/design/design.md",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "9b76ab59ceaa181680da2efdfb27dcf7ccc4de4e73047d52db3f399b95b4de6c"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/03-final.png",
+      "sources": [
+        ".cache/scad-project/state/design-entrypoints/5af97cc3655a3de0.scad",
+        "dsg/openscad/components/tube-holder/design/design.md",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "454421c5a94724d48d9626ae5564e31e1a0377c40f3a66106d46320d50de2038"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/01-block.png",
+      "sources": [
+        "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp.py",
+        "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp_render.py",
+        "dsg/openscad/ext/lib.scad.clamps/test/pythonscad/tube_clamp_api.py",
+        "dsg/pythonscad/components/pythonscad-example/design/design.md",
+        "dsg/pythonscad/components/pythonscad-example/pythonscad_example.py"
+      ],
+      "target_spec_digest": "3ad661564dde291ec461323ea8bfaf26b2e4bbbe8205e47990cae83b643958b0"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/02-bore.png",
+      "sources": [
+        "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp.py",
+        "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp_render.py",
+        "dsg/openscad/ext/lib.scad.clamps/test/pythonscad/tube_clamp_api.py",
+        "dsg/pythonscad/components/pythonscad-example/design/design.md",
+        "dsg/pythonscad/components/pythonscad-example/pythonscad_example.py"
+      ],
+      "target_spec_digest": "3dbbac3ea161c4785f80344498d776dcd36ac82ba74a8b2357d1ef15976cfda4"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": ".cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/03-final.png",
+      "sources": [
+        "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp.py",
+        "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp_render.py",
+        "dsg/openscad/ext/lib.scad.clamps/test/pythonscad/tube_clamp_api.py",
+        "dsg/pythonscad/components/pythonscad-example/design/design.md",
+        "dsg/pythonscad/components/pythonscad-example/pythonscad_example.py"
+      ],
+      "target_spec_digest": "ffb0dcdf8526efd6a3a7446cc4286e0f32e801f60a1a4e3c6ac90c4d0276d8a4"
+    }
+  ]
+}

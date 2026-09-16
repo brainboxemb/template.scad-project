@@ -8,9 +8,9 @@ Functional changes to released `template.scad-project` versions.
 
 ### Changed
 
-- Upgrade the reference consumer to released `tool.scad-project v0.14.7` while keeping the committed tool gitlink on exact source `3935e5f86fe309b8908a05554f7ada336a6d6886`.
-- Use readable semantic `@v0.14.7` refs for Production and Release reusable-workflow callers instead of duplicating the tool commit SHA in workflow YAML.
-- Collapse the consumer Release workflow to triggers, permissions, project output paths and one shared `project-release.yml@v0.14.7` call; release-request parsing, validation and cleanup remain in the shared owner workflow.
+- Upgrade the reference consumer to released `tool.scad-project v0.14.8` while keeping the committed tool gitlink on exact source `85781a6b21a0f6a06d37be154fd9eb475ecaa2a4`.
+- Use readable semantic `@v0.14.8` refs for Production and Release reusable-workflow callers instead of duplicating the tool commit SHA in workflow YAML.
+- Collapse the consumer Release workflow to triggers, permissions, project output paths and one shared `project-release.yml@v0.14.8` call; release-request parsing, validation and cleanup remain in the shared owner workflow.
 - Qualify durable coarse workflow timings in generated Build/Verification output, including `orchestration/timings.json`, the generated README timing table and direct raw-log navigation.
 
 ### Fixed
@@ -18,6 +18,7 @@ Functional changes to released `template.scad-project` versions.
 - Qualify shallow base-to-head impact evaluation when the `tool.scad-project` gitlink itself changes, avoiding conservative fallback caused by a missing base gitlink object.
 - Qualify exact pull-request publication provenance so `publication-info.txt`, run context, materialization records and producer evidence all identify the same assessed source revision rather than GitHub's synthetic pull-request merge SHA.
 - Align repository verification and maintainer guidance with the semantic workflow-ref plus exact-gitlink dependency contract.
+- Qualify semantic cross-repository Release calls through lightweight `tool.scad-project` release tags, fixing the annotated-tag workflow-resolution blocker exposed by the first v0.0.5 release attempt.
 
 ## v0.0.4
 

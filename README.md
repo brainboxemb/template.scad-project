@@ -101,7 +101,7 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.14.7
+    ref: v0.14.8
 ```
 
 The semantic release ref is the human-readable dependency policy. The committed `tools/tool.scad-project` gitlink records the exact source commit resolved for that release.
@@ -167,7 +167,7 @@ The consumer workflow remains intentionally thin:
 ```yaml
 jobs:
   scad:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.7
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-production.yml@v0.14.8
     with:
       cache_namespace: template-scad-production-v2
 ```
@@ -309,7 +309,7 @@ rel/vX.Y.Z/verification
 
 Build and Verification publication remain logically separate and can overlap on the same host without another CAD runner.
 
-The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.7`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
+The consumer release workflow is deliberately small: it owns triggers, permissions and the Build/Verification paths, then calls `project-release.yml@v0.14.8`. The shared workflow owns request parsing/validation, Build/Verify/finalization, immutable publication and request-branch cleanup.
 
 Release remains intentionally different from normal production because separate Build/Verify/finalize jobs require complete artifacts as exact-source cross-job hand-off. Normal production keeps only compact/current orchestration evidence plus the generated branches.
 

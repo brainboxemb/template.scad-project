@@ -6,10 +6,10 @@ Functional changes to released `template.scad-project` versions.
 
 ### Changed
 
-- Upgrade the reference consumer to released `tool.scad-project v0.14.4` while keeping the committed tool gitlink on exact source `79855e2495d9e0b57ed3ab0fce818f6fc26d9e00`.
-- Use readable semantic `@v0.14.4` refs for Production and Release reusable-workflow callers instead of duplicating the tool commit SHA in workflow YAML.
-- Collapse the consumer Release workflow to triggers, permissions, project output paths and one shared `project-release.yml@v0.14.4` call; release-request parsing, validation and cleanup now remain in the shared owner workflow.
-- Document durable orchestration timing and direct raw-log navigation separately from cached producer evidence.
+- Upgrade the reference consumer to released `tool.scad-project v0.14.6` while keeping the committed tool gitlink on exact source `723e8b28f40f91686d1c21c8adaa5f559da950ca`.
+- Use readable semantic `@v0.14.6` refs for Production and Release reusable-workflow callers instead of duplicating the tool commit SHA in workflow YAML.
+- Collapse the consumer Release workflow to triggers, permissions, project output paths and one shared `project-release.yml@v0.14.6` call; release-request parsing, validation and cleanup remain in the shared owner workflow.
+- Qualify durable coarse workflow timings in generated Build/Verification output, including `orchestration/timings.json`, the generated README timing table and direct raw-log navigation.
 
 ### Fixed
 

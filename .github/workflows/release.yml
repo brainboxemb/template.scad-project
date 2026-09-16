@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   release:
-    uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@v0.14.5
+    uses: brainboxemb/tool.scad-project/.github/workflows/project-release.yml@v0.14.6
     with:
       version: ${{ inputs.version }}
       source_sha: ${{ inputs.source_sha }}

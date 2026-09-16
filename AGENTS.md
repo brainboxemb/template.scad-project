@@ -27,16 +27,18 @@ Before SCAD workflow, publication or release changes, read the pinned `tools/too
 Do not duplicate volatile dependency versions in this file. Use:
 
 ```text
-project.yml                         generic dependency policy
+project.yml                         generic dependency + semantic release policy
 project.scad.yml                    SCAD project/runtime/build policy
 .gitlinks / .gitmodules             exact resolved dependency pins
-.github/workflows/*.yml             exact reusable-workflow refs
+.github/workflows/*.yml             released semantic reusable-workflow refs
 .moon/workspace.yml                 Moon workspace/project registration
 moon.yml                            visible capabilities + project-specific impact rules
 scad-toolchain-info                 runtime component evidence
 ```
 
 `tool.git-project` is the bootstrap special case: its gitlink is the authoritative exact pin and it is not recursively declared in `project.yml`.
+
+For `tool.scad-project`, `project.yml` and reusable workflow callers use the same released semantic ref such as `v0.14.4`; the committed gitlink records the exact source commit resolved for that release.
 
 ## Visible SCAD capabilities
 
@@ -57,7 +59,7 @@ They are selected in root `moon.yml` through `workspace.inheritedTasks.include`.
 
 Beyond that capability selection, root `moon.yml` contains only project-specific source-impact inputs. Keep `.moon/workspace.yml` limited to Moon workspace-level configuration. Do not reintroduce generic commands, build-index/provenance tasks, synthetic CI roots, or broad `tools/tool.scad-project/**` inputs.
 
-Verification impact stays deliberately narrow: list the project CAD source actually consumed by verification entrypoints and extend that list when verification gains a dependency.
+Use maintainable source-family boundaries for capability impact. Adding a normal component or verification case should not require enumerating that individual file in `moon.yml` or duplicating the concrete glob list in verification scripts.
 
 ## Runtime and build-engine reference choices
 
@@ -135,13 +137,15 @@ Keep the small PythonSCAD example as an end-to-end multi-engine reference. It is
 
 Root bootstrap launchers must remain exact copies of the canonical pinned `tool.git-project` consumer launchers. They initialize the bootstrap gitlink first, then let generic tooling restore dependencies from `project.yml`.
 
-Root update launchers must remain exact copies of the pinned `tool.scad-project` consumer update wrappers. Generic dependency movement is delegated to `tool.git-project`; SCAD tooling then aligns exact reusable-workflow refs with the resulting `tool.scad-project` gitlink.
+Root update launchers must remain exact copies of the pinned `tool.scad-project` consumer update wrappers. Generic dependency movement is delegated to `tool.git-project`; SCAD tooling then aligns the semantic reusable-workflow refs with the configured `tool.scad-project` release while the committed gitlink retains exact source identity.
 
 Never recursively initialize development dependencies owned by those dependencies.
 
 ## CI and publication
 
-Consumer workflows stay thin. Normal Production calls the exact pinned `project-production.yml` and supplies only consumer-level options such as the cache namespace. Do not reintroduce Migration-004 `affected_task` / `aggregate_task` arguments or copy orchestration shell into this repository.
+Consumer workflows stay thin. Normal Production calls the released `project-production.yml` through the same semantic `tool.scad-project` ref configured in `project.yml` and supplies only consumer-level options such as the cache namespace. Do not reintroduce Migration-004 `affected_task` / `aggregate_task` arguments or copy orchestration shell into this repository.
+
+Release is equally thin: the consumer owns only triggers, permissions and project paths; release-request parsing, validation, Build/Verify orchestration, immutable publication and request-branch cleanup belong to the shared released `project-release.yml` workflow.
 
 Normal production behaviour is:
 
@@ -153,7 +157,7 @@ Normal production behaviour is:
 6. add current-run Build/Verification finishing information on the host;
 7. publish only changed output families.
 
-Normal CI retains compact impact/materialization evidence instead of duplicating complete Build/Verification trees as Actions artifacts. Release remains different: separate release jobs need complete artifacts as an exact-source cross-job hand-off.
+Normal CI retains current orchestration evidence with direct navigation to raw Moon/producer logs and durable timing information. Release remains different: separate release jobs need complete Build/Verification trees as an exact-source cross-job hand-off.
 
 Build and Verification publishers remain separate logical outputs and may overlap on the same runner. Publication stays outside the CAD container because it needs current repository credentials/context, not CAD dependencies.
 

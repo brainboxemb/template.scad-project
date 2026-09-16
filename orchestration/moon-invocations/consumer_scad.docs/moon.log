@@ -1,0 +1,250 @@
+[ WARN 2026-09-16 19:25:24.520] moon_app::queries::changed_files  Detected a shallow checkout, unable to run Git commands to determine changed files. 
+[ WARN 19:25:24.520] moon_app::queries::changed_files  A full Git history is required for affected checks, falling back to an empty files list. 
+▮▮▮▮ consumer:scad.docs (bfe810b0)
+SCons design engine: 16 target(s), cache=/work/.cache/scad-project/scons
++ scons -Q -f /work/tools/tool.scad-project/src/scad_project/design_scons_driver.py SCAD_PROJECT_MANIFEST=/work/.cache/scad-project/state/design-manifest.json
+_action([".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/01-plate.png"], [".cache/scad-project/state/design-entrypoints/33535839886b0225.scad", "dsg/openscad/assemblies/tube-holder-assembly/design/design.md", "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad", "dsg/openscad/components/mounting-plate/mounting_plate.scad", "dsg/openscad/components/tube/tube.scad", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.01-plate.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/33535839886b0225.scad
+Geometries in cache: 3
+Geometry cache size in bytes: 2568
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.127
+Top level object is a 3D object (PolySet):
+   Convex:       yes
+   Facets:         6
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.01-plate.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/01-plate.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/01-plate.png
+_action([".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/02-clamp.png"], [".cache/scad-project/state/design-entrypoints/8f5e51f4fe81e10a.scad", "dsg/openscad/assemblies/tube-holder-assembly/design/design.md", "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad", "dsg/openscad/components/mounting-plate/mounting_plate.scad", "dsg/openscad/components/tube/tube.scad", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.02-clamp.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/8f5e51f4fe81e10a.scad
+Geometries in cache: 14
+Geometry cache size in bytes: 88256
+CGAL Polyhedrons in cache: 6
+CGAL cache size in bytes: 453500
+Total rendering time: 0:00:00.071
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      337
+   Facets:        670
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.02-clamp.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/02-clamp.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/02-clamp.png
+_action([".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/03-tube.png"], [".cache/scad-project/state/design-entrypoints/6a4d8fce84759186.scad", "dsg/openscad/assemblies/tube-holder-assembly/design/design.md", "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad", "dsg/openscad/components/mounting-plate/mounting_plate.scad", "dsg/openscad/components/tube/tube.scad", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.03-tube.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/6a4d8fce84759186.scad
+Geometries in cache: 16
+Geometry cache size in bytes: 128944
+CGAL Polyhedrons in cache: 12
+CGAL cache size in bytes: 1236250
+Total rendering time: 0:00:00.084
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      874
+   Facets:       1744
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.03-tube.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/03-tube.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/03-tube.png
+_action([".cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/04-final.png"], [".cache/scad-project/state/design-entrypoints/e0edca2467a41165.scad", "dsg/openscad/assemblies/tube-holder-assembly/design/design.md", "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad", "dsg/openscad/components/mounting-plate/mounting_plate.scad", "dsg/openscad/components/tube/tube.scad", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.04-final.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/e0edca2467a41165.scad
+Geometries in cache: 16
+Geometry cache size in bytes: 128944
+CGAL Polyhedrons in cache: 10
+CGAL cache size in bytes: 1067750
+Total rendering time: 0:00:00.082
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      874
+   Facets:       1744
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/.04-final.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/04-final.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/04-final.png
+_action([".cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/01-base.png"], [".cache/scad-project/state/design-entrypoints/96a7b030653047d1.scad", "dsg/openscad/components/mounting-plate/design/design.md", "dsg/openscad/components/mounting-plate/mounting_plate.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/.01-base.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/96a7b030653047d1.scad
+Geometries in cache: 3
+Geometry cache size in bytes: 2568
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.065
+Top level object is a 3D object (PolySet):
+   Convex:       yes
+   Facets:         6
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/.01-base.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/01-base.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/01-base.png
+_action([".cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/02-final.png"], [".cache/scad-project/state/design-entrypoints/617d0d548cb7b0db.scad", "dsg/openscad/components/mounting-plate/design/design.md", "dsg/openscad/components/mounting-plate/mounting_plate.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/.02-final.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/617d0d548cb7b0db.scad
+Geometries in cache: 2
+Geometry cache size in bytes: 1712
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.066
+Top level object is a 3D object (PolySet):
+   Convex:       yes
+   Facets:         6
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/.02-final.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/02-final.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/02-final.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube/design/img/01-outer.png"], [".cache/scad-project/state/design-entrypoints/d0752be2a2a2db37.scad", "dsg/openscad/components/tube/design/design.md", "dsg/openscad/components/tube/tube.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,60.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.01-outer.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/d0752be2a2a2db37.scad
+Geometries in cache: 3
+Geometry cache size in bytes: 61032
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.069
+Top level object is a 3D object (PolySet):
+   Convex:       yes
+   Facets:       122
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.01-outer.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/01-outer.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/01-outer.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube/design/img/02-bore.png"], [".cache/scad-project/state/design-entrypoints/79874c4d0c6e3614.scad", "dsg/openscad/components/tube/design/design.md", "dsg/openscad/components/tube/tube.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,60.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.02-bore.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/79874c4d0c6e3614.scad
+Geometries in cache: 4
+Geometry cache size in bytes: 81376
+CGAL Polyhedrons in cache: 2
+CGAL cache size in bytes: 360000
+Total rendering time: 0:00:00.074
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      720
+   Facets:       1436
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.02-bore.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/02-bore.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/02-bore.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube/design/img/03-final.png"], [".cache/scad-project/state/design-entrypoints/1c6039aaae7a2a93.scad", "dsg/openscad/components/tube/design/design.md", "dsg/openscad/components/tube/tube.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,60.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.03-final.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/1c6039aaae7a2a93.scad
+Geometries in cache: 2
+Geometry cache size in bytes: 40688
+CGAL Polyhedrons in cache: 2
+CGAL cache size in bytes: 240000
+Total rendering time: 0:00:00.073
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      1
+   Vertices:      480
+   Facets:        960
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.03-final.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/03-final.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/03-final.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube/design/img/04-wall-thickness.png"], [".cache/scad-project/state/design-entrypoints/77e444172567a0bf.scad", "dsg/openscad/components/tube/design/design.md"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,55.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.04-wall-thickness.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/77e444172567a0bf.scad
+Geometries in cache: 4
+Geometry cache size in bytes: 54216
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.067
+Top level object is a 3D object (PolySet):
+   Convex:       no
+   Triangles:    960
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/.04-wall-thickness.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube/design/img/04-wall-thickness.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/04-wall-thickness.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/01-library-clamp.png"], [".cache/scad-project/state/design-entrypoints/9e55c486e1e307a3.scad", "dsg/openscad/components/tube-holder/design/design.md", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/.01-library-clamp.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/9e55c486e1e307a3.scad
+Geometries in cache: 11
+Geometry cache size in bytes: 85688
+CGAL Polyhedrons in cache: 3
+CGAL cache size in bytes: 204750
+Total rendering time: 0:00:00.072
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      329
+   Facets:        654
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/.01-library-clamp.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/01-library-clamp.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/01-library-clamp.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/02-mounted.png"], [".cache/scad-project/state/design-entrypoints/2e2958b5c6daef25.scad", "dsg/openscad/components/tube-holder/design/design.md", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/.02-mounted.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/2e2958b5c6daef25.scad
+Geometries in cache: 11
+Geometry cache size in bytes: 85688
+CGAL Polyhedrons in cache: 4
+CGAL cache size in bytes: 287000
+Total rendering time: 0:00:00.074
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      329
+   Facets:        654
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/.02-mounted.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/02-mounted.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/02-mounted.png
+_action([".cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/03-final.png"], [".cache/scad-project/state/design-entrypoints/5af97cc3655a3de0.scad", "dsg/openscad/components/tube-holder/design/design.md", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -o /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/.03-final.unwatermarked.png /work/.cache/scad-project/state/design-entrypoints/5af97cc3655a3de0.scad
+Geometries in cache: 11
+Geometry cache size in bytes: 85688
+CGAL Polyhedrons in cache: 3
+CGAL cache size in bytes: 204750
+Total rendering time: 0:00:00.073
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      0
+   Vertices:      329
+   Facets:        654
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/.03-final.unwatermarked.png /work/.cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/03-final.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/03-final.png
+_action([".cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/01-block.png"], ["dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp.py", "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp_render.py", "dsg/openscad/ext/lib.scad.clamps/test/pythonscad/tube_clamp_api.py", "dsg/pythonscad/components/pythonscad-example/design/design.md", "dsg/pythonscad/components/pythonscad-example/pythonscad_example.py"])
++ xvfb-run -a pythonscad --trust-python --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -D design_view="block" -o /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/.01-block.unwatermarked.png /work/dsg/pythonscad/components/pythonscad-example/pythonscad_example.py
+Python Code globally trusted
+Geometries in cache: 1
+Geometry cache size in bytes: 928
+CGAL Polyhedrons in cache: 0
+CGAL cache size in bytes: 0
+Total rendering time: 0:00:00.061
+Top level object is a 3D object (PolySet):
+   Convex:       yes
+   Facets:         6
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/.01-block.unwatermarked.png /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/01-block.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/01-block.png
+_action([".cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/02-bore.png"], ["dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp.py", "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp_render.py", "dsg/openscad/ext/lib.scad.clamps/test/pythonscad/tube_clamp_api.py", "dsg/pythonscad/components/pythonscad-example/design/design.md", "dsg/pythonscad/components/pythonscad-example/pythonscad_example.py"])
++ xvfb-run -a pythonscad --trust-python --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -D design_view="bore" -o /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/.02-bore.unwatermarked.png /work/dsg/pythonscad/components/pythonscad-example/pythonscad_example.py
+Python Code globally trusted
+Geometries in cache: 3
+Geometry cache size in bytes: 37056
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 72000
+Total rendering time: 0:00:00.064
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      1
+   Vertices:      288
+   Facets:        576
+Measurements:
+   Surface: 2034.46
+   Volume: 4066.34
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/.02-bore.unwatermarked.png /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/02-bore.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/02-bore.png
+_action([".cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/03-final.png"], ["dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp.py", "dsg/openscad/ext/lib.scad.clamps/pythonscad/tube-clamp/tube_clamp_render.py", "dsg/openscad/ext/lib.scad.clamps/test/pythonscad/tube_clamp_api.py", "dsg/pythonscad/components/pythonscad-example/design/design.md", "dsg/pythonscad/components/pythonscad-example/pythonscad_example.py"])
++ xvfb-run -a pythonscad --trust-python --render --camera=0.0,0.0,0.0,65.0,0.0,35.0,0.0 --autocenter --viewall --imgsize=640,480 -D design_view="final" -o /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/.03-final.unwatermarked.png /work/dsg/pythonscad/components/pythonscad-example/pythonscad_example.py
+Python Code globally trusted
+Geometries in cache: 3
+Geometry cache size in bytes: 37056
+CGAL Polyhedrons in cache: 1
+CGAL cache size in bytes: 72000
+Total rendering time: 0:00:00.076
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      1
+   Vertices:      288
+   Facets:        576
+Measurements:
+   Surface: 2034.46
+   Volume: 4066.34
++ scad-image-watermark /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/.03-final.unwatermarked.png /work/.cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/03-final.png --text © 2026 brainboxemb
+SCons design built: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/03-final.png
+SCons design summary: targets=16 built=16 cache-restored=0 current=0 error=0
+  built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/01-plate.png
+  built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/02-clamp.png
+  built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/03-tube.png
+  built: .cache/scad-project/design-stage/project/openscad/assemblies/tube-holder-assembly/design/img/04-final.png
+  built: .cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/01-base.png
+  built: .cache/scad-project/design-stage/project/openscad/components/mounting-plate/design/img/02-final.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/01-outer.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/02-bore.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/03-final.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube/design/img/04-wall-thickness.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/01-library-clamp.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/02-mounted.png
+  built: .cache/scad-project/design-stage/project/openscad/components/tube-holder/design/img/03-final.png
+  built: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/01-block.png
+  built: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/02-bore.png
+  built: .cache/scad-project/design-stage/project/pythonscad/components/pythonscad-example/design/img/03-final.png
+Generated design documentation: bld/design
+design build: OK
+▮▮▮▮ consumer:scad.docs (4s 480ms, bfe810b0)
+
+Tasks: 1 completed
+ Time: 4s 526ms
+

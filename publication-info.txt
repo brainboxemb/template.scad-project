@@ -1,0 +1,25 @@
+Publication context : production
+Publication kind    : verification
+Publication branch  : prod/vrf
+
+Source
+------
+Repository          : brainboxemb/template.scad-project
+Ref type            : branch
+Ref                 : main
+Commit              : 637906c49b90308ebba7e4477fa2e5036d9543da
+Triggered by        : brainboxemb
+Workflow run        : https://github.com/brainboxemb/template.scad-project/actions/runs/35140381160
+
+Tooling
+-------
+SCAD toolchain image: ghcr.io/brainboxemb/scad-toolchain:v0.5.0
+SCAD toolchain ver. : v0.5.0
+tool.scad-project   : v0.14.10
+
+Git submodules
+--------------
+dsg/openscad/ext/lib.scad.clamps : e2e4c03a743b4c76ebd96f015ca81cc686defbf3
+dsg/openscad/ext/lib.scad.clamps/tools/tool.scad-project : 827ae5fef4bffd83b81fb4e2eb580267d1dd3abb
+tools/tool.git-project : 7c43f37e7b07cfb57638a1d1dad2501de09ba7eb
+tools/tool.scad-project : 3ad040b2d9c26b8c482853157baeb99a8d9b36db

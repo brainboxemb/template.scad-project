@@ -320,3 +320,5 @@ Every published snapshot includes `publication-info.txt` with source, tool/toolc
 Structured OpenSCAD comments use `openscad_docsgen` conventions and begin with `// File:` or `// LibFile:` before structured module/function blocks.
 
 The model and documentation were developed with the assistance of ChatGPT.
+
+<!-- Migration 005 qualification probe: README-only zero-runtime path. -->

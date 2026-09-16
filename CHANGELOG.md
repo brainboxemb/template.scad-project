@@ -4,6 +4,8 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+## v0.0.5
+
 ### Changed
 
 - Upgrade the reference consumer to released `tool.scad-project v0.14.7` while keeping the committed tool gitlink on exact source `3935e5f86fe309b8908a05554f7ada336a6d6886`.

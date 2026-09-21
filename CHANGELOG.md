@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-21 — qualify tool.scad-project v0.15.3 hydration provenance
+
+- Advance the reference consumer from `tool.scad-project v0.15.2` to `v0.15.3` / exact `c822617f5376f635689697883e92bc2ba1a03412`.
+- Re-qualify normal production after Experiment 006 exposed stale generic-orchestration ownership in v0.15.2.
+- Verify shared production reports `tool.git-project v0.2.9` and retains `dependency-provenance.json` through Moon capability hydration.
+
+
 ## 2026-09-21 — Migration 008 released dependency stack
 
 - Advance the reference consumer to `tool.git-project v0.2.9` and `tool.scad-project v0.15.2`, preserving exact gitlink identity alongside readable semantic workflow refs.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-21 — Migration 008 released dependency stack
+
+- Advance the reference consumer to `tool.git-project v0.2.9` and `tool.scad-project v0.15.2`, preserving exact gitlink identity alongside readable semantic workflow refs.
+- Replace root repository update launchers with the canonical Python-free v0.15.2 consumer launchers.
+- Qualify normal SCons Build production with the released dependency-provenance owner implementation; no artificial nested dependency is added to the template.
+- Align reference-consumer documentation with the v0.6.1 runtime and current released owner stack.
+
+
 Functional changes to released `template.scad-project` versions.
 
 ## Unreleased

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_GIT_TOOL_SHA="7c43f37e7b07cfb57638a1d1dad2501de09ba7eb"
-EXPECTED_SCAD_TOOL_SHA="3ad040b2d9c26b8c482853157baeb99a8d9b36db"
-EXPECTED_SCAD_TOOL_REF="v0.14.10"
+EXPECTED_GIT_TOOL_SHA="9879da589101f41b2b0e634d196ddcc51e1a6102"
+EXPECTED_SCAD_TOOL_SHA="70fd4162731484a949dc390e942dde8b8d811f10"
+EXPECTED_SCAD_TOOL_REF="v0.15.2"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -117,8 +117,8 @@ for forbidden in \
   fi
 done
 
-if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.8' .github/workflows/pr-cleanup.yml; then
-  echo "ERROR: pr-cleanup.yml must use released generic cleanup workflow v0.2.8" >&2
+if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.9' .github/workflows/pr-cleanup.yml; then
+  echo "ERROR: pr-cleanup.yml must use released generic cleanup workflow v0.2.9" >&2
   exit 1
 fi
 for suffix in bld vrf; do
@@ -219,4 +219,4 @@ mkdir -p "$OUT"
 rm -f "$OUT/png/tube-holder-assembly.png"
 cp vrf/templates/README.md "$OUT/README.md"
 
-echo "Migration 005 reference-consumer verification: OK"
+echo "Reference-consumer released-stack verification: OK"

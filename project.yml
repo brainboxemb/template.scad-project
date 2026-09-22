@@ -13,7 +13,7 @@ dependencies:
     type: git-submodule
     url: https://github.com/brainboxemb/tool.scad-project.git
     path: tools/tool.scad-project
-    ref: v0.15.2
+    ref: b9760876e1b971765a4d170fda0736a926eb9190
 
   - name: lib.scad.clamps
     role: external

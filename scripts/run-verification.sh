@@ -2,8 +2,8 @@
 set -euo pipefail
 
 EXPECTED_GIT_TOOL_SHA="9879da589101f41b2b0e634d196ddcc51e1a6102"
-EXPECTED_SCAD_TOOL_SHA="70fd4162731484a949dc390e942dde8b8d811f10"
-EXPECTED_SCAD_TOOL_REF="v0.15.2"
+EXPECTED_SCAD_TOOL_SHA="b9760876e1b971765a4d170fda0736a926eb9190"
+EXPECTED_SCAD_TOOL_REF="b9760876e1b971765a4d170fda0736a926eb9190"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -33,7 +33,7 @@ TOOL_REF="$(awk '
   in_tool && $1 == "ref:" { print $2; exit }
 ' project.yml)"
 if [[ "$TOOL_REF" != "$EXPECTED_SCAD_TOOL_REF" ]]; then
-  echo "ERROR: tool.scad-project must use released ref ${EXPECTED_SCAD_TOOL_REF}; got ${TOOL_REF:-<missing>}" >&2
+  echo "ERROR: tool.scad-project must use qualification ref ${EXPECTED_SCAD_TOOL_REF}; got ${TOOL_REF:-<missing>}" >&2
   exit 1
 fi
 
@@ -51,7 +51,7 @@ if [[ "$GIT_TOOL_SHA" != "$EXPECTED_GIT_TOOL_SHA" ]]; then
   exit 1
 fi
 if [[ "$TOOL_SHA" != "$EXPECTED_SCAD_TOOL_SHA" ]]; then
-  echo "ERROR: tool.scad-project must resolve to released ${EXPECTED_SCAD_TOOL_REF} commit ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_SHA}" >&2
+  echo "ERROR: tool.scad-project must resolve to qualification commit ${EXPECTED_SCAD_TOOL_SHA}; got ${TOOL_SHA}" >&2
   exit 1
 fi
 

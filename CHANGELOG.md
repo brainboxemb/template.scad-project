@@ -12,6 +12,11 @@ Functional changes to released `template.scad-project` versions.
 
 ## Unreleased
 
+### Changed
+
+- Adopt released `tool.scad-project v0.15.6` with exact tool gitlink `8ea81a0c3483770bedda75ccf80fb72797097c0a` for Migration 009, so production-branch SCAD runs serialize instead of cancelling required predecessor work.
+- Qualify the released stack on exact-main source `462534755fef88f393e53c8b7d8a3675ff9a7cce` through production run `35728474360`, with both `prod/bld` and `prod/vrf` provenance on v0.15.6.
+
 ## v0.0.6
 
 ### Changed

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_GIT_TOOL_SHA="9879da589101f41b2b0e634d196ddcc51e1a6102"
-EXPECTED_SCAD_TOOL_SHA="bfaac9f6916c09bc6525abddf64c87238fe59103"
-EXPECTED_SCAD_TOOL_REF="v0.15.7"
+EXPECTED_GIT_TOOL_SHA="d1ed47c7d85524cfcb2a8f7e1ea81ba106ae9c60"
+EXPECTED_SCAD_TOOL_SHA="8d167ad17dbfa798d68f46d871aaeed2e2e09857"
+EXPECTED_SCAD_TOOL_REF="v0.15.11"
 
 OUT="vrf/out"
 VERIFY_PNGS=(
@@ -60,8 +60,8 @@ if [[ -e .github/workflows/build.yml || -e .github/workflows/verify.yml ]]; then
   exit 1
 fi
 
-SCAD_WORKFLOW=.github/workflows/scad.yml
-REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/project-production.yml@${EXPECTED_SCAD_TOOL_REF}"
+SCAD_WORKFLOW=.github/workflows/self-ci.yml
+REUSABLE_PRODUCTION="brainboxemb/tool.scad-project/.github/workflows/reusable-ci.yml@${EXPECTED_SCAD_TOOL_REF}"
 for required in \
   "$REUSABLE_PRODUCTION" \
   'cache_namespace: template-scad-production-v2'; do
@@ -95,8 +95,8 @@ for forbidden in \
   fi
 done
 
-RELEASE_WORKFLOW=.github/workflows/release.yml
-REUSABLE_RELEASE="brainboxemb/tool.scad-project/.github/workflows/project-release.yml@${EXPECTED_SCAD_TOOL_REF}"
+RELEASE_WORKFLOW=.github/workflows/self-release.yml
+REUSABLE_RELEASE="brainboxemb/tool.scad-project/.github/workflows/reusable-release.yml@${EXPECTED_SCAD_TOOL_REF}"
 for required in \
   "$REUSABLE_RELEASE" \
   'build_path: bld' \
@@ -117,18 +117,18 @@ for forbidden in \
   fi
 done
 
-if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.9' .github/workflows/pr-cleanup.yml; then
-  echo "ERROR: pr-cleanup.yml must use released generic cleanup workflow v0.2.9" >&2
+if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.14' .github/workflows/self-pr-cleanup.yml; then
+  echo "ERROR: self-pr-cleanup.yml must use released generic cleanup workflow v0.2.14" >&2
   exit 1
 fi
 for suffix in bld vrf; do
-  if ! grep -Fxq "        ${suffix}" .github/workflows/pr-cleanup.yml; then
-    echo "ERROR: pr-cleanup.yml must remove the canonical ${suffix} preview namespace" >&2
+  if ! grep -Fxq "        ${suffix}" .github/workflows/self-pr-cleanup.yml; then
+    echo "ERROR: self-pr-cleanup.yml must remove the canonical ${suffix} preview namespace" >&2
     exit 1
   fi
 done
-if grep -Fxq '        build' .github/workflows/pr-cleanup.yml || grep -Fxq '        verification' .github/workflows/pr-cleanup.yml; then
-  echo "ERROR: pr-cleanup.yml still uses legacy build/verification preview suffixes" >&2
+if grep -Fxq '        build' .github/workflows/self-pr-cleanup.yml || grep -Fxq '        verification' .github/workflows/self-pr-cleanup.yml; then
+  echo "ERROR: self-pr-cleanup.yml still uses legacy build/verification preview suffixes" >&2
   exit 1
 fi
 
@@ -198,25 +198,23 @@ if grep -Fq 'build_branch: prod/build' project.scad.yml || grep -Fq 'verificatio
   exit 1
 fi
 
-if ! cmp -s bootstrap.sh tools/tool.git-project/bootstrap/consumer-bootstrap.sh; then
-  echo "ERROR: bootstrap.sh differs from the pinned tool.git-project consumer bootstrap" >&2
-  exit 1
-fi
-if ! cmp -s bootstrap.ps1 tools/tool.git-project/bootstrap/consumer-bootstrap.ps1; then
-  echo "ERROR: bootstrap.ps1 differs from the pinned tool.git-project consumer bootstrap" >&2
-  exit 1
-fi
-if ! cmp -s update-repo.sh tools/tool.scad-project/bootstrap/consumer-update.sh; then
-  echo "ERROR: update-repo.sh differs from the released tool.scad-project SCAD update wrapper" >&2
-  exit 1
-fi
-if ! cmp -s update-repo.ps1 tools/tool.scad-project/bootstrap/consumer-update.ps1; then
-  echo "ERROR: update-repo.ps1 differs from the released tool.scad-project SCAD update wrapper" >&2
-  exit 1
-fi
+for mapping in \
+  'bootstrap.sh:bootstrap/consumer-bootstrap.sh' \
+  'bootstrap.ps1:bootstrap/consumer-bootstrap.ps1' \
+  'update.sh:bootstrap/consumer-update.sh' \
+  'update.ps1:bootstrap/consumer-update.ps1'; do
+  root_path="${mapping%%:*}"
+  owner_path="${mapping#*:}"
+  root_blob="$(git rev-parse "HEAD:${root_path}")"
+  owner_blob="$(git -C tools/tool.git-project rev-parse "HEAD:${owner_path}")"
+  if [[ "$root_blob" != "$owner_blob" ]]; then
+    echo "ERROR: ${root_path} committed blob differs from pinned tool.git-project ${owner_path}" >&2
+    exit 1
+  fi
+done
 
 mkdir -p "$OUT"
-cp doc/30-verification.md "$OUT/30-verification.md"
+cp doc/50-00-verification.md "$OUT/50-00-verification.md"
 rm -f "$OUT/png/tube-holder-assembly.png"
 cp vrf/templates/README.md "$OUT/README.md"
 

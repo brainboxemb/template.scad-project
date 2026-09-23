@@ -14,6 +14,8 @@ Functional changes to released `template.scad-project` versions.
 
 ### Changed
 
+- Adopt the Migration 011 qualified reference baseline: tool.git-project v0.2.14, tool.scad-project v0.15.11 and lib.scad.clamps v0.1.9; install managed bootstrap/update launchers; move repository entry workflows to self-ci/self-release/self-pr-cleanup; migrate documentation to the shared 10/20/30/40/50 families; strengthen the human-facing specification; and surface generated visual design documents alongside their source authorities.
+
 - Align the reference consumer with Migration 010 documentation/agent guidance: add numbered plan/specification/design/verification/CI authorities, route shared workflow through `brainboxemb.meta`, keep component-local visual detailed design, publish the verification strategy with generated evidence, and replace stale copied tooling/version documentation with config/live-provenance routing. Preserve a representative generated assembly preview in the top-level README.
 
 - Advance Migration 009 to released `tool.scad-project v0.15.7` with exact tool gitlink `bfaac9f6916c09bc6525abddf64c87238fe59103`; this retains production-branch serialization and restores the qualified read-only `update-repo status` contract.

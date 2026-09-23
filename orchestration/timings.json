@@ -1,0 +1,52 @@
+{
+  "phases": [
+    {
+      "duration_ms": 11475,
+      "finished_at": "2026-09-23T20:50:17.168Z",
+      "name": "preflight_and_plan",
+      "started_at": "2026-09-23T20:50:05.693Z"
+    },
+    {
+      "duration_ms": 749,
+      "finished_at": "2026-09-23T20:50:17.917Z",
+      "name": "cache_restore",
+      "started_at": "2026-09-23T20:50:17.168Z"
+    },
+    {
+      "duration_ms": 23310,
+      "finished_at": "2026-09-23T20:50:41.227Z",
+      "name": "runtime_pull",
+      "started_at": "2026-09-23T20:50:17.917Z"
+    },
+    {
+      "duration_ms": 13064,
+      "finished_at": "2026-09-23T20:50:54.291Z",
+      "name": "materialization",
+      "started_at": "2026-09-23T20:50:41.227Z"
+    },
+    {
+      "duration_ms": 2047,
+      "finished_at": "2026-09-23T20:50:56.338Z",
+      "name": "cache_save",
+      "started_at": "2026-09-23T20:50:54.291Z"
+    },
+    {
+      "duration_ms": 549,
+      "finished_at": "2026-09-23T20:50:56.887Z",
+      "name": "finishing",
+      "started_at": "2026-09-23T20:50:56.338Z"
+    },
+    {
+      "duration_ms": 1,
+      "finished_at": "2026-09-23T20:50:56.996Z",
+      "name": "snapshot_preparation",
+      "started_at": "2026-09-23T20:50:56.995Z"
+    }
+  ],
+  "publication_family": "verification",
+  "schema": "brainboxemb.scad-workflow-timings",
+  "schema_version": 1,
+  "snapshot_ready_at": "2026-09-23T20:50:56.996Z",
+  "total_to_snapshot_ms": 51303,
+  "workflow_started_at": "2026-09-23T20:50:05.693Z"
+}

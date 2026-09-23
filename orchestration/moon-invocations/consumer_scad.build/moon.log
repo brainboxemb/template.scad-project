@@ -1,0 +1,41 @@
+[ WARN 2026-09-23 20:50:50.714] moon_app::queries::changed_files  Detected a shallow checkout, unable to run Git commands to determine changed files. 
+[ WARN 20:50:50.714] moon_app::queries::changed_files  A full Git history is required for affected checks, falling back to an empty files list. 
+▮▮▮▮ consumer:scad.build (191bfcd1)
+SCons build engine: 2 target(s), cache=/work/.cache/scad-project/scons
++ scons -Q -f /work/tools/tool.scad-project/src/scad_project/scons_driver.py SCAD_PROJECT_MANIFEST=/work/.cache/scad-project/state/build-manifest.json
+_action(["bld/png/tube-holder-assembly.png"], ["dsg/openscad/render/tube-holder-assembly.scad", "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad", "dsg/openscad/components/mounting-plate/mounting_plate.scad", "dsg/openscad/components/tube/tube.scad", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ xvfb-run -a openscad --enable=object-function --render --autocenter --viewall --imgsize=1600,1000 -o /work/bld/png/.tube-holder-assembly.unwatermarked.png /work/dsg/openscad/render/tube-holder-assembly.scad
+Geometries in cache: 16
+Geometry cache size in bytes: 128944
+CGAL Polyhedrons in cache: 10
+CGAL cache size in bytes: 1078250
+Total rendering time: 0:00:00.140
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      1
+   Vertices:      838
+   Facets:       1676
++ scad-image-watermark /work/bld/png/.tube-holder-assembly.unwatermarked.png /work/bld/png/tube-holder-assembly.png --text © 2026 brainboxemb
+SCons built: bld/png/tube-holder-assembly.png
+_action(["bld/stl/tube-holder-assembly.stl"], ["dsg/openscad/export/tube-holder-assembly.scad", "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad", "dsg/openscad/components/mounting-plate/mounting_plate.scad", "dsg/openscad/components/tube/tube.scad", "dsg/openscad/components/tube-holder/tube_holder.scad", "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"])
++ openscad --enable=object-function -o /work/bld/stl/tube-holder-assembly.stl /work/dsg/openscad/export/tube-holder-assembly.scad
+Geometries in cache: 16
+Geometry cache size in bytes: 128944
+CGAL Polyhedrons in cache: 10
+CGAL cache size in bytes: 1078250
+Total rendering time: 0:00:00.016
+   Top level object is a 3D object (manifold):
+   Status:     NoError
+   Genus:      1
+   Vertices:      838
+   Facets:       1676
+SCons built: bld/stl/tube-holder-assembly.stl
+SCons summary: targets=2 built=2 cache-restored=0 current=0 error=0
+  built: bld/png/tube-holder-assembly.png
+  built: bld/stl/tube-holder-assembly.stl
+build: OK
+▮▮▮▮ consumer:scad.build (657ms, 191bfcd1)
+
+Tasks: 1 completed
+ Time: 701ms
+

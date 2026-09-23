@@ -117,17 +117,17 @@ for forbidden in \
   fi
 done
 
-if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.14' .github/workflows/self-self-pr-cleanup.yml; then
+if ! grep -Fq 'reusable-pr-preview-cleanup.yml@v0.2.14' .github/workflows/self-pr-cleanup.yml; then
   echo "ERROR: self-pr-cleanup.yml must use released generic cleanup workflow v0.2.14" >&2
   exit 1
 fi
 for suffix in bld vrf; do
-  if ! grep -Fxq "        ${suffix}" .github/workflows/self-self-pr-cleanup.yml; then
+  if ! grep -Fxq "        ${suffix}" .github/workflows/self-pr-cleanup.yml; then
     echo "ERROR: self-pr-cleanup.yml must remove the canonical ${suffix} preview namespace" >&2
     exit 1
   fi
 done
-if grep -Fxq '        build' .github/workflows/self-self-pr-cleanup.yml || grep -Fxq '        verification' .github/workflows/self-self-pr-cleanup.yml; then
+if grep -Fxq '        build' .github/workflows/self-pr-cleanup.yml || grep -Fxq '        verification' .github/workflows/self-pr-cleanup.yml; then
   echo "ERROR: self-pr-cleanup.yml still uses legacy build/verification preview suffixes" >&2
   exit 1
 fi
@@ -207,7 +207,7 @@ if ! cmp -s bootstrap.ps1 tools/tool.git-project/bootstrap/consumer-bootstrap.ps
   exit 1
 fi
 if ! cmp -s update.sh tools/tool.git-project/bootstrap/consumer-update.sh; then
-  echo "ERROR: update.sh differs from the released tool.scad-project SCAD update wrapper" >&2
+  echo "ERROR: update.sh differs from the pinned tool.git-project managed consumer update launcher" >&2
   exit 1
 fi
 if ! cmp -s update.ps1 tools/tool.git-project/bootstrap/consumer-update.ps1; then

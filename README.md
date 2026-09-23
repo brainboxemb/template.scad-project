@@ -12,12 +12,13 @@ used throughout the template.
 
 ## Start here
 
-- [Plan](doc/00-plan.md) — current role, information sources and future template work.
-- [Specification](doc/10-specification.md) — why the reference consumer exists and what it must demonstrate.
-- [Design](doc/20-design.md) — concrete project structure, capabilities and ownership boundaries.
-- [Verification](doc/30-verification.md) — what the template proves and how current evidence is obtained.
-- [CI orchestration](doc/40-ci-orchestration.md) — detailed runtime/capability flow.
-- [Generated design documentation](../../blob/prod/bld/design/README.md)
+- [Documentation index](doc/README.md)
+- [Plan](doc/10-00-plan.md) — current role, information sources and future template work.
+- [Specification](doc/30-00-specification.md) — why the reference consumer exists and what it must demonstrate.
+- [Design](doc/40-00-design.md) — concrete project structure, capabilities and ownership boundaries.
+- [Verification](doc/50-00-verification.md) — what the template proves and how current evidence is obtained.
+- [CI orchestration](doc/40-01-ci-orchestration.md) — detailed runtime/capability flow.
+- [Generated visual design documentation](../../blob/prod/bld/design/README.md)
 - [Latest Build](../../tree/prod/bld)
 - [Latest Verification](../../tree/prod/vrf)
 - [Changelog](CHANGELOG.md)

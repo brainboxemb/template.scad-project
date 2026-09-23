@@ -23,14 +23,14 @@ tasks:
 
   scad.verify:
     inputs:
-      - 'doc/30-verification.md'
+      - 'doc/50-00-verification.md'
       - 'dsg/openscad/components/**'
       - 'dsg/openscad/ext/**'
       - 'vrf/**'
       - 'scripts/**'
       - 'bootstrap.sh'
       - 'bootstrap.ps1'
-      - 'update-repo.sh'
-      - 'update-repo.ps1'
+      - 'update.sh'
+      - 'update.ps1'
       - '.github/workflows/**'
       - 'tools/tool.git-project'

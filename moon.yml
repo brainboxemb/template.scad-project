@@ -23,6 +23,7 @@ tasks:
 
   scad.verify:
     inputs:
+      - 'doc/30-verification.md'
       - 'dsg/openscad/components/**'
       - 'dsg/openscad/ext/**'
       - 'vrf/**'

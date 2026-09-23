@@ -1,5 +1,7 @@
 # Verification
 
+Repository-level strategy/status: [30-verification.md](30-verification.md).
+
 This snapshot contains verification-specific evidence only. Normal build products remain under `bld/` and are not duplicated here.
 
 The reference consumer currently verifies two independent OpenSCAD dependency paths:

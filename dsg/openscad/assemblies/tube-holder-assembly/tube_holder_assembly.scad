@@ -2,6 +2,8 @@
 //   Reference assembly combining project and library geometry.
 //
 // FileSummary: Mounting plate, reusable clamp and reference tube.
+//
+// - Design: design/design.md
 
 use <../../components/mounting-plate/mounting_plate.scad>
 use <../../components/tube/tube.scad>

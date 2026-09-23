@@ -24,13 +24,13 @@ edit.
 
 | Design | Source authority | Generated visual document |
 | --- | --- | --- |
-| Tube-holder assembly | [source](../dsg/openscad/assemblies/tube-holder-assembly/design/design.md) | [Build](../../blob/prod/bld/design/project/openscad/assemblies/tube-holder-assembly/design/design.md) |
-| Mounting plate | [source](../dsg/openscad/components/mounting-plate/design/design.md) | [Build](../../blob/prod/bld/design/project/openscad/components/mounting-plate/design/design.md) |
-| Tube holder | [source](../dsg/openscad/components/tube-holder/design/design.md) | [Build](../../blob/prod/bld/design/project/openscad/components/tube-holder/design/design.md) |
-| Tube | [source](../dsg/openscad/components/tube/design/design.md) | [Build](../../blob/prod/bld/design/project/openscad/components/tube/design/design.md) |
-| PythonSCAD example | [source](../dsg/pythonscad/components/pythonscad-example/design/design.md) | [Build](../../blob/prod/bld/design/project/pythonscad/components/pythonscad-example/design/design.md) |
+| Tube-holder assembly | [source](../dsg/openscad/assemblies/tube-holder-assembly/design/design.md) | [Build](../../../blob/prod/bld/design/project/openscad/assemblies/tube-holder-assembly/design/design.md) |
+| Mounting plate | [source](../dsg/openscad/components/mounting-plate/design/design.md) | [Build](../../../blob/prod/bld/design/project/openscad/components/mounting-plate/design/design.md) |
+| Tube holder | [source](../dsg/openscad/components/tube-holder/design/design.md) | [Build](../../../blob/prod/bld/design/project/openscad/components/tube-holder/design/design.md) |
+| Tube | [source](../dsg/openscad/components/tube/design/design.md) | [Build](../../../blob/prod/bld/design/project/openscad/components/tube/design/design.md) |
+| PythonSCAD example | [source](../dsg/pythonscad/components/pythonscad-example/design/design.md) | [Build](../../../blob/prod/bld/design/project/pythonscad/components/pythonscad-example/design/design.md) |
 
-[Generated design index](../../blob/prod/bld/design/README.md)
+[Generated design index](../../../blob/prod/bld/design/README.md)
 
 ## Workflow boundary
 

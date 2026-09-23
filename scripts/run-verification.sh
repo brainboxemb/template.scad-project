@@ -198,22 +198,20 @@ if grep -Fq 'build_branch: prod/build' project.scad.yml || grep -Fq 'verificatio
   exit 1
 fi
 
-if ! cmp -s bootstrap.sh tools/tool.git-project/bootstrap/consumer-bootstrap.sh; then
-  echo "ERROR: bootstrap.sh differs from the pinned tool.git-project consumer bootstrap" >&2
-  exit 1
-fi
-if ! cmp -s bootstrap.ps1 tools/tool.git-project/bootstrap/consumer-bootstrap.ps1; then
-  echo "ERROR: bootstrap.ps1 differs from the pinned tool.git-project consumer bootstrap" >&2
-  exit 1
-fi
-if ! cmp -s update.sh tools/tool.git-project/bootstrap/consumer-update.sh; then
-  echo "ERROR: update.sh differs from the pinned tool.git-project managed consumer update launcher" >&2
-  exit 1
-fi
-if ! cmp -s update.ps1 tools/tool.git-project/bootstrap/consumer-update.ps1; then
-  echo "ERROR: update.ps1 differs from the released tool.scad-project SCAD update wrapper" >&2
-  exit 1
-fi
+for mapping in \
+  'bootstrap.sh:bootstrap/consumer-bootstrap.sh' \
+  'bootstrap.ps1:bootstrap/consumer-bootstrap.ps1' \
+  'update.sh:bootstrap/consumer-update.sh' \
+  'update.ps1:bootstrap/consumer-update.ps1'; do
+  root_path="${mapping%%:*}"
+  owner_path="${mapping#*:}"
+  root_blob="$(git rev-parse "HEAD:${root_path}")"
+  owner_blob="$(git -C tools/tool.git-project rev-parse "HEAD:${owner_path}")"
+  if [[ "$root_blob" != "$owner_blob" ]]; then
+    echo "ERROR: ${root_path} committed blob differs from pinned tool.git-project ${owner_path}" >&2
+    exit 1
+  fi
+done
 
 mkdir -p "$OUT"
 cp doc/50-00-verification.md "$OUT/50-00-verification.md"

@@ -3,6 +3,8 @@
 //
 // FileSummary: Reference mounting surface shared by assembly and verification examples.
 //
+// - Design: design/design.md
+//
 // Module: mounting_plate()
 // Usage:
 //   mounting_plate();

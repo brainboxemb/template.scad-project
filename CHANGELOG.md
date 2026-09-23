@@ -14,6 +14,8 @@ Functional changes to released `template.scad-project` versions.
 
 ### Changed
 
+- Align the reference consumer with Migration 010 documentation/agent guidance: add numbered plan/specification/design/verification/CI authorities, route shared workflow through `brainboxemb.meta`, keep component-local visual detailed design, publish the verification strategy with generated evidence, and replace stale copied tooling/version documentation with config/live-provenance routing. Preserve a representative generated assembly preview in the top-level README.
+
 - Advance Migration 009 to released `tool.scad-project v0.15.7` with exact tool gitlink `bfaac9f6916c09bc6525abddf64c87238fe59103`; this retains production-branch serialization and restores the qualified read-only `update-repo status` contract.
 - Qualify the released stack on exact-main source `462534755fef88f393e53c8b7d8a3675ff9a7cce` through production run `35728474360`, with both `prod/bld` and `prod/vrf` provenance on v0.15.6.
 

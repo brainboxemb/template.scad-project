@@ -2,6 +2,8 @@
 //   Project adapter that consumes lib.scad.clamps.
 //
 // FileSummary: Reusable library clamp as a project component.
+//
+// - Design: design/design.md
 
 use <../../ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad>
 

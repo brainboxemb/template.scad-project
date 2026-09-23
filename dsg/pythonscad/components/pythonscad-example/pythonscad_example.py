@@ -1,5 +1,7 @@
 """Small PythonSCAD component used to verify multi-engine design rendering."""
 
+# Design: design/design.md
+
 from pythonscad import *
 
 design_view = globals().get("design_view", "final")

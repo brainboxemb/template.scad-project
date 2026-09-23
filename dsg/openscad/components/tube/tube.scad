@@ -3,6 +3,8 @@
 //
 // FileSummary: Hollow 20 mm reference tube.
 //
+// - Design: design/design.md
+//
 // Module: tube()
 // Usage:
 //   tube();

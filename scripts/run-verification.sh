@@ -216,6 +216,7 @@ if ! cmp -s update-repo.ps1 tools/tool.scad-project/bootstrap/consumer-update.ps
 fi
 
 mkdir -p "$OUT"
+cp doc/30-verification.md "$OUT/30-verification.md"
 rm -f "$OUT/png/tube-holder-assembly.png"
 cp vrf/templates/README.md "$OUT/README.md"
 

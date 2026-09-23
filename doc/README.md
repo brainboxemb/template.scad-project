@@ -14,6 +14,6 @@ This directory is the maintained documentation index for the SCAD reference cons
 - [50-00 — Verification](50-00-verification.md) — integration acceptance and evidence.
 
 Component-local visual design remains beside source in `design/design.md`. For
-human reading, use the generated [Build design index](../../blob/prod/bld/design/README.md)
+human reading, use the generated [Build design index](../../../blob/prod/bld/design/README.md)
 when available: it publishes those same design documents together with their
 generated images.

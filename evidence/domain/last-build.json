@@ -1,0 +1,63 @@
+{
+  "backend_signature": "4647c14511cf22b2655ca5b94b83bcef5c8444506005471336ad534799183452",
+  "engine": "scons",
+  "kind": "build",
+  "manifest_schema_version": 1,
+  "outcome_counts": {
+    "BUILT": 2,
+    "CACHE_RESTORED": 0,
+    "CURRENT": 0,
+    "ERROR": 0
+  },
+  "provenance": {
+    "cache": {
+      "exact_hit": null,
+      "matched_key": null,
+      "namespace": null,
+      "primary_key": null
+    },
+    "source_commit_sha": "5a1ae13ee54727aaf0745e96caf621421e24c897",
+    "tool_commit_sha": "8d167ad17dbfa798d68f46d871aaeed2e2e09857",
+    "tool_version": "0.15.11",
+    "toolchain_image": "ghcr.io/brainboxemb/scad-toolchain:v0.6.1",
+    "toolchain_version": "v0.6.1",
+    "workflow_version": "v0.15.11"
+  },
+  "schema": "scad-project.build-decisions",
+  "schema_version": 1,
+  "target_count": 2,
+  "targets": [
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": "bld/png/tube-holder-assembly.png",
+      "sources": [
+        "dsg/openscad/render/tube-holder-assembly.scad",
+        "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad",
+        "dsg/openscad/components/tube/tube.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "b12e5526e4941b83ad332fd70f047b4f0841e614822afb8708ce4f86fb1a305c"
+    },
+    {
+      "action_executed": true,
+      "existed_before": false,
+      "exists_after": true,
+      "outcome": "BUILT",
+      "output": "bld/stl/tube-holder-assembly.stl",
+      "sources": [
+        "dsg/openscad/export/tube-holder-assembly.scad",
+        "dsg/openscad/assemblies/tube-holder-assembly/tube_holder_assembly.scad",
+        "dsg/openscad/components/mounting-plate/mounting_plate.scad",
+        "dsg/openscad/components/tube/tube.scad",
+        "dsg/openscad/components/tube-holder/tube_holder.scad",
+        "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+      ],
+      "target_spec_digest": "30fe2cca5b50a9c35272809e301cfb4c81d4b4ff65d2ff497edcb3c5ae6efb98"
+    }
+  ]
+}

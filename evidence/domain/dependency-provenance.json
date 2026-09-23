@@ -1,0 +1,46 @@
+{
+  "build_manifest": ".cache/scad-project/state/build-manifest.json",
+  "schema": "brainboxemb.scad-build-dependency-provenance",
+  "schema_version": 1,
+  "source_revision": "5a1ae13ee54727aaf0745e96caf621421e24c897",
+  "targets": [
+    {
+      "dependencies": [
+        {
+          "declared_ref": "v0.1.9",
+          "dependency_path": "dsg/openscad/ext/lib.scad.clamps",
+          "depth": 1,
+          "name": "lib.scad.clamps",
+          "owner_path": ".",
+          "repository": "https://github.com/brainboxemb/lib.scad.clamps",
+          "revision": "e9f2fe0039a5f1cb6e2a0386a736767d95e627e7",
+          "used_sources": [
+            "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+          ],
+          "worktree_path": "dsg/openscad/ext/lib.scad.clamps"
+        }
+      ],
+      "output": "bld/png/tube-holder-assembly.png",
+      "source": "dsg/openscad/render/tube-holder-assembly.scad"
+    },
+    {
+      "dependencies": [
+        {
+          "declared_ref": "v0.1.9",
+          "dependency_path": "dsg/openscad/ext/lib.scad.clamps",
+          "depth": 1,
+          "name": "lib.scad.clamps",
+          "owner_path": ".",
+          "repository": "https://github.com/brainboxemb/lib.scad.clamps",
+          "revision": "e9f2fe0039a5f1cb6e2a0386a736767d95e627e7",
+          "used_sources": [
+            "dsg/openscad/ext/lib.scad.clamps/openscad/tube-clamp/tube_clamp.scad"
+          ],
+          "worktree_path": "dsg/openscad/ext/lib.scad.clamps"
+        }
+      ],
+      "output": "bld/stl/tube-holder-assembly.stl",
+      "source": "dsg/openscad/export/tube-holder-assembly.scad"
+    }
+  ]
+}
